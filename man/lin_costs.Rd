@@ -13,7 +13,7 @@ lin_costs(x, y, w, indices)
 
 \item{w}{NumericVector, weights.}
 
-\item{indices}{IntegerVector, ordered list of indices to evaluate.}
+\item{indices}{IntegerVector, ordered list of indices to pair.}
 }
 \value{
 xcosts NumericMatix, for j>=i xcosts(i,j) is the cost of partition element [i,...,j] (inclusive).
@@ -21,4 +21,9 @@ xcosts NumericMatix, for j>=i xcosts(i,j) is the cost of partition element [i,..
 \description{
 Built matrix of interval costs for held-out linear models.
 One indexed.
+}
+\examples{
+
+lin_costs(c(1, 2, 3, 4), c(1, 2, 2, 1), c(1, 1, 1, 1), 1:4)
+
 }

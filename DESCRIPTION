@@ -8,6 +8,9 @@ Authors@R: c(
     person("Nina", "Zumel", email = "nzumel@win-vector.com", role = c("aut")),
     person(family = "Win-Vector LLC", role = c("cph"))
     )
+URL: https://github.com/WinVector/RcppDynProg/, https://winvector.github.io/RcppDynProg/
+BugReports: https://github.com/WinVector/RcppDynProg/issues
+Maintainer: John Mount <jmount@win-vector.com>
 Description: Dynamic Programming implemented in 'Rcpp'.  Includes example partition and out of sample fitting applications.
 License: GPL-3
 Depends:

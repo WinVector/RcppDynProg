@@ -24,4 +24,9 @@ linear cost of [i,...,j] interval (inclusive).
 Calculate cost of using linear model fit on points to estimate other points in the interval.
 Zero indexed.
 }
+\examples{
+
+lin_cost(c(1, 2, 3, 4), c(1, 2, 2, 1), c(1, 1, 1, 1), 0, 3)
+
+}
 \keyword{internal}

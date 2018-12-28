@@ -13,6 +13,11 @@ using namespace Rcpp;
 //' @param kmax int, maximum number of segments in solution. 
 //' @return dynamic program solution.
 //' 
+//' @examples
+//' 
+//' costs <- matrix(c(1.5, NA ,NA ,1 ,0 , NA, 5, -1, 1), nrow = 3)
+//' solve_dynamic_program(costs, nrow(costs))
+//' 
 //' @export
 // [[Rcpp::export]]
 IntegerVector solve_dynamic_program(NumericMatrix x, int kmax) {

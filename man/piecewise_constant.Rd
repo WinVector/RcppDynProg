@@ -18,3 +18,8 @@ piecewise_constant(varName, x, y, w = NULL)
 \description{
 \code{vtreat} custom coder based on \code{RcppDynProg::solve_for_partition()}.
 }
+\examples{
+
+piecewise_constant("x", 1:8, c(-1, -1, -1, -1, 1, 1, 1, 1))
+
+}

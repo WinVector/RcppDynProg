@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{all_partitions}
 \alias{all_partitions}
-\title{Build all sequential partitions.}
+\title{Build all partitions into intervals.}
 \usage{
 all_partitions(n, kmax = n)
 }
@@ -15,10 +15,11 @@ all_partitions(n, kmax = n)
 list of all partitions.
 }
 \description{
-Build all sequential partitions.
+Build all partitions into intervals.
 }
 \examples{
 
 all_partitions(4, 2)
 
 }
+\keyword{internal}

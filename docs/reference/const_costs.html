@@ -100,7 +100,12 @@ One indexed." />
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/WinVector/RcppDynProg">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -114,7 +119,7 @@ One indexed." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>const_costs</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/WinVector/RcppDynProg/blob/master/R/RcppExports.R'><code>R/RcppExports.R</code></a></small>
     <div class="hidden name"><code>const_costs.Rd</code></div>
     </div>
 
@@ -140,7 +145,7 @@ One indexed.</p>
     </tr>
     <tr>
       <th>indices</th>
-      <td><p>IntegerVector, ordered list of indices to evaluate.</p></td>
+      <td><p>IntegerVector, order list of indices to pair.</p></td>
     </tr>
     </table>
     
@@ -149,6 +154,14 @@ One indexed.</p>
     <p>xcosts NumericMatix, for j&gt;=i xcosts(i,j) is the cost of partition element [i,...,j] (inclusive).</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class='fu'>const_costs</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>2</span>), <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>), <span class='fl'>1</span>:<span class='fl'>4</span>)</div><div class='output co'>#&gt;               [,1]          [,2]          [,3]          [,4]
+#&gt; [1,] 1.797693e+308  0.000000e+00  1.500000e+00  1.777778e+00
+#&gt; [2,]  0.000000e+00 1.797693e+308  2.000000e+00  1.500000e+00
+#&gt; [3,]  1.500000e+00  2.000000e+00 1.797693e+308  0.000000e+00
+#&gt; [4,]  1.777778e+00  1.500000e+00  0.000000e+00 1.797693e+308</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -156,7 +169,9 @@ One indexed.</p>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

@@ -14,6 +14,10 @@
 #' 
 #' @keywords internal
 #' 
+#' @examples
+#' 
+#' const_cost(c(1, 1, 2, 2), c(1, 1, 1, 1), 0, 3)
+#' 
 #' @export
 const_cost <- function(y, w, i, j) {
     .Call('_RcppDynProg_const_cost', PACKAGE = 'RcppDynProg', y, w, i, j)
@@ -26,8 +30,13 @@ const_cost <- function(y, w, i, j) {
 #' 
 #' @param y NumericVector, values to group in order.
 #' @param w NumericVector, weights.
-#' @param indices IntegerVector, ordered list of indices to evaluate.
+#' @param indices IntegerVector, order list of indices to pair.
 #' @return xcosts NumericMatix, for j>=i xcosts(i,j) is the cost of partition element [i,...,j] (inclusive).
+#' 
+#' 
+#' @examples
+#' 
+#' const_costs(c(1, 1, 2, 2), c(1, 1, 1, 1), 1:4)
 #' 
 #' @export
 const_costs <- function(y, w, indices) {
@@ -44,6 +53,11 @@ const_costs <- function(y, w, indices) {
 #' @param x NumericMatix, for j>=i x(i,j) is the cost of partition element [i,...,j] (inclusive).
 #' @param kmax int, maximum number of segments in solution. 
 #' @return dynamic program solution.
+#' 
+#' @examples
+#' 
+#' costs <- matrix(c(1.5, NA ,NA ,1 ,0 , NA, 5, -1, 1), nrow = 3)
+#' solve_dynamic_program(costs, nrow(costs))
 #' 
 #' @export
 solve_dynamic_program <- function(x, kmax) {
@@ -64,6 +78,10 @@ solve_dynamic_program <- function(x, kmax) {
 #' 
 #' @keywords internal
 #' 
+#' @examples
+#' 
+#' xlin_fits(c(1, 2, 3, 4), c(1, 2, 2, 1), c(1, 1, 1, 1), 0, 3)
+#' 
 #' @export
 xlin_fits <- function(x, y, w, i, j) {
     .Call('_RcppDynProg_xlin_fits', PACKAGE = 'RcppDynProg', x, y, w, i, j)
@@ -83,6 +101,10 @@ xlin_fits <- function(x, y, w, i, j) {
 #' 
 #' @keywords internal
 #' 
+#' @examples
+#' 
+#' lin_cost(c(1, 2, 3, 4), c(1, 2, 2, 1), c(1, 1, 1, 1), 0, 3)
+#' 
 #' @export
 lin_cost <- function(x, y, w, i, j) {
     .Call('_RcppDynProg_lin_cost', PACKAGE = 'RcppDynProg', x, y, w, i, j)
@@ -96,8 +118,12 @@ lin_cost <- function(x, y, w, i, j) {
 #' @param x NumericVector, x-coords of values to group.
 #' @param y NumericVector, values to group in order.
 #' @param w NumericVector, weights.
-#' @param indices IntegerVector, ordered list of indices to evaluate.
+#' @param indices IntegerVector, ordered list of indices to pair.
 #' @return xcosts NumericMatix, for j>=i xcosts(i,j) is the cost of partition element [i,...,j] (inclusive).
+#' 
+#' @examples
+#' 
+#' lin_costs(c(1, 2, 3, 4), c(1, 2, 2, 1), c(1, 1, 1, 1), 1:4)
 #' 
 #' @export
 lin_costs <- function(x, y, w, indices) {

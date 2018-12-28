@@ -11,7 +11,7 @@ const_costs(y, w, indices)
 
 \item{w}{NumericVector, weights.}
 
-\item{indices}{IntegerVector, ordered list of indices to evaluate.}
+\item{indices}{IntegerVector, order list of indices to pair.}
 }
 \value{
 xcosts NumericMatix, for j>=i xcosts(i,j) is the cost of partition element [i,...,j] (inclusive).
@@ -19,4 +19,9 @@ xcosts NumericMatix, for j>=i xcosts(i,j) is the cost of partition element [i,..
 \description{
 Built matrix of interval costs for held-out means.
 One indexed.
+}
+\examples{
+
+const_costs(c(1, 1, 2, 2), c(1, 1, 1, 1), 1:4)
+
 }

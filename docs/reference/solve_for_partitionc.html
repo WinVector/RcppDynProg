@@ -101,7 +101,12 @@ function." />
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/WinVector/RcppDynProg">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -115,7 +120,7 @@ function." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Solve for a piecewise constant partiton.</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/WinVector/RcppDynProg/blob/master/R/solve_for_partition.R'><code>R/solve_for_partition.R</code></a></small>
     <div class="hidden name"><code>solve_for_partitionc.Rd</code></div>
     </div>
 
@@ -168,6 +173,14 @@ function.</p>
     <p>a data frame appropriate for stats::approx().</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class='fu'>solve_for_partitionc</span>(<span class='fl'>1</span>:<span class='fl'>8</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(-<span class='fl'>1</span>, -<span class='fl'>1</span>, -<span class='fl'>1</span>, -<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>))</div><div class='output co'>#&gt;   x pred group  what
+#&gt; 1 1   -1     1  left
+#&gt; 2 4   -1     1 right
+#&gt; 3 5    1     2  left
+#&gt; 4 8    1     2 right</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -175,7 +188,9 @@ function.</p>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

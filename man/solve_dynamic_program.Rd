@@ -20,3 +20,9 @@ is the cost of choosing the partition element [i,...,j].
 Returned solution is an ordered vector v of length k where: v[1]==1, v[k]==nrow(x)+1, and the 
 partition is of the form [v[i], v[i+1]) (intervals open on the right).
 }
+\examples{
+
+costs <- matrix(c(1.5, NA ,NA ,1 ,0 , NA, 5, -1, 1), nrow = 3)
+solve_dynamic_program(costs, nrow(costs))
+
+}

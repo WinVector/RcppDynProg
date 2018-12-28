@@ -15,6 +15,10 @@ using namespace Rcpp;
 //' 
 //' @keywords internal
 //' 
+//' @examples
+//' 
+//' const_cost(c(1, 1, 2, 2), c(1, 1, 1, 1), 0, 3)
+//' 
 //' @export
 // [[Rcpp::export]]
 double const_cost(NumericVector y, NumericVector w, const int i, const int j) {
@@ -47,8 +51,13 @@ double const_cost(NumericVector y, NumericVector w, const int i, const int j) {
 //' 
 //' @param y NumericVector, values to group in order.
 //' @param w NumericVector, weights.
-//' @param indices IntegerVector, ordered list of indices to evaluate.
+//' @param indices IntegerVector, order list of indices to pair.
 //' @return xcosts NumericMatix, for j>=i xcosts(i,j) is the cost of partition element [i,...,j] (inclusive).
+//' 
+//' 
+//' @examples
+//' 
+//' const_costs(c(1, 1, 2, 2), c(1, 1, 1, 1), 1:4)
 //' 
 //' @export
 // [[Rcpp::export]]

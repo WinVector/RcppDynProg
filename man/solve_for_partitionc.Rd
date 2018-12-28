@@ -30,3 +30,8 @@ Solve for a good set of right-exclusive x-cuts such that the
 overall graph of y~x is well-approximated by a piecewise linear
 function.
 }
+\examples{
+
+solve_for_partitionc(1:8, c(-1, -1, -1, -1, 1, 1, 1, 1))
+
+}

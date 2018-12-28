@@ -110,6 +110,10 @@ solve_for_partition_xs <- function(x, y,
 #' @param max_k maximum segments to divide into.
 #' @return a data frame appropriate for stats::approx().
 #' 
+#' @examples 
+#' 
+#' solve_for_partition(1:8, c(1, 2, 3, 4, 4, 3, 2, 1))
+#' 
 #' @export
 #' 
 solve_for_partition <- function(x, y,
@@ -176,6 +180,10 @@ solve_for_partition <- function(x, y,
 #' @param min_n_to_chunk minimum n to subdivied problem.
 #' @param max_k maximum segments to divide into.
 #' @return a data frame appropriate for stats::approx().
+#' 
+#' @examples
+#' 
+#' solve_for_partitionc(1:8, c(-1, -1, -1, -1, 1, 1, 1, 1))
 #' 
 #' @export
 #' 

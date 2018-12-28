@@ -17,6 +17,10 @@ using namespace Rcpp;
 //' 
 //' @keywords internal
 //' 
+//' @examples
+//' 
+//' xlin_fits(c(1, 2, 3, 4), c(1, 2, 2, 1), c(1, 1, 1, 1), 0, 3)
+//' 
 //' @export
 // [[Rcpp::export]]
 NumericVector xlin_fits(NumericVector x, NumericVector y, NumericVector w,
@@ -74,6 +78,10 @@ NumericVector xlin_fits(NumericVector x, NumericVector y, NumericVector w,
 //' 
 //' @keywords internal
 //' 
+//' @examples
+//' 
+//' lin_cost(c(1, 2, 3, 4), c(1, 2, 2, 1), c(1, 1, 1, 1), 0, 3)
+//' 
 //' @export
 // [[Rcpp::export]]
 double lin_cost(NumericVector x, NumericVector y, NumericVector w,
@@ -104,8 +112,12 @@ double lin_cost(NumericVector x, NumericVector y, NumericVector w,
 //' @param x NumericVector, x-coords of values to group.
 //' @param y NumericVector, values to group in order.
 //' @param w NumericVector, weights.
-//' @param indices IntegerVector, ordered list of indices to evaluate.
+//' @param indices IntegerVector, ordered list of indices to pair.
 //' @return xcosts NumericMatix, for j>=i xcosts(i,j) is the cost of partition element [i,...,j] (inclusive).
+//' 
+//' @examples
+//' 
+//' lin_costs(c(1, 2, 3, 4), c(1, 2, 2, 1), c(1, 1, 1, 1), 1:4)
 //' 
 //' @export
 // [[Rcpp::export]]

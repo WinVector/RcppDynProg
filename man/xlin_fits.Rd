@@ -24,4 +24,9 @@ vector of predictions.
 Calculate out of sample linear fit predictions.
 Zero indexed.
 }
+\examples{
+
+xlin_fits(c(1, 2, 3, 4), c(1, 2, 2, 1), c(1, 1, 1, 1), 0, 3)
+
+}
 \keyword{internal}

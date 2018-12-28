@@ -22,4 +22,9 @@ const cost of [i,...,j] interval (inclusive).
 Calculate cost of using mean of points to estimate other points in interval.
 Zero indexed.
 }
+\examples{
+
+const_cost(c(1, 1, 2, 2), c(1, 1, 1, 1), 0, 3)
+
+}
 \keyword{internal}

@@ -18,3 +18,8 @@ piecewise_linear(varName, x, y, w = NULL)
 \description{
 \code{vtreat} custom coder based on \code{RcppDynProg::solve_for_partition()}.
 }
+\examples{
+
+piecewise_linear("x", 1:8, c(1, 2, 3, 4, 4, 3, 2, 1))
+
+}

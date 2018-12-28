@@ -3,7 +3,7 @@
 #' RcppDynProg
 #' 
 #' Rcpp dynamic programming solutions for partitioning and machine learning problems.
-#' Includes out of sample fitting applications.
+#' Includes out of sample fitting applications.  Please see \url{https://github.com/WinVector/RcppDynProg} for details.
 #' 
 #' @docType package
 #' @author John Mount

@@ -42,7 +42,7 @@ seqi <- function(a, b) {
 }
 
 
-#' Build all sequential partitions.
+#' Build all partitions into intervals.
 #' 
 #' @param n integer, sequence lenght to choose from.
 #' @param kmax int, maximum number of segments in solution.
@@ -51,6 +51,8 @@ seqi <- function(a, b) {
 #' @examples 
 #' 
 #' all_partitions(4, 2)
+#' 
+#' @keywords internal
 #' 
 #' @export
 #' 
@@ -124,7 +126,6 @@ score_solution <- function(x, solution) {
 test_solvers <- function(x, k) {
   msg <- NULL
   tryCatch({
-    
     sl <- all_partitions(3, k)
     if(length(sl)<1) {
       stop("brute force didn't return any solutions")
@@ -159,8 +160,6 @@ test_solvers <- function(x, k) {
     if(!(abs(score2-sm)<=1e-5)) {
       stop("C++ solution has wrong score")
     }
-    
-  
   },
   error = function(e) { msg <<- paste(as.character(e), sep = " ") }
   )
