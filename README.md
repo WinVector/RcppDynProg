@@ -3,33 +3,33 @@
 The package
 -----------
 
-[`RcppDynProg`](https://github.com/WinVector/RcppDynProg) is an [`Rcpp`](https://CRAN.R-project.org/package=Rcpp) based [`R`](https://www.r-project.org) package that implements simple table-based [dynamic programming](https://en.wikipedia.org/wiki/Dynamic_programming).
+[`RcppDynProg`](https://github.com/WinVector/RcppDynProg) is an [`Rcpp`](https://CRAN.R-project.org/package=Rcpp) based [`R`](https://www.r-project.org) package that implements simple, but powerful, table-based [dynamic programming](https://en.wikipedia.org/wiki/Dynamic_programming).
 
 The abstract problem
 --------------------
 
 The primary problem [`RcppDynProg::solve_dynamic_program()`](https://winvector.github.io/RcppDynProg/reference/solve_dynamic_program.html) is designed to solve is formally given as follows.
 
-> Minimum cost consecutive partition.
+> Minimum cost partition into intervals.
 >
 > Given: a positive integer `n` and an a *n* by `n` matrix called `costs`.
 >
 > Find: an increasing sequence of integers `soln` with `length(soln)==k (>=2)`, `soln[1] == 1`, and `soln[k] == n+1` such that `sum[i=1,...,k-1] costs[soln[i], soln[i+1]-1]` is minimized.
 
-To rephrase: `costs[i,j]` is specifying the cost of interval of integers `{i,...,j}` (inclusive) and the problem is to find the minimum cost [partition](https://en.wikipedia.org/wiki/Partition_of_a_set) of the set of integers `{1,...,n}` in a sequence of intervals. What the use does is supply the matrix of costs of *every* possible interval of integers and the solver then finds what disjoint *set* of intervals that cover `{1,...,n}` have the lowest sum of costs. The user has to supply a lot of input interval costs (`n(n-1)/2` of them, which is a lot- but is tractable) and the algorithm quickly finds the best simultaneous set of intervals (there are of them, so exhaustive search would not be an option at scale as there are going to be `2^(n-1)` partitions to inspect).
+To rephrase: `costs[i,j]` is specifying the cost of taking the interval of integers `{i,...,j}` (inclusive) as a single element of our solution. The problem is to find the minimum cost [partition](https://en.wikipedia.org/wiki/Partition_of_a_set) of the set of integers `{1,...,n}` as a sequence of intervals. A user supplies a matrix of costs of *every* possible interval of integers, and the solver then finds what disjoint *set* of intervals that cover `{1,...,n}` have the lowest sum of costs. The user encodes their optimization problem a family of interval costs (`n(n-1)/2` of them, which is a lot- but is tractable) and the algorithm quickly finds the best simultaneous set of intervals (there are `2^(n-1)` partitions into intervals, so exhaustive search would not be practical).
 
 We can illustrate this abstract problem as follows (if this is too abstract, please skip forward to the concrete application).
 
 Suppose we have the following cost matrix.
 
 ``` r
-costs <- matrix(c(1.5, 1 ,5 ,1 ,1, 0, 5, 0, -1), 
-                nrow=3)
+costs <- matrix(c(1.5, NA ,NA ,1 ,0 , NA, 5, -1, 1), 
+                nrow = 3)
 print(costs)
  #       [,1] [,2] [,3]
  #  [1,]  1.5    1    5
- #  [2,]  1.0    1    0
- #  [3,]  5.0    0   -1
+ #  [2,]   NA    0   -1
+ #  [3,]   NA   NA    1
 ```
 
 Then the optimal partition is found as follows.
@@ -38,7 +38,7 @@ Then the optimal partition is found as follows.
 library("RcppDynProg")
 soln <- solve_dynamic_program(costs, nrow(costs))
 print(soln)
- #  [1] 1 3 4
+ #  [1] 1 2 4
 ```
 
 The sequence `[1, 2, 4]` is a just compact representation for the following sequence of intervals.
@@ -50,38 +50,38 @@ lapply(
     soln[i]:(soln[i+1]-1)
   })
  #  [[1]]
- #  [1] 1 2
+ #  [1] 1
  #  
  #  [[2]]
- #  [1] 3
+ #  [1] 2 3
 ```
 
-Which is saying the optimal partition is to the sequence of sets `[{1}, {2, 3}]` which has total cost `costs[1,1] + costs[2,3]`. The dynamic programming solver knew to take the expensive set `{1}` to allow the cheap set `{2, 3}` to be in its chosen partition. This is the essence of dynamic programming: finding an optimal *global* solution, even if it requires odd-looking local choices.
+Which is saying the optimal partition into intervals is to the sequence of sets `[{1}, {2, 3}]` which has total cost `costs[1,1] + costs[2,3]`. The dynamic programming solver knew to take the expensive set `{1}` to allow the cheap set `{2, 3}` to be in its chosen partition. This is the essence of dynamic programming: finding an optimal *global* solution, even if it requires odd-looking local choices.
 
-The application
----------------
+An application
+--------------
 
 The intended application of `RcppDynProg` is to find optimal piecewise solutions to single-variable modeling problems. For example consider the following data.
 
 <img src="tools/README-r1-1.png" style="display: block; margin: auto;" />
 
-In the above we have an input (or independent variable) `x` and an observed outcome (or dependent variable) `y_observed` (portrayed as points). `y_observed` is an unobserved idea value (`y_ideal`, portrayed by the dashed curve) plus independent noise. The modeling goal is to get close the `y_ideal` curve using the `y_observed` observations. Obviously this [can be done with a spline](https://github.com/WinVector/RcppDynProg/blob/master/extras/SegmentationL.md), but let's use `RcppDynProg` to find a piecewise linear fit.
+In the above we have an input (or independent variable) `x` and an observed outcome (or dependent variable) `y_observed` (portrayed as points). `y_observed` is the unobserved idea value `y_ideal` (portrayed by the dashed curve) plus independent noise. The modeling goal is to get close the `y_ideal` curve using the `y_observed` observations. Obviously this [can be done with a smoothing spline](https://github.com/WinVector/RcppDynProg/blob/master/extras/SegmentationL.md), but let's use `RcppDynProg` to find a piecewise linear fit.
 
 To encode this as a dynamic programming problem we need to build a cost matrix that for every consecutive interval of `x`-values we have estimated the out-of sample quality of fit. This is supplied by the function `RcppDynProg::lin_costs()` (using the [PRESS statistic](http://www.win-vector.com/blog/2014/09/estimating-generalization-error-with-the-press-statistic/)), but lets take a quick look at the idea.
 
-The following interval is a good interval, as all the chosen points (shown in dark blue) are in a nearly linear arrangement. The in-sample price of the interval would be the total sum of residuals of a linear model fit on the selected region (and the out of sample price would be the PRESS statistic).
+The following interval is a good interval, as all the chosen points (shown in dark blue) are in a nearly linear arrangement. The in-sample price of the interval would be the total sum of residuals of a linear model fit on the selected region (and the out of sample price would be given by the PRESS statistic).
 
 <img src="tools/README-rg1-1.png" style="display: block; margin: auto;" />
 
 The "cost" (or loss) of this interval can be estimated as shown.
 
 ``` r
-print(interval_indexes)
+print(good_interval_indexes)
  #  [1]  94 139
-print(1 + interval_indexes[2] - interval_indexes[1]) # width
+print(1 + good_interval_indexes[2] - good_interval_indexes[1]) # width
  #  [1] 46
 fit <- lm(y_observed ~ x, 
-          data = d[interval_indexes[1]:interval_indexes[2], ])
+          data = d[good_interval_indexes[1]:good_interval_indexes[2], ])
 sum(fit$residuals^2)
  #  [1] 2.807998
 ```
@@ -91,19 +91,19 @@ The following interval is a bad interval, as all the chosen points (shown in dar
 <img src="tools/README-rb1-1.png" style="display: block; margin: auto;" />
 
 ``` r
-print(interval_indexes)
+print(bad_interval_indexes)
  #  [1] 120 165
-print(1 + interval_indexes[2] - interval_indexes[1]) # width
+print(1 + bad_interval_indexes[2] - bad_interval_indexes[1]) # width
  #  [1] 46
 fit <- lm(y_observed ~ x, 
-          data = d[interval_indexes[1]:interval_indexes[2], ])
+          data = d[bad_interval_indexes[1]:bad_interval_indexes[2], ])
 sum(fit$residuals^2)
  #  [1] 5.453532
 ```
 
-The user would price all of the intervals alone, and then ask the solver to find the best simultaneous set of intervals.
+The user would price all of the intervals individually, and then ask the solver to find the best simultaneous set of intervals.
 
-The complete solution is worked as follows (using the [`RcppDynProg::solve_for_partition()`](https://winvector.github.io/RcppDynProg/reference/solve_for_partition.html) function which wraps all the steps together).
+The complete solution is worked as follows (using the [`RcppDynProg::solve_for_partition()`](https://winvector.github.io/RcppDynProg/reference/solve_for_partition.html) function which wraps all the steps together, converting from indices to `x`-coordinates).
 
 ``` r
 x_cuts <- solve_for_partition(d$x, d$y_observed, penalty = 10)
@@ -148,12 +148,12 @@ print(plt2)
 
 The entire modeling procedure is wrapped as a [`vtreat`](https://github.com/WinVector/vtreat) [custom-coder](http://www.win-vector.com/blog/2017/09/custom-level-coding-in-vtreat/) in the function [`RcppDynProg::piecewise_linear()`](https://winvector.github.io/RcppDynProg/reference/piecewise_linear.html). This allows such variable treatments to be easily incorporated into modeling pipelines (example [here](https://github.com/WinVector/zmPDSwR/blob/master/KDD2009/KDD2009vtreat.md)).
 
-In addition to a piecewise linear solver we include a piecewise constant solver, which is demonstrated [here](https://winvector.github.io/RcppDynProg/articles/Segmentation.html). Other applications can include peak detection or any other application where the per-segment metrics are independent.
+In addition to a piecewise linear solver we include a piecewise constant solver, which is demonstrated [here](https://winvector.github.io/RcppDynProg/articles/Segmentation.html). Other applications can include peak detection, or any other application where the per-segment metrics are independent.
 
 The methodology
 ---------------
 
-The solver is fast for 3 reasons:
+The solver is fast through to the use of 3 techniques:
 
 1.  `RcppDynProg::solve_for_partition()` includes a problem reduction heuristic in the spirit of the [parameterized complexity](https://www.springer.com/us/book/9780387948836) methodology.
 2.  Ordered (or interval) partition problems are amenable to dynamic programming because initial segments of an interval partition have succinct summaries (just the right-most integer and how many segments were used to get to this point).
