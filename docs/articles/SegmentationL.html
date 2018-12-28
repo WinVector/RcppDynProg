@@ -89,14 +89,12 @@
     
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">"RcppDynProg"</span>)
 
-plot &lt;-<span class="st"> </span><span class="kw">requireNamespace</span>(<span class="st">"rqdatatable"</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>) <span class="op">&amp;&amp;</span>
-<span class="st">  </span><span class="kw">requireNamespace</span>(<span class="st">"ggplot2"</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)
+plot &lt;-<span class="st"> </span><span class="kw">requireNamespace</span>(<span class="st">"ggplot2"</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)
 <span class="cf">if</span>(plot) {
   <span class="kw">library</span>(<span class="st">"ggplot2"</span>)
-  <span class="kw">library</span>(<span class="st">"rqdatatable"</span>)
-}</code></pre></div>
-<pre><code>## Loading required package: rquery</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">2018</span>)
+}
+
+<span class="kw">set.seed</span>(<span class="dv">2018</span>)
 g &lt;-<span class="st"> </span><span class="dv">100</span>
 d &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
   <span class="dt">x =</span> <span class="fl">0.05</span><span class="op">*</span>(<span class="dv">1</span><span class="op">:</span>(<span class="dv">3</span><span class="op">*</span>g))) <span class="co"># ordered in x</span>
@@ -152,150 +150,6 @@ d<span class="op">$</span>group &lt;-<span class="st"> </span><span class="kw">a
   <span class="kw">print</span>(plt2)
 }</code></pre></div>
 <p><img src="SegmentationL_files/figure-html/r5-1.png" width="768" style="display: block; margin: auto;"></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">use_vtreat &lt;-<span class="st"> </span><span class="kw">requireNamespace</span>(<span class="st">"vtreat"</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">spline_variable &lt;-<span class="st"> </span><span class="cf">function</span>(varName, x, y, <span class="dt">w =</span> <span class="ot">NULL</span>) {
-  <span class="cf">if</span>(<span class="kw">is.null</span>(w)) {
-    w &lt;-<span class="st"> </span><span class="kw">numeric</span>(n) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
-  }
-  nknots &lt;-<span class="st"> </span><span class="dv">100</span>
-  spline &lt;-<span class="st"> </span>stats<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/stats/topics/smooth.spline">smooth.spline</a></span>(x, y, 
-                                 <span class="dt">w =</span> w,
-                                 <span class="dt">nknots =</span> nknots,
-                                 <span class="dt">keep.data =</span> <span class="ot">FALSE</span>, 
-                                 <span class="dt">keep.stuff =</span> <span class="ot">FALSE</span>,
-                                 <span class="dt">cv =</span> <span class="ot">TRUE</span>)<span class="op">$</span>fit
-  estimate &lt;-<span class="st"> </span>stats<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(spline, x)<span class="op">$</span>y
-  <span class="kw">return</span>(estimate)
-}
-
-customCoders =<span class="st"> </span><span class="kw">list</span>(<span class="st">'c.PiecewiseV.num'</span> =<span class="st"> </span>vtreat<span class="op">::</span>solve_piecewise,
-                    <span class="st">'n.PiecewiseV.num'</span> =<span class="st"> </span>vtreat<span class="op">::</span>solve_piecewise,
-                    <span class="st">'c.knearest.num'</span> =<span class="st"> </span>vtreat<span class="op">::</span>square_window,
-                    <span class="st">'n.knearest.num'</span> =<span class="st"> </span>vtreat<span class="op">::</span>square_window,
-                    <span class="st">'c.spline.num'</span> =<span class="st"> </span>spline_variable,
-                    <span class="st">'n.spline.num'</span> =<span class="st"> </span>spline_variable,
-                    <span class="st">'c.PiecewiseLin.num'</span> =<span class="st"> </span>RcppDynProg<span class="op">::</span>piecewise_linear,
-                    <span class="st">'n.PiecewiseLin.num'</span> =<span class="st"> </span>RcppDynProg<span class="op">::</span>piecewise_linear,
-                    <span class="st">'c.PiecewiseC.num'</span> =<span class="st"> </span>RcppDynProg<span class="op">::</span>piecewise_constant,
-                    <span class="st">'n.PiecewiseC.num'</span> =<span class="st"> </span>RcppDynProg<span class="op">::</span>piecewise_constant)
-codeRestriction =<span class="st"> </span><span class="kw">c</span>(<span class="st">"PiecewiseV"</span>, 
-                    <span class="st">"knearest"</span>,
-                    <span class="st">"spline"</span>,
-                    <span class="st">"PiecewiseLin"</span>,
-                    <span class="st">"PiecewiseC"</span>)
-
-trt &lt;-<span class="st"> </span>vtreat<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/vtreat/topics/designTreatmentsN">designTreatmentsN</a></span>(
-  d, 
-  <span class="st">'x'</span>, <span class="st">'y_observed'</span>,
-  <span class="dt">customCoders =</span> customCoders,
-  <span class="dt">codeRestriction =</span> codeRestriction,
-  <span class="dt">verbose =</span> <span class="ot">FALSE</span>)
-knitr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/knitr/topics/kable">kable</a></span>(trt<span class="op">$</span>scoreFrame[, <span class="kw">c</span>(<span class="st">"varName"</span>, <span class="st">"rsq"</span>, <span class="st">"sig"</span>)])</code></pre></div>
-<table class="table">
-<thead><tr class="header">
-<th align="left">varName</th>
-<th align="right">rsq</th>
-<th align="right">sig</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">x_PiecewiseV</td>
-<td align="right">0.8064672</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">x_knearest</td>
-<td align="right">0.7415207</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="left">x_spline</td>
-<td align="right">0.8486192</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">x_PiecewiseLin</td>
-<td align="right">0.6278839</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="left">x_PiecewiseC</td>
-<td align="right">0.4356028</td>
-<td align="right">0</td>
-</tr>
-</tbody>
-</table>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dt &lt;-<span class="st"> </span>vtreat<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/vtreat/topics/prepare">prepare</a></span>(trt, d)
-dt<span class="op">$</span>y_observed &lt;-<span class="st"> </span><span class="ot">NULL</span>
-d &lt;-<span class="st"> </span><span class="kw">cbind</span>(d, dt)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(<span class="kw">sum</span>((d<span class="op">$</span>x_PiecewiseV <span class="op">-</span><span class="st"> </span>d<span class="op">$</span>y_ideal)<span class="op">^</span><span class="dv">2</span>))</code></pre></div>
-<pre><code>## [1] 5.336369</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(<span class="kw">sum</span>((d<span class="op">$</span>x_PiecewiseV <span class="op">-</span><span class="st"> </span>d<span class="op">$</span>y_observed)<span class="op">^</span><span class="dv">2</span>))</code></pre></div>
-<pre><code>## [1] 25.18626</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(<span class="kw">sum</span>((d<span class="op">$</span>x_knearest <span class="op">-</span><span class="st"> </span>d<span class="op">$</span>y_ideal)<span class="op">^</span><span class="dv">2</span>))</code></pre></div>
-<pre><code>## [1] 3.825642</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(<span class="kw">sum</span>((d<span class="op">$</span>x_knearest <span class="op">-</span><span class="st"> </span>d<span class="op">$</span>y_observed)<span class="op">^</span><span class="dv">2</span>))</code></pre></div>
-<pre><code>## [1] 22.8239</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(<span class="kw">sum</span>((d<span class="op">$</span>x_PiecewiseLin <span class="op">-</span><span class="st"> </span>d<span class="op">$</span>y_ideal)<span class="op">^</span><span class="dv">2</span>))</code></pre></div>
-<pre><code>## [1] 3.536541</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(<span class="kw">sum</span>((d<span class="op">$</span>x_PiecewiseLin <span class="op">-</span><span class="st"> </span>d<span class="op">$</span>y_observed)<span class="op">^</span><span class="dv">2</span>))</code></pre></div>
-<pre><code>## [1] 20.53796</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(<span class="kw">sum</span>((d<span class="op">$</span>x_spline <span class="op">-</span><span class="st"> </span>d<span class="op">$</span>y_ideal)<span class="op">^</span><span class="dv">2</span>))</code></pre></div>
-<pre><code>## [1] 1.002791</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(<span class="kw">sum</span>((d<span class="op">$</span>x_spline <span class="op">-</span><span class="st"> </span>d<span class="op">$</span>y_observed)<span class="op">^</span><span class="dv">2</span>))</code></pre></div>
-<pre><code>## [1] 19.3061</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span>(plot) {
-  plt3 &lt;-<span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="dt">data=</span> d, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> x)) <span class="op">+</span><span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>(<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">y =</span> y_ideal), <span class="dt">linetype=</span><span class="dv">2</span>) <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>(<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">y =</span> y_observed)) <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>(<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">y =</span> x_PiecewiseV)) <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"y"</span>) <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span>(<span class="st">"vtreat PiecewiseV estimate"</span>,
-            <span class="dt">subtitle =</span> <span class="st">"dots: observed values, segments: observed group means, dashed line: unobserved true values"</span>) <span class="op">+</span><span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="dt">legend.position =</span> <span class="st">"none"</span>)
-  <span class="kw">print</span>(plt3)
-  
-  plt4 &lt;-<span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="dt">data=</span> d, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> x)) <span class="op">+</span><span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>(<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">y =</span> y_ideal), <span class="dt">linetype=</span><span class="dv">2</span>) <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>(<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">y =</span> y_observed)) <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>(<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">y =</span> x_knearest)) <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"y"</span>) <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span>(<span class="st">"vtreat k-nearest estimate"</span>,
-            <span class="dt">subtitle =</span> <span class="st">"dots: observed values, segments: observed group means, dashed line: unobserved true values"</span>) <span class="op">+</span><span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="dt">legend.position =</span> <span class="st">"none"</span>)
-  <span class="kw">print</span>(plt4)
-  
-  plt5 &lt;-<span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="dt">data=</span> d, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> x)) <span class="op">+</span><span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>(<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">y =</span> y_ideal), <span class="dt">linetype=</span><span class="dv">2</span>) <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>(<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">y =</span> y_observed)) <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>(<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">y =</span> x_PiecewiseLin)) <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"y"</span>) <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span>(<span class="st">"vtreat RcppDynProg piecewise linear estimate"</span>,
-            <span class="dt">subtitle =</span> <span class="st">"dots: observed values, segments: observed group means, dashed line: unobserved true values"</span>) <span class="op">+</span><span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="dt">legend.position =</span> <span class="st">"none"</span>)
-  <span class="kw">print</span>(plt5)
-  
-  plt6 &lt;-<span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="dt">data=</span> d, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> x)) <span class="op">+</span><span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>(<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">y =</span> y_ideal), <span class="dt">linetype=</span><span class="dv">2</span>) <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>(<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">y =</span> y_observed)) <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>(<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">y =</span> x_PiecewiseC)) <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"y"</span>) <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span>(<span class="st">"vtreat RcppDynProg piecewise constant estimate"</span>,
-            <span class="dt">subtitle =</span> <span class="st">"dots: observed values, segments: observed group means, dashed line: unobserved true values"</span>) <span class="op">+</span><span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="dt">legend.position =</span> <span class="st">"none"</span>)
-  <span class="kw">print</span>(plt6)
-  
-  plt7 &lt;-<span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="dt">data=</span> d, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> x)) <span class="op">+</span><span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>(<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">y =</span> y_ideal), <span class="dt">linetype=</span><span class="dv">2</span>) <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>(<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">y =</span> y_observed)) <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>(<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">y =</span> x_spline)) <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"y"</span>) <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span>(<span class="st">"spline estimate"</span>,
-            <span class="dt">subtitle =</span> <span class="st">"dots: observed values, segments: observed group means, dashed line: unobserved true values"</span>) <span class="op">+</span><span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="dt">legend.position =</span> <span class="st">"none"</span>)
-  <span class="kw">print</span>(plt7)
-}</code></pre></div>
-<p><img src="SegmentationL_files/figure-html/r12-1.png" width="768" style="display: block; margin: auto;"><img src="SegmentationL_files/figure-html/r12-2.png" width="768" style="display: block; margin: auto;"><img src="SegmentationL_files/figure-html/r12-3.png" width="768" style="display: block; margin: auto;"><img src="SegmentationL_files/figure-html/r12-4.png" width="768" style="display: block; margin: auto;"><img src="SegmentationL_files/figure-html/r12-5.png" width="768" style="display: block; margin: auto;"></p>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

@@ -12,11 +12,9 @@ vignette: >
 ```{r r1, fig.height = 6, fig.width = 8, fig.align = "center"}
 library("RcppDynProg")
 
-plot <- requireNamespace("rqdatatable", quietly = TRUE) &&
-  requireNamespace("ggplot2", quietly = TRUE)
+plot <- requireNamespace("ggplot2", quietly = TRUE)
 if(plot) {
   library("ggplot2")
-  library("rqdatatable")
 }
 
 set.seed(2018)
@@ -68,130 +66,6 @@ if(plot) {
             subtitle = "dots: observed values, segments: observed group means, dashed line: unobserved true values") + 
     theme(legend.position = "none")
   print(plt2)
-}
-```
-
-
-```{r r6, fig.height = 6, fig.width = 8, fig.align = "center"}
-use_vtreat <- requireNamespace("vtreat", quietly = TRUE)
-```
-
-```{r r7, fig.height = 6, fig.width = 8, fig.align = "center", eval=use_vtreat}
-spline_variable <- function(varName, x, y, w = NULL) {
-  if(is.null(w)) {
-    w <- numeric(n) + 1
-  }
-  nknots <- 100
-  spline <- stats::smooth.spline(x, y, 
-                                 w = w,
-                                 nknots = nknots,
-                                 keep.data = FALSE, 
-                                 keep.stuff = FALSE,
-                                 cv = TRUE)$fit
-  estimate <- stats::predict(spline, x)$y
-  return(estimate)
-}
-
-customCoders = list('c.PiecewiseV.num' = vtreat::solve_piecewise,
-                    'n.PiecewiseV.num' = vtreat::solve_piecewise,
-                    'c.knearest.num' = vtreat::square_window,
-                    'n.knearest.num' = vtreat::square_window,
-                    'c.spline.num' = spline_variable,
-                    'n.spline.num' = spline_variable,
-                    'c.PiecewiseLin.num' = RcppDynProg::piecewise_linear,
-                    'n.PiecewiseLin.num' = RcppDynProg::piecewise_linear,
-                    'c.PiecewiseC.num' = RcppDynProg::piecewise_constant,
-                    'n.PiecewiseC.num' = RcppDynProg::piecewise_constant)
-codeRestriction = c("PiecewiseV", 
-                    "knearest",
-                    "spline",
-                    "PiecewiseLin",
-                    "PiecewiseC")
-
-trt <- vtreat::designTreatmentsN(
-  d, 
-  'x', 'y_observed',
-  customCoders = customCoders,
-  codeRestriction = codeRestriction,
-  verbose = FALSE)
-knitr::kable(trt$scoreFrame[, c("varName", "rsq", "sig")])
-
-dt <- vtreat::prepare(trt, d)
-dt$y_observed <- NULL
-d <- cbind(d, dt)
-```
-
-```{r r8, fig.height = 6, fig.width = 8, fig.align = "center", eval=use_vtreat}
-print(sum((d$x_PiecewiseV - d$y_ideal)^2))
-print(sum((d$x_PiecewiseV - d$y_observed)^2))
-```
-
-```{r r9, fig.height = 6, fig.width = 8, fig.align = "center", eval=use_vtreat}
-print(sum((d$x_knearest - d$y_ideal)^2))
-print(sum((d$x_knearest - d$y_observed)^2))
-```
-
-```{r r10, fig.height = 6, fig.width = 8, fig.align = "center", eval=use_vtreat}
-print(sum((d$x_PiecewiseLin - d$y_ideal)^2))
-print(sum((d$x_PiecewiseLin - d$y_observed)^2))
-```
-
-```{r r11, fig.height = 6, fig.width = 8, fig.align = "center", eval=use_vtreat}
-print(sum((d$x_spline - d$y_ideal)^2))
-print(sum((d$x_spline - d$y_observed)^2))
-```
-
-```{r r12, fig.height = 6, fig.width = 8, fig.align = "center", eval=use_vtreat}
-if(plot) {
-  plt3 <- ggplot(data= d, aes(x = x)) + 
-    geom_line(aes(y = y_ideal), linetype=2) +
-    geom_point(aes(y = y_observed)) +
-    geom_line(aes(y = x_PiecewiseV)) +
-    ylab("y") +
-    ggtitle("vtreat PiecewiseV estimate",
-            subtitle = "dots: observed values, segments: observed group means, dashed line: unobserved true values") + 
-    theme(legend.position = "none")
-  print(plt3)
-  
-  plt4 <- ggplot(data= d, aes(x = x)) + 
-    geom_line(aes(y = y_ideal), linetype=2) +
-    geom_point(aes(y = y_observed)) +
-    geom_line(aes(y = x_knearest)) +
-    ylab("y") +
-    ggtitle("vtreat k-nearest estimate",
-            subtitle = "dots: observed values, segments: observed group means, dashed line: unobserved true values") + 
-    theme(legend.position = "none")
-  print(plt4)
-  
-  plt5 <- ggplot(data= d, aes(x = x)) + 
-    geom_line(aes(y = y_ideal), linetype=2) +
-    geom_point(aes(y = y_observed)) +
-    geom_line(aes(y = x_PiecewiseLin)) +
-    ylab("y") +
-    ggtitle("vtreat RcppDynProg piecewise linear estimate",
-            subtitle = "dots: observed values, segments: observed group means, dashed line: unobserved true values") + 
-    theme(legend.position = "none")
-  print(plt5)
-  
-  plt6 <- ggplot(data= d, aes(x = x)) + 
-    geom_line(aes(y = y_ideal), linetype=2) +
-    geom_point(aes(y = y_observed)) +
-    geom_line(aes(y = x_PiecewiseC)) +
-    ylab("y") +
-    ggtitle("vtreat RcppDynProg piecewise constant estimate",
-            subtitle = "dots: observed values, segments: observed group means, dashed line: unobserved true values") + 
-    theme(legend.position = "none")
-  print(plt6)
-  
-  plt7 <- ggplot(data= d, aes(x = x)) + 
-    geom_line(aes(y = y_ideal), linetype=2) +
-    geom_point(aes(y = y_observed)) +
-    geom_line(aes(y = x_spline)) +
-    ylab("y") +
-    ggtitle("spline estimate",
-            subtitle = "dots: observed values, segments: observed group means, dashed line: unobserved true values") + 
-    theme(legend.position = "none")
-  print(plt7)
 }
 ```
 

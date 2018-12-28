@@ -9,14 +9,12 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r r, fig.height = 6, fig.width = 8, fig.align = "center"}
+```{r r1, fig.height = 6, fig.width = 8, fig.align = "center"}
 library("RcppDynProg")
 
-plot <- requireNamespace("rqdatatable", quietly = TRUE) &&
-  requireNamespace("ggplot2", quietly = TRUE)
+plot <- requireNamespace("ggplot2", quietly = TRUE)
 if(plot) {
   library("ggplot2")
-  library("rqdatatable")
 }
 
 set.seed(2018)
@@ -74,18 +72,14 @@ print(soln)
 
 
 d$group <- as.character(findInterval(d$x, soln))
+group_means <- tapply(d$y_observed, d$group, mean)
+d$group_mean <- group_means[d$group]
 
-
+print(sum((d$y_observed - d$y_ideal)^2))
+  
+print(sum((d$group_mean - d$y_ideal)^2))
 
 if(plot) {
-  d <- d %.>% 
-    extend(., group_mean = mean(y_observed),
-           partitionby = "group") %.>%
-    as.data.frame(.)
-  
-  print(sum((d$y_observed - d$y_ideal)^2))
-  print(sum((d$group_mean - d$y_ideal)^2))
-
   plt2 <- ggplot(data= d, aes(x = x)) + 
     geom_line(aes(y = y_ideal), linetype=2) +
     geom_point(aes(y = y_observed, color = group)) +
@@ -98,11 +92,11 @@ if(plot) {
 }
 ```
 
-```{r l, fig.height = 6, fig.width = 8, fig.align = "center"}
+```{r r2, fig.height = 6, fig.width = 8, fig.align = "center"}
 # x_cuts <- solve_for_partition(d$x, d$y_observed)
 # sometimes a different penalty due to problem chunking
 x_cuts <- solve_for_partitionc(d$x, d$y_observed, penalty = ub)
-print(x_cuts)
+#print(x_cuts)
 
 d$estimate <- approx(x_cuts$x, x_cuts$pred, xout = d$x, method = "constant", rule = 2)$y
 d$group <- as.character(findInterval(d$x, x_cuts[x_cuts$what=="left", "x"]))
