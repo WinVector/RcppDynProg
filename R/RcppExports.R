@@ -42,7 +42,7 @@ const_costs <- function(y, w, indices) {
 #' partition is of the form [v[i], v[i+1]) (intervals open on the right).
 #' 
 #' @param x NumericMatix, for j>=i x(i,j) is the cost of partition element [i,...,j] (inclusive).
-#' @param kmax int, maximum number of steps in solution. 
+#' @param kmax int, maximum number of segments in solution. 
 #' @return dynamic program solution.
 #' 
 #' @export

@@ -79,7 +79,131 @@
     
     
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-<p>Cross validated dynamic programming solutions for partitioning and machine learning problems.</p>
+<div id="the-package" class="section level2">
+<h2 class="hasAnchor">
+<a href="#the-package" class="anchor"></a>The package</h2>
+<p><a href="https://github.com/WinVector/RcppDynProg"><code>RcppDynProg</code></a> is an <a href="https://CRAN.R-project.org/package=Rcpp"><code>Rcpp</code></a> based <a href="https://www.r-project.org"><code>R</code></a> package that implements simple table-based <a href="https://en.wikipedia.org/wiki/Dynamic_programming">dynamic programming</a>.</p>
+</div>
+<div id="the-abstract-problem" class="section level2">
+<h2 class="hasAnchor">
+<a href="#the-abstract-problem" class="anchor"></a>The abstract problem</h2>
+<p>The primary problem <a href="https://winvector.github.io/RcppDynProg/reference/solve_dynamic_program.html"><code><a href="reference/solve_dynamic_program.html">RcppDynProg::solve_dynamic_program()</a></code></a> is designed to solve is formally given as follows.</p>
+<blockquote>
+<p>Minimum cost consecutive partition.</p>
+<p>Given: a positive integer <code>n</code> and an a <span class="math inline">\(n\)</span> by <code>n</code> matrix called <code>costs</code>.</p>
+<p>Find: an increasing sequence of integers <code>soln</code> with <code>length(soln)==k (&gt;=2)</code>, <code>soln[1] == 1</code>, and <code>soln[k] == n+1</code> such that <code>sum[i=1,...,k-1] costs[soln[i], soln[i+1]-1]</code> is minimized.</p>
+</blockquote>
+<p>To rephrase: <code>costs[i,j]</code> is specifying the cost of interval of integers <code>{i,...,j}</code> (inclusive) and the problem is to find the minimum cost <a href="https://en.wikipedia.org/wiki/Partition_of_a_set">partition</a> of the set of integers <code>{1,...,n}</code> in a sequence of intervals. What the use does is supply the matrix of costs of <em>every</em> possible interval of integers and the solver then finds what disjoint <em>set</em> of intervals that cover <code>{1,...,n}</code> have the lowest sum of costs. The user has to supply a lot of input interval costs (<code>n(n-1)/2</code> of them, which is a lot- but is tractable) and the algorithm quickly finds the best simultaneous set of intervals (there are of them, so exhaustive search would not be an option at scale as there are going to be <code>2^(n-1)</code> partitions to inspect).</p>
+<p>We can illustrate this abstract problem as follows (if this is too abstract, please skip forward to the concrete application).</p>
+<p>Suppose we have the following cost matrix.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">costs &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="fl">1.5</span>, <span class="dv">1</span> ,<span class="dv">5</span> ,<span class="dv">1</span> ,<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">5</span>, <span class="dv">0</span>, <span class="op">-</span><span class="dv">1</span>), 
+                <span class="dt">nrow=</span><span class="dv">3</span>)
+<span class="kw">print</span>(costs)
+ <span class="co">#       [,1] [,2] [,3]</span>
+ <span class="co">#  [1,]  1.5    1    5</span>
+ <span class="co">#  [2,]  1.0    1    0</span>
+ <span class="co">#  [3,]  5.0    0   -1</span></code></pre></div>
+<p>Then the optimal partition is found as follows.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">"RcppDynProg"</span>)
+soln &lt;-<span class="st"> </span><span class="kw"><a href="reference/solve_dynamic_program.html">solve_dynamic_program</a></span>(costs, <span class="kw">nrow</span>(costs))
+<span class="kw">print</span>(soln)
+ <span class="co">#  [1] 1 3 4</span></code></pre></div>
+<p>The sequence <code>[1, 2, 4]</code> is a just compact representation for the following sequence of intervals.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">lapply</span>(
+  <span class="kw">seq_len</span>(<span class="kw">length</span>(soln)<span class="op">-</span><span class="dv">1</span>),
+  <span class="cf">function</span>(i) {
+    soln[i]<span class="op">:</span>(soln[i<span class="op">+</span><span class="dv">1</span>]<span class="op">-</span><span class="dv">1</span>)
+  })
+ <span class="co">#  [[1]]</span>
+ <span class="co">#  [1] 1 2</span>
+ <span class="co">#  </span>
+ <span class="co">#  [[2]]</span>
+ <span class="co">#  [1] 3</span></code></pre></div>
+<p>Which is saying the optimal partition is to the sequence of sets <code>[{1}, {2, 3}]</code> which has total cost <code>costs[1,1] + costs[2,3]</code>. The dynamic programming solver knew to take the expensive set <code>{1}</code> to allow the cheap set <code>{2, 3}</code> to be in its chosen partition. This is the essence of dynamic programming: finding an optimal <em>global</em> solution, even if it requires odd-looking local choices.</p>
+</div>
+<div id="the-application" class="section level2">
+<h2 class="hasAnchor">
+<a href="#the-application" class="anchor"></a>The application</h2>
+<p>The intended application of <code>RcppDynProg</code> is to find optimal piecewise solutions to single-variable modeling problems. For example consider the following data.</p>
+<p><img src="tools/README-r1-1.png" width="768" style="display: block; margin: auto;"></p>
+<p>In the above we have an input (or independent variable) <code>x</code> and an observed outcome (or dependent variable) <code>y_observed</code> (portrayed as points). <code>y_observed</code> is an unobserved idea value (<code>y_ideal</code>, portrayed by the dashed curve) plus independent noise. The modeling goal is to get close the <code>y_ideal</code> curve using the <code>y_observed</code> observations. Obviously this <a href="https://github.com/WinVector/RcppDynProg/blob/master/extras/SegmentationL.html">can be done with a spline</a>, but let’s use <code>RcppDynProg</code> to find a piecewise linear fit.</p>
+<p>To encode this as a dynamic programming problem we need to build a cost matrix that for every consecutive interval of <code>x</code>-values we have estimated the out-of sample quality of fit. This is supplied by the function <code><a href="reference/lin_costs.html">RcppDynProg::lin_costs()</a></code> (using the <a href="http://www.win-vector.com/blog/2014/09/estimating-generalization-error-with-the-press-statistic/">PRESS statistic</a>), but lets take a quick look at the idea.</p>
+<p>The following interval is a good interval, as all the chosen points (shown in dark blue) are in a nearly linear arrangement. The in-sample price of the interval would be the total sum of residuals of a linear model fit on the selected region (and the out of sample price would be the PRESS statistic).</p>
+<p><img src="tools/README-rg1-1.png" width="768" style="display: block; margin: auto;"></p>
+<p>The “cost” (or loss) of this interval can be estimated as shown.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(interval_indexes)
+ <span class="co">#  [1]  94 139</span>
+<span class="kw">print</span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>interval_indexes[<span class="dv">2</span>] <span class="op">-</span><span class="st"> </span>interval_indexes[<span class="dv">1</span>]) <span class="co"># width</span>
+ <span class="co">#  [1] 46</span>
+fit &lt;-<span class="st"> </span><span class="kw">lm</span>(y_observed <span class="op">~</span><span class="st"> </span>x, 
+          <span class="dt">data =</span> d[interval_indexes[<span class="dv">1</span>]<span class="op">:</span>interval_indexes[<span class="dv">2</span>], ])
+<span class="kw">sum</span>(fit<span class="op">$</span>residuals<span class="op">^</span><span class="dv">2</span>)
+ <span class="co">#  [1] 2.807998</span></code></pre></div>
+<p>The following interval is a bad interval, as all the chosen points (shown in dark blue) are not in a nearly linear arrangement.</p>
+<p><img src="tools/README-rb1-1.png" width="768" style="display: block; margin: auto;"></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(interval_indexes)
+ <span class="co">#  [1] 120 165</span>
+<span class="kw">print</span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>interval_indexes[<span class="dv">2</span>] <span class="op">-</span><span class="st"> </span>interval_indexes[<span class="dv">1</span>]) <span class="co"># width</span>
+ <span class="co">#  [1] 46</span>
+fit &lt;-<span class="st"> </span><span class="kw">lm</span>(y_observed <span class="op">~</span><span class="st"> </span>x, 
+          <span class="dt">data =</span> d[interval_indexes[<span class="dv">1</span>]<span class="op">:</span>interval_indexes[<span class="dv">2</span>], ])
+<span class="kw">sum</span>(fit<span class="op">$</span>residuals<span class="op">^</span><span class="dv">2</span>)
+ <span class="co">#  [1] 5.453532</span></code></pre></div>
+<p>The user would price all of the intervals alone, and then ask the solver to find the best simultaneous set of intervals.</p>
+<p>The complete solution is worked as follows (using the <a href="https://winvector.github.io/RcppDynProg/reference/solve_for_partition.html"><code><a href="reference/solve_for_partition.html">RcppDynProg::solve_for_partition()</a></code></a> function which wraps all the steps together).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x_cuts &lt;-<span class="st"> </span><span class="kw"><a href="reference/solve_for_partition.html">solve_for_partition</a></span>(d<span class="op">$</span>x, d<span class="op">$</span>y_observed, <span class="dt">penalty =</span> <span class="dv">10</span>)
+<span class="kw">print</span>(x_cuts)
+ <span class="co">#         x       pred group  what</span>
+ <span class="co">#  1   0.05 -0.1570880     1  left</span>
+ <span class="co">#  2   4.65  1.1593754     1 right</span>
+ <span class="co">#  3   4.70  1.0653666     2  left</span>
+ <span class="co">#  4   6.95 -0.9770792     2 right</span>
+ <span class="co">#  5   7.00 -1.2254925     3  left</span>
+ <span class="co">#  6   9.20  0.8971391     3 right</span>
+ <span class="co">#  7   9.25  1.3792437     4  left</span>
+ <span class="co">#  8  11.10 -1.1542021     4 right</span>
+ <span class="co">#  9  11.15 -1.0418353     5  left</span>
+ <span class="co">#  10 12.50  1.1519490     5 right</span>
+ <span class="co">#  11 12.55  1.3964906     6  left</span>
+ <span class="co">#  12 13.75 -1.2045219     6 right</span>
+ <span class="co">#  13 13.80 -1.3791405     7  left</span>
+ <span class="co">#  14 15.00  1.0195679     7 right</span>
+
+d<span class="op">$</span>estimate &lt;-<span class="st"> </span><span class="kw">approx</span>(x_cuts<span class="op">$</span>x, x_cuts<span class="op">$</span>pred, 
+                     <span class="dt">xout =</span> d<span class="op">$</span>x, 
+                     <span class="dt">method =</span> <span class="st">"linear"</span>, <span class="dt">rule =</span> <span class="dv">2</span>)<span class="op">$</span>y
+d<span class="op">$</span>group &lt;-<span class="st"> </span><span class="kw">as.character</span>(
+  <span class="kw">findInterval</span>(d<span class="op">$</span>x, x_cuts[x_cuts<span class="op">$</span>what<span class="op">==</span><span class="st">"left"</span>, <span class="st">"x"</span>]))
+
+plt2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data=</span> d, <span class="kw">aes</span>(<span class="dt">x =</span> x)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> y_ideal), <span class="dt">linetype=</span><span class="dv">2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y =</span> y_observed, <span class="dt">color =</span> group)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> estimate, <span class="dt">color =</span> group)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">"y"</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">"RcppDynProg piecewise linear estimate"</span>,
+          <span class="dt">subtitle =</span> <span class="st">"dots: observed values, segments: observed group means, dashed line: unobserved true values"</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">"none"</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_color_brewer</span>(<span class="dt">palette =</span> <span class="st">"Dark2"</span>)
+<span class="kw">print</span>(plt2)</code></pre></div>
+<p><img src="tools/README-r2-1.png" width="768" style="display: block; margin: auto;"></p>
+<p><a href="https://winvector.github.io/RcppDynProg/reference/solve_for_partition.html"><code><a href="reference/solve_for_partition.html">RcppDynProg::solve_for_partition()</a></code></a> finds a partition of a relation into a number of linear estimates. Each interval is priced using out-of sample cost via the <a href="http://www.win-vector.com/blog/2014/09/estimating-generalization-error-with-the-press-statistic/">PRESS statistic</a> plus the specified penalty (to discourage small intervals). Notice, however, the user did not have to specify a <em>k</em> (or number of intervals) to a get good result.</p>
+<p>The entire modeling procedure is wrapped as a <a href="https://github.com/WinVector/vtreat"><code>vtreat</code></a> <a href="http://www.win-vector.com/blog/2017/09/custom-level-coding-in-vtreat/">custom-coder</a> in the function <a href="https://winvector.github.io/RcppDynProg/reference/piecewise_linear.html"><code><a href="reference/piecewise_linear.html">RcppDynProg::piecewise_linear()</a></code></a>. This allows such variable treatments to be easily incorporated into modeling pipelines (example <a href="https://github.com/WinVector/zmPDSwR/blob/master/KDD2009/KDD2009vtreat.html">here</a>).</p>
+<p>In addition to a piecewise linear solver we include a piecewise constant solver, which is demonstrated <a href="https://winvector.github.io/RcppDynProg/articles/Segmentation.html">here</a>. Other applications can include peak detection or any other application where the per-segment metrics are independent.</p>
+</div>
+<div id="the-methodology" class="section level2">
+<h2 class="hasAnchor">
+<a href="#the-methodology" class="anchor"></a>The methodology</h2>
+<p>The solver is fast for 3 reasons:</p>
+<ol style="list-style-type: decimal">
+<li>
+<code><a href="reference/solve_for_partition.html">RcppDynProg::solve_for_partition()</a></code> includes a problem reduction heuristic in the spirit of the <a href="https://www.springer.com/us/book/9780387948836">parameterized complexity</a> methodology.</li>
+<li>Ordered (or interval) partition problems are amenable to dynamic programming because initial segments of an interval partition have succinct summaries (just the right-most integer and how many segments were used to get to this point).</li>
+<li>
+<code>RcppDynProg</code> is a fast <code>C++</code> implementation using <code>Rcpp</code>.</li>
+</ol>
+<p>Some <a href="https://github.com/WinVector/RcppDynProg/blob/master/extras/Timings.html">basic timings</a> show <a href="https://github.com/WinVector/RcppDynProg/blob/master/src/dyn_prog.cpp">the <code>C++</code> implementation</a> can be on the order of 350 times faster than <a href="https://github.com/WinVector/RcppDynProg/blob/master/R/solve_dyn_R.R">a direct transliteration <code>R</code></a> of the same code (so not vectorized, and not fully R idiomatic), and <a href="https://github.com/WinVector/RcppDynProg/blob/master/extras/time_python.ipynb">on the order of 650 times faster</a> than an <a href="https://github.com/WinVector/RcppDynProg/blob/master/extras/DynProg.py"><code>Python</code> direct transliteration</a> of the same code (so not optimized, and not “Pythonic”). The non-optimized and non-adapted nature of the code translations unfortunately exaggerates the speedup, but we the <code>Rcpp</code> is likely buying as a solid factor of over 100- as <code>C++</code> is going to be much more efficient at all of the index-chasing this dynamic programming solution is based on.</p>
+<p>A note on problem complexity: general partition problems (where we do not restrict the subsets to be intervals) are NP-hard, so not thought to be amenable to efficient general solutions at scale (subset sum problems being good examples).</p>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

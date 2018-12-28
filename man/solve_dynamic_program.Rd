@@ -9,7 +9,7 @@ solve_dynamic_program(x, kmax)
 \arguments{
 \item{x}{NumericMatix, for j>=i x(i,j) is the cost of partition element [i,...,j] (inclusive).}
 
-\item{kmax}{int, maximum number of steps in solution.}
+\item{kmax}{int, maximum number of segments in solution.}
 }
 \value{
 dynamic program solution.
