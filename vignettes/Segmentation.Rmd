@@ -1,0 +1,128 @@
+---
+title: "Segmentation"
+author: "John Mount"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Segmentation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r r, fig.height = 6, fig.width = 8, fig.align = "center"}
+library("RcppDynProg")
+
+plot <- requireNamespace("rqdatatable", quietly = TRUE) &&
+  requireNamespace("ggplot2", quietly = TRUE)
+if(plot) {
+  library("ggplot2")
+  library("rqdatatable")
+}
+
+set.seed(2018)
+g <- 50
+d <- data.frame(
+  x = 1:(3*g)) # ordered in x
+d$y_ideal <- c(rep(0, g), rep(1, g), rep(-1, g))
+d$y_observed <- d$y_ideal + rnorm(length(d$y_ideal))
+
+
+
+if(plot) {
+  plt1 <- ggplot(data= d, aes(x = x)) + 
+    geom_line(aes(y = y_ideal), linetype=2) +
+    geom_point(aes(y = y_observed)) +
+    ylab("y") +
+    ggtitle("raw data", 
+            subtitle = "dots: observed values, dashed line: unobserved true values")
+  print(plt1)
+}
+
+
+y_permuted <- d$y_ideal[sample.int(nrow(d), nrow(d), replace = FALSE)]
+
+
+solve_with_penalty <- function(ycol, penalty) {
+  n <- length(ycol)
+  indices = seq_len(n)
+  x <- const_costs(ycol, 1+numeric(n), indices)
+  x <- x + penalty
+  solve_dynamic_program(x, n)
+}
+
+lb <- 1
+ub <- 10
+while(length(solve_with_penalty(y_permuted, ub))>2) {
+  ub <- ub*2
+}
+while(TRUE) {
+  mid <- ceiling((ub+lb)/2)
+  if(mid>=ub) {
+    break
+  }
+  si <- solve_with_penalty(y_permuted, mid)
+  if(length(si)<=2) {
+    ub <- mid
+  } else {
+    lb <- mid
+  }
+}
+print(ub)
+
+soln <- solve_with_penalty(d$y_observed, ub)
+print(soln)
+
+
+d$group <- as.character(findInterval(d$x, soln))
+
+
+
+if(plot) {
+  d <- d %.>% 
+    extend(., group_mean = mean(y_observed),
+           partitionby = "group") %.>%
+    as.data.frame(.)
+  
+  print(sum((d$y_observed - d$y_ideal)^2))
+  print(sum((d$group_mean - d$y_ideal)^2))
+
+  plt2 <- ggplot(data= d, aes(x = x)) + 
+    geom_line(aes(y = y_ideal), linetype=2) +
+    geom_point(aes(y = y_observed, color = group)) +
+    geom_line(aes(y = group_mean, color = group)) +
+    ylab("y") +
+    ggtitle("RcppDynProg piecewise constant estimate",
+            subtitle = "dots: observed values, segments: observed group means, dashed line: unobserved true values") + 
+    theme(legend.position = "none")
+  print(plt2)
+}
+```
+
+```{r l, fig.height = 6, fig.width = 8, fig.align = "center"}
+# x_cuts <- solve_for_partition(d$x, d$y_observed)
+# sometimes a different penalty due to problem chunking
+x_cuts <- solve_for_partitionc(d$x, d$y_observed, penalty = ub)
+print(x_cuts)
+
+d$estimate <- approx(x_cuts$x, x_cuts$pred, xout = d$x, method = "constant", rule = 2)$y
+d$group <- as.character(findInterval(d$x, x_cuts[x_cuts$what=="left", "x"]))
+
+print(sum((d$y_observed - d$y_ideal)^2))
+
+print(sum((d$estimate - d$y_ideal)^2))
+
+print(sum((d$estimate - d$y_observed)^2))
+
+if(plot) {
+  plt3 <- ggplot(data= d, aes(x = x)) + 
+    geom_line(aes(y = y_ideal), linetype=2) +
+    geom_point(aes(y = y_observed, color = group)) +
+    geom_line(aes(y = estimate, color = group)) +
+    ylab("y") +
+    ggtitle("RcppDynProg piecewise constant estimate",
+            subtitle = "dots: observed values, segments: observed group means, dashed line: unobserved true values") + 
+    theme(legend.position = "none")
+  print(plt3)
+}
+```
+

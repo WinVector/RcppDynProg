@@ -1,0 +1,72 @@
+library('RcppDynProg')
+
+context("ops")
+
+
+test_that("test_dynprog1: test basic operaton", {
+  x <- matrix(c(1,1,5,1,1,0,5,0,1), nrow=3)
+  k <- 3
+  testthat::expect_true(RcppDynProg:::test_solvers(x, k))
+  
+  x2 <- matrix(c(0.165439415490255, 0.982703358167782, 0.507731057703495, 
+                    0.423818744486198, 0.866322142072022, 0.807251449674368, 0.0862272190861404, 
+                    0.823423527413979, 0.907007380854338), nrow=3)
+  testthat::expect_true(RcppDynProg:::test_solvers(x2, k))
+  
+  set.seed(1515)
+  for(i in 1:10) {
+    x3 <- matrix(runif(9), nrow=3)
+    testthat::expect_true(RcppDynProg:::test_solvers(x3, k))
+  }
+  
+  
+  
+  
+  # should be non-increasing in k
+  # expected loss of using the mean of other points to
+  # estimate each point
+  inflated_var <- function(x) {
+    meanx <- mean(x)
+    n <- length(x)
+    (n/(n-1))*sum((x-meanx)^2) # + 10
+  }
+  
+  set.seed(253)
+  g <- 10
+  d <- data.frame(
+    x = 1:(3*g),
+    y = c(rnorm(g), 1 + rnorm(g), -1 + rnorm(g)))
+  
+  n <- nrow(d)
+  x <- matrix(0, nrow=n, ncol=n)
+  for(i in 1:n) {
+    x[i,i] <- 100000 # big penalty
+    if(i<n) {
+      for(j in (i+1):n) {
+        cost <- inflated_var(d$y[i:j])
+        x[i,j] <- cost
+        x[j,i] <- x[i,j]
+      }
+    }
+  }
+  
+  slast <- NA
+  for(k in 1:nrow(x)) {
+    s1 <- solve_dynamic_program_R(x, k)
+    sc1 <- score_solution(x, s1)
+    s2 <- solve_dynamic_program(x, k)
+    sc2 <- score_solution(x, s2)
+    if(!(abs(sc1-sc2)<=1e-5)) {
+      stop("R and C++ solutions disagree")
+    }
+    if(!is.na(slast)) {
+      if(sc1>slast) {
+        stop("solution was not monotone in k")
+      }
+    }
+    slast <- sc1
+  }
+ 
+})
+
+  

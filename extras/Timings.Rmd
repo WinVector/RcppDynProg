@@ -1,0 +1,45 @@
+---
+title: "Timings"
+output: github_document
+---
+
+```{r}
+knitr::opts_chunk$set(fig.width=12, fig.height=8) 
+library("CrossDynProg")
+library("WVPlots")
+library("microbenchmark")
+library("rqdatatable")
+
+
+set.seed(2018)
+n <- 500
+x <- matrix(runif(n*n), nrow=n, ncol=n)
+
+solve_dynamic_program(x, n)
+
+solve_dynamic_program_R(x, n)
+
+timings <- microbenchmark(
+  solve_dynamic_program(x, n),
+  solve_dynamic_program_R(x, n),
+  times = 5L)
+
+print(timings)
+
+p <- data.frame(timings)
+p$seconds <- p$time/1e+9
+p$method <- as.factor(p$expr)
+p$method <- reorder(p$method, p$seconds)
+
+summary <- p %.>%
+  project(., 
+          mean_seconds = mean(seconds),
+          groupby = "method")
+print(summary)
+ratio <- max(summary$mean_seconds)/min(summary$mean_seconds)
+print(ratio)
+
+WVPlots::ScatterBoxPlotH(p, 
+                         "seconds", "method", 
+                         "performance of same dynamic programming code in R and Rcpp (C++)")
+```

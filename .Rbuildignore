@@ -1,0 +1,10 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^CrossDynProg.Rproj$
+^.Rhistory$
+^extras$
+^.DS_Store$
+^cran-comments.md$
+^revdep$
+^docs$
+^README.Rmd$

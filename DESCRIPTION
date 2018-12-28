@@ -1,0 +1,29 @@
+Package: RcppDynProg
+Type: Package
+Title: Rcpp Dynamic Programming
+Version: 0.1.0
+Date: 2018-12-28
+Authors@R: c(
+    person("John", "Mount", email = "jmount@win-vector.com", role = c("aut", "cre")),
+    person("Nina", "Zumel", email = "nzumel@win-vector.com", role = c("aut")),
+    person(family = "Win-Vector LLC", role = c("cph"))
+    )
+Description: Dynamic Programming implemented in Rcpp.  Includes example partition and out of sample fitting applications.
+License: GPL-3
+Depends:
+  R (>= 3.4.0)
+Imports:
+  Rcpp (>= 1.0.0),
+  wrapr (>= 1.8.0),
+  utils,
+  stats
+LinkingTo: Rcpp
+RoxygenNote: 6.1.1
+Suggests:
+    testthat,
+    knitr,
+    rmarkdown,
+    rqdatatable,
+    vtreat (>= 1.3.3),
+    ggplot2
+VignetteBuilder: knitr

@@ -1,0 +1,8 @@
+*~
+.DS_Store
+.Rproj.user
+*.o
+*.so
+.Rhistory
+inst/doc
+revdep
