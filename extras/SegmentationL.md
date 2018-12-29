@@ -1,7 +1,10 @@
 Linear Segmentation
 ================
 John Mount
-2018-12-28
+2018-12-29
+
+In this example we fit a piecewise linear function to example data.
+Please see [here](https://github.com/WinVector/RcppDynProg) for an discussion of the methodology.
 
 ``` r
 library("RcppDynProg")
@@ -88,6 +91,8 @@ print(plt2)
 ``` r
 use_vtreat <- requireNamespace("vtreat", quietly = TRUE)
 ```
+
+Here we show many of the [`vtreat`](https://github.com/WinVector/vtreat) [custom variable coders](http://www.win-vector.com/blog/2017/09/custom-level-coding-in-vtreat/). An application of these coders can be found [here](https://github.com/WinVector/zmPDSwR/blob/master/KDD2009/KDD2009vtreat.md).
 
 ``` r
 spline_variable <- function(varName, x, y, w = NULL) {

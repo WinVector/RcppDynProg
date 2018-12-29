@@ -9,6 +9,9 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+In this example we fit a piecewise constant function to example data.  
+Please see [here](https://github.com/WinVector/RcppDynProg) for an discussion of the methodology.
+
 ```{r r1, fig.height = 6, fig.width = 8, fig.align = "center"}
 library("RcppDynProg")
 
@@ -35,8 +38,12 @@ if(plot) {
             subtitle = "dots: observed values, dashed line: unobserved true values")
   print(plt1)
 }
+```
 
+As a heuristic, we set our regularization penalty to a value that treats permuted data (no relation between x and y) 
+as a single partition.
 
+```{r}
 y_permuted <- d$y_ideal[sample.int(nrow(d), nrow(d), replace = FALSE)]
 
 
@@ -66,7 +73,11 @@ while(TRUE) {
   }
 }
 print(ub)
+```
 
+We now use this penalty to segment the data. Notice we recover the actual problem structure.
+
+```{r r5, fig.height = 6, fig.width = 8, fig.align = "center"}
 soln <- solve_with_penalty(d$y_observed, ub)
 print(soln)
 
@@ -92,11 +103,13 @@ if(plot) {
 }
 ```
 
+The same solution through the more succinct `solve_for_partitionc()` interface.
+
 ```{r r2, fig.height = 6, fig.width = 8, fig.align = "center"}
 # x_cuts <- solve_for_partition(d$x, d$y_observed)
 # sometimes a different penalty due to problem chunking
 x_cuts <- solve_for_partitionc(d$x, d$y_observed, penalty = ub)
-#print(x_cuts)
+print(x_cuts)
 
 d$estimate <- approx(x_cuts$x, x_cuts$pred, xout = d$x, method = "constant", rule = 2)$y
 d$group <- as.character(findInterval(d$x, x_cuts[x_cuts$what=="left", "x"]))

@@ -5,6 +5,9 @@ date: "`r Sys.Date()`"
 output: github_document
 ---
 
+In this example we fit a piecewise linear function to example data.  
+Please see [here](https://github.com/WinVector/RcppDynProg) for an discussion of the methodology.
+
 ```{r r1, fig.height = 6, fig.width = 8, fig.align = "center"}
 library("RcppDynProg")
 library("ggplot2")
@@ -62,6 +65,9 @@ print(plt2)
 ```{r r6, fig.height = 6, fig.width = 8, fig.align = "center"}
 use_vtreat <- requireNamespace("vtreat", quietly = TRUE)
 ```
+
+Here we show many of the [`vtreat`](https://github.com/WinVector/vtreat) [custom variable coders](http://www.win-vector.com/blog/2017/09/custom-level-coding-in-vtreat/).
+An application of these coders can be found [here](https://github.com/WinVector/zmPDSwR/blob/master/KDD2009/KDD2009vtreat.md).
 
 ```{r r7, fig.height = 6, fig.width = 8, fig.align = "center", eval=use_vtreat}
 spline_variable <- function(varName, x, y, w = NULL) {

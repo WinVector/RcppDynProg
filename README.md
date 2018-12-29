@@ -3,7 +3,7 @@
 The package
 -----------
 
-[`RcppDynProg`](https://github.com/WinVector/RcppDynProg) is an [`Rcpp`](https://CRAN.R-project.org/package=Rcpp) based [`R`](https://www.r-project.org) package that implements simple, but powerful, table-based [dynamic programming](https://en.wikipedia.org/wiki/Dynamic_programming).
+[`RcppDynProg`](https://github.com/WinVector/RcppDynProg) is an [`Rcpp`](https://CRAN.R-project.org/package=Rcpp) based [`R`](https://www.r-project.org) package that implements simple, but powerful, table-based [dynamic programming](https://en.wikipedia.org/wiki/Dynamic_programming). This package can be used to optimally solve the minimum cost partition into intervals problem (described below) and is useful in building piecewise estimates of functions (shown in this note).
 
 The abstract problem
 --------------------
@@ -156,9 +156,9 @@ The methodology
 The solver is fast through to the use of 3 techniques:
 
 1.  `RcppDynProg::solve_for_partition()` includes a problem reduction heuristic in the spirit of the [parameterized complexity](https://www.springer.com/us/book/9780387948836) methodology.
-2.  Ordered (or interval) partition problems are amenable to dynamic programming because initial segments of an interval partition have succinct summaries (just the right-most integer and how many segments were used to get to this point).
+2.  Ordered (or interval) partition problems are amenable to dynamic programming because initial segments of an interval partition have succinct summaries (just the right-most index and how many segments were used to get to this point).
 3.  `RcppDynProg` is a fast `C++` implementation using `Rcpp`.
 
-Some [basic timings](https://github.com/WinVector/RcppDynProg/blob/master/extras/Timings.md) show [the `C++` implementation](https://github.com/WinVector/RcppDynProg/blob/master/src/dyn_prog.cpp) can be on the order of 350 times faster than [a direct transliteration `R`](https://github.com/WinVector/RcppDynProg/blob/master/R/solve_dyn_R.R) of the same code (so not vectorized, and not fully R idiomatic), and [on the order of 650 times faster](https://github.com/WinVector/RcppDynProg/blob/master/extras/time_python.ipynb) than an [`Python` direct transliteration](https://github.com/WinVector/RcppDynProg/blob/master/extras/DynProg.py) of the same code (so not optimized, and not "Pythonic"). The non-optimized and non-adapted nature of the code translations unfortunately exaggerates the speedup, but we the `Rcpp` is likely buying as a solid factor of over 100- as `C++` is going to be much more efficient at all of the index-chasing this dynamic programming solution is based on.
+Some [basic timings](https://github.com/WinVector/RcppDynProg/blob/master/extras/Timings.md) show [the `C++` implementation](https://github.com/WinVector/RcppDynProg/blob/master/src/dyn_prog.cpp) can be on the order of 350 times faster than [a direct transliteration `R`](https://github.com/WinVector/RcppDynProg/blob/master/R/solve_dyn_R.R) of the same code (so not vectorized, not fully R idiomatic, some time lost to [`seqi()`](https://winvector.github.io/wrapr/reference/seqi.html) abstraction), and [on the order of 650 times faster](https://github.com/WinVector/RcppDynProg/blob/master/extras/time_python.ipynb) than a [`Python` direct transliteration](https://github.com/WinVector/RcppDynProg/blob/master/extras/DynProg.py) of the same code (so not optimized, and not "Pythonic"). The non-optimized and non-adapted nature of the code translations unfortunately exaggerates the speedup, however the `Rcpp` is likely buying as a solid factor of over 100- as `C++` is going to be much more efficient at all of the index-chasing this dynamic programming solution is based on.
 
 A note on problem complexity: general partition problems (where we do not restrict the subsets to be intervals) are NP-hard, so not thought to be amenable to efficient general solutions at scale (subset sum problems being good examples).
