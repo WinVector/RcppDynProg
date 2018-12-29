@@ -25,7 +25,7 @@ test_that("test_scoring: test scoring", {
   }
   
   c1 <- inflated_var(d$y_observed, 0)
-  c2 <- const_cost(d$y_observed, d$w, 0, length(d$y_observed-1)-1)
+  c2 <- const_cost(d$y_observed, d$w, 1, 0, length(d$y_observed-1)-1)
   testthat::expect_true(abs(c1-c2)<1.e-6)
   
   y_permuted <- d$y_ideal[sample.int(nrow(d), nrow(d), replace = FALSE)]
@@ -48,7 +48,7 @@ test_that("test_scoring: test scoring", {
   
   m1 <- create_cost_matrix(d$y_observed, 0)
   indices = seq_len(length(d$y_observed))
-  m2 <- const_costs(d$y_observed, d$w, indices)
+  m2 <- const_costs(d$y_observed, d$w, 1, indices)
   d <- abs(m1-m2)
   for(i in seq_len(nrow(d))) {
     d[i,i] <- 0

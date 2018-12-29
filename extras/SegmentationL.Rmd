@@ -30,7 +30,7 @@ plt1 <- ggplot(data= d, aes(x = x)) +
 print(plt1)
 
 
-x_cuts <- solve_for_partition(d$x, d$y_observed, penalty = 10)
+x_cuts <- solve_for_partition(d$x, d$y_observed, penalty = 1)
 print(x_cuts)
 
 d$estimate <- approx(x_cuts$x, x_cuts$pred, xout = d$x, method = "linear", rule = 2)$y

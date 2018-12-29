@@ -4,7 +4,7 @@
 \alias{lin_cost}
 \title{lin_cost}
 \usage{
-lin_cost(x, y, w, i, j)
+lin_cost(x, y, w, min_seg, i, j)
 }
 \arguments{
 \item{x}{NumericVector, x-coords of values to group.}
@@ -13,12 +13,14 @@ lin_cost(x, y, w, i, j)
 
 \item{w}{NumericVector, weights.}
 
+\item{min_seg}{positive integer, minimum segment size.}
+
 \item{i}{integer, first index (inclusive).}
 
 \item{j}{integer, j>=i last index (inclusive);}
 }
 \value{
-linear cost of [i,...,j] interval (inclusive).
+scalar, linear cost of [i,...,j] interval (inclusive).
 }
 \description{
 Calculate cost of using linear model fit on points to estimate other points in the interval.
@@ -26,7 +28,7 @@ Zero indexed.
 }
 \examples{
 
-lin_cost(c(1, 2, 3, 4), c(1, 2, 2, 1), c(1, 1, 1, 1), 0, 3)
+lin_cost(c(1, 2, 3, 4), c(1, 2, 2, 1), c(1, 1, 1, 1), 1, 0, 3)
 
 }
 \keyword{internal}

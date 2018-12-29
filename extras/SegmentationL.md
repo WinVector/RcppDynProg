@@ -31,7 +31,7 @@ print(plt1)
 <img src="SegmentationL_files/figure-markdown_github/r1-1.png" style="display: block; margin: auto;" />
 
 ``` r
-x_cuts <- solve_for_partition(d$x, d$y_observed, penalty = 10)
+x_cuts <- solve_for_partition(d$x, d$y_observed, penalty = 1)
 print(x_cuts)
 ```
 

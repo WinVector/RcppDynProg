@@ -7,11 +7,11 @@
 xlin_fits(x, y, w, i, j)
 }
 \arguments{
-\item{x}{NumericVector, x-coords of values to group.}
+\item{x}{NumericVector, x-coords of values to group (length>=2).}
 
 \item{y}{NumericVector, values to group in order.}
 
-\item{w}{NumericVector, weights.}
+\item{w}{NumericVector, weights (positive).}
 
 \item{i}{integer, first index (inclusive).}
 

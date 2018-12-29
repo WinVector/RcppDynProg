@@ -5,7 +5,7 @@
 \title{Solve for a piecewise linear partiton.}
 \usage{
 solve_for_partition(x, y, ..., w = NULL, penalty = 0,
-  min_n_to_chunk = 1000, max_k = length(x))
+  min_n_to_chunk = 1000, min_seg = 1, max_k = length(x))
 }
 \arguments{
 \item{x}{numeric, input variable (no NAs).}
@@ -19,6 +19,8 @@ solve_for_partition(x, y, ..., w = NULL, penalty = 0,
 \item{penalty}{per-segment cost penalty.}
 
 \item{min_n_to_chunk}{minimum n to subdivied problem.}
+
+\item{min_seg}{positive integer, minimum segment size.}
 
 \item{max_k}{maximum segments to divide into.}
 }

@@ -4,19 +4,21 @@
 \alias{const_cost}
 \title{const_cost}
 \usage{
-const_cost(y, w, i, j)
+const_cost(y, w, min_seg, i, j)
 }
 \arguments{
 \item{y}{NumericVector, values to group in order.}
 
 \item{w}{NumericVector, weights.}
 
+\item{min_seg}{positive integer, minimum segment size.}
+
 \item{i}{integer, first index (inclusive).}
 
 \item{j}{integer, j>=i last index (inclusive);}
 }
 \value{
-const cost of [i,...,j] interval (inclusive).
+scalar, const cost of [i,...,j] interval (inclusive).
 }
 \description{
 Calculate cost of using mean of points to estimate other points in interval.
@@ -24,7 +26,7 @@ Zero indexed.
 }
 \examples{
 
-const_cost(c(1, 1, 2, 2), c(1, 1, 1, 1), 0, 3)
+const_cost(c(1, 1, 2, 2), c(1, 1, 1, 1), 1, 0, 3)
 
 }
 \keyword{internal}

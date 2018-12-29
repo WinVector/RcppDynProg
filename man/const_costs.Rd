@@ -4,12 +4,14 @@
 \alias{const_costs}
 \title{const_costs}
 \usage{
-const_costs(y, w, indices)
+const_costs(y, w, min_seg, indices)
 }
 \arguments{
 \item{y}{NumericVector, values to group in order.}
 
 \item{w}{NumericVector, weights.}
+
+\item{min_seg}{positive integer, minimum segment size.}
 
 \item{indices}{IntegerVector, order list of indices to pair.}
 }
@@ -22,6 +24,6 @@ One indexed.
 }
 \examples{
 
-const_costs(c(1, 1, 2, 2), c(1, 1, 1, 1), 1:4)
+const_costs(c(1, 1, 2, 2), c(1, 1, 1, 1), 1, 1:4)
 
 }

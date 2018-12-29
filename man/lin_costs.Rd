@@ -4,7 +4,7 @@
 \alias{lin_costs}
 \title{lin_costs}
 \usage{
-lin_costs(x, y, w, indices)
+lin_costs(x, y, w, min_seg, indices)
 }
 \arguments{
 \item{x}{NumericVector, x-coords of values to group.}
@@ -12,6 +12,8 @@ lin_costs(x, y, w, indices)
 \item{y}{NumericVector, values to group in order.}
 
 \item{w}{NumericVector, weights.}
+
+\item{min_seg}{positive integer, minimum segment size.}
 
 \item{indices}{IntegerVector, ordered list of indices to pair.}
 }
@@ -24,6 +26,6 @@ One indexed.
 }
 \examples{
 
-lin_costs(c(1, 2, 3, 4), c(1, 2, 2, 1), c(1, 1, 1, 1), 1:4)
+lin_costs(c(1, 2, 3, 4), c(1, 2, 2, 1), c(1, 1, 1, 1), 1, 1:4)
 
 }

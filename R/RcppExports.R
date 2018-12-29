@@ -8,19 +8,20 @@
 #' 
 #' @param y NumericVector, values to group in order.
 #' @param w NumericVector, weights.
+#' @param min_seg positive integer, minimum segment size.
 #' @param i integer, first index (inclusive).
 #' @param j integer, j>=i last index (inclusive);
-#' @return  const cost of [i,...,j] interval (inclusive).
+#' @return scalar, const cost of [i,...,j] interval (inclusive).
 #' 
 #' @keywords internal
 #' 
 #' @examples
 #' 
-#' const_cost(c(1, 1, 2, 2), c(1, 1, 1, 1), 0, 3)
+#' const_cost(c(1, 1, 2, 2), c(1, 1, 1, 1), 1, 0, 3)
 #' 
 #' @export
-const_cost <- function(y, w, i, j) {
-    .Call('_RcppDynProg_const_cost', PACKAGE = 'RcppDynProg', y, w, i, j)
+const_cost <- function(y, w, min_seg, i, j) {
+    .Call('_RcppDynProg_const_cost', PACKAGE = 'RcppDynProg', y, w, min_seg, i, j)
 }
 
 #' const_costs
@@ -30,17 +31,18 @@ const_cost <- function(y, w, i, j) {
 #' 
 #' @param y NumericVector, values to group in order.
 #' @param w NumericVector, weights.
+#' @param min_seg positive integer, minimum segment size.
 #' @param indices IntegerVector, order list of indices to pair.
 #' @return xcosts NumericMatix, for j>=i xcosts(i,j) is the cost of partition element [i,...,j] (inclusive).
 #' 
 #' 
 #' @examples
 #' 
-#' const_costs(c(1, 1, 2, 2), c(1, 1, 1, 1), 1:4)
+#' const_costs(c(1, 1, 2, 2), c(1, 1, 1, 1), 1, 1:4)
 #' 
 #' @export
-const_costs <- function(y, w, indices) {
-    .Call('_RcppDynProg_const_costs', PACKAGE = 'RcppDynProg', y, w, indices)
+const_costs <- function(y, w, min_seg, indices) {
+    .Call('_RcppDynProg_const_costs', PACKAGE = 'RcppDynProg', y, w, min_seg, indices)
 }
 
 #' solve_dynamic_program
@@ -69,9 +71,9 @@ solve_dynamic_program <- function(x, kmax) {
 #' Calculate out of sample linear fit predictions.
 #' Zero indexed.
 #' 
-#' @param x NumericVector, x-coords of values to group.
+#' @param x NumericVector, x-coords of values to group (length>=2).
 #' @param y NumericVector, values to group in order.
-#' @param w NumericVector, weights.
+#' @param w NumericVector, weights (positive).
 #' @param i integer, first index (inclusive).
 #' @param j integer, j>=i+2 last index (inclusive);
 #' @return  vector of predictions.
@@ -95,19 +97,20 @@ xlin_fits <- function(x, y, w, i, j) {
 #' @param x NumericVector, x-coords of values to group.
 #' @param y NumericVector, values to group in order.
 #' @param w NumericVector, weights.
+#' @param min_seg positive integer, minimum segment size.
 #' @param i integer, first index (inclusive).
 #' @param j integer, j>=i last index (inclusive);
-#' @return  linear cost of [i,...,j] interval (inclusive).
+#' @return scalar, linear cost of [i,...,j] interval (inclusive).
 #' 
 #' @keywords internal
 #' 
 #' @examples
 #' 
-#' lin_cost(c(1, 2, 3, 4), c(1, 2, 2, 1), c(1, 1, 1, 1), 0, 3)
+#' lin_cost(c(1, 2, 3, 4), c(1, 2, 2, 1), c(1, 1, 1, 1), 1, 0, 3)
 #' 
 #' @export
-lin_cost <- function(x, y, w, i, j) {
-    .Call('_RcppDynProg_lin_cost', PACKAGE = 'RcppDynProg', x, y, w, i, j)
+lin_cost <- function(x, y, w, min_seg, i, j) {
+    .Call('_RcppDynProg_lin_cost', PACKAGE = 'RcppDynProg', x, y, w, min_seg, i, j)
 }
 
 #' lin_costs
@@ -118,15 +121,16 @@ lin_cost <- function(x, y, w, i, j) {
 #' @param x NumericVector, x-coords of values to group.
 #' @param y NumericVector, values to group in order.
 #' @param w NumericVector, weights.
+#' @param min_seg positive integer, minimum segment size.
 #' @param indices IntegerVector, ordered list of indices to pair.
 #' @return xcosts NumericMatix, for j>=i xcosts(i,j) is the cost of partition element [i,...,j] (inclusive).
 #' 
 #' @examples
 #' 
-#' lin_costs(c(1, 2, 3, 4), c(1, 2, 2, 1), c(1, 1, 1, 1), 1:4)
+#' lin_costs(c(1, 2, 3, 4), c(1, 2, 2, 1), c(1, 1, 1, 1), 1, 1:4)
 #' 
 #' @export
-lin_costs <- function(x, y, w, indices) {
-    .Call('_RcppDynProg_lin_costs', PACKAGE = 'RcppDynProg', x, y, w, indices)
+lin_costs <- function(x, y, w, min_seg, indices) {
+    .Call('_RcppDynProg_lin_costs', PACKAGE = 'RcppDynProg', x, y, w, min_seg, indices)
 }
 

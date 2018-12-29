@@ -50,7 +50,7 @@ y_permuted <- d$y_ideal[sample.int(nrow(d), nrow(d), replace = FALSE)]
 solve_with_penalty <- function(ycol, penalty) {
   n <- length(ycol)
   indices = seq_len(n)
-  x <- const_costs(ycol, 1+numeric(n), indices)
+  x <- const_costs(ycol, 1+numeric(n), 1, indices)
   x <- x + penalty
   solve_dynamic_program(x, n)
 }

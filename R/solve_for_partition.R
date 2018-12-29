@@ -15,6 +15,7 @@ NULL
 #' @param w numeric, weights (no NAs, positive, same length as x).
 #' @param penalty per-segment cost penalty.
 #' @param min_n_to_chunk minimum n to subdivied problem.
+#' @param min_seg positive integer, minimum segment size.
 #' @param max_k maximum segments to divide into.
 #' @param costs_fn function to produce cost matrix.
 #' @param cost_f function to score intervals
@@ -27,6 +28,7 @@ solve_for_partition_xs <- function(x, y,
                                    w = NULL,
                                    penalty = 0.0,
                                    min_n_to_chunk = 1000,
+                                   min_seg = 1,
                                    max_k = length(x),
                                    cost_fn = lin_costs, cost_f = lin_cost) {
   wrapr::stop_if_dot_args(substitute(list(...)), "RcppDynProg::solve_for_partition_xs")
@@ -54,7 +56,7 @@ solve_for_partition_xs <- function(x, y,
   indices <- indices[!is_dup]
   indices = sort(unique(c(1, indices, n)))
   # solve dynamic program
-  xmat <- cost_fn(x, y, w, indices)
+  xmat <- cost_fn(x, y, w, min_seg, indices)
   xmat <- xmat + penalty
   soln1 <- solve_dynamic_program(xmat, max_k)
   if(length(soln1)<=2) {
@@ -70,14 +72,14 @@ solve_for_partition_xs <- function(x, y,
   for(trial in seqi(1,5)) {
     old_soln = soln2
     for(ii in seqi(2, length(soln2)-1)) {
-      low <- max(soln2[ii-1]+2, soln2[ii]-chunk_size)
-      high <- min(soln2[ii+1]-2, soln2[ii]+chunk_size)
+      low <- max(soln2[ii-1]+(1+min_seg), soln2[ii]-chunk_size)
+      high <- min(soln2[ii+1]-(1+min_seg), soln2[ii]+chunk_size)
       if((low<high)&&(low<=soln2[ii])&&(high>=soln2[ii])) {
         best_can <- -1
         best_cost <- 0
         for(candidate in seqi(low, high)) {
-          costi <- cost_f(x, y, w, R_INDEX_SHIFT + soln2[ii-1], R_INDEX_SHIFT + candidate-1) + 
-            cost_f(x, y, w, R_INDEX_SHIFT + candidate, R_INDEX_SHIFT + soln2[ii+1]-1)
+          costi <- cost_f(x, y, w, min_seg, R_INDEX_SHIFT + soln2[ii-1], R_INDEX_SHIFT + candidate-1) + 
+            cost_f(x, y, w, min_seg, R_INDEX_SHIFT + candidate, R_INDEX_SHIFT + soln2[ii+1]-1)
           if((best_can<0)||(costi<best_cost)) {
             best_can <- candidate
             best_cost <- costi
@@ -107,6 +109,7 @@ solve_for_partition_xs <- function(x, y,
 #' @param w numeric, weights (no NAs, positive, same length as x).
 #' @param penalty per-segment cost penalty.
 #' @param min_n_to_chunk minimum n to subdivied problem.
+#' @param min_seg positive integer, minimum segment size.
 #' @param max_k maximum segments to divide into.
 #' @return a data frame appropriate for stats::approx().
 #' 
@@ -121,6 +124,7 @@ solve_for_partition <- function(x, y,
                                 w = NULL,
                                 penalty = 0.0,
                                 min_n_to_chunk = 1000,
+                                min_seg = 1,
                                 max_k = length(x)) {
   wrapr::stop_if_dot_args(substitute(list(...)), "RcppDynProg::solve_for_partition")
   n <- length(x)
@@ -137,6 +141,7 @@ solve_for_partition <- function(x, y,
                                   w = w,
                                   penalty = penalty, 
                                   min_n_to_chunk = min_n_to_chunk,
+                                  min_seg = min_seg,
                                   max_k = max_k,
                                   cost_fn = lin_costs, cost_f = lin_cost)
   d <- data.frame(x = x, y = y, w = w)
@@ -178,6 +183,7 @@ solve_for_partition <- function(x, y,
 #' @param w numeric, weights (no NAs, positive, same length as x).
 #' @param penalty per-segment cost penalty.
 #' @param min_n_to_chunk minimum n to subdivied problem.
+#' @param min_seg positive integer, minimum segment size.
 #' @param max_k maximum segments to divide into.
 #' @return a data frame appropriate for stats::approx().
 #' 
@@ -192,6 +198,7 @@ solve_for_partitionc <- function(x, y,
                                  w = NULL,
                                  penalty = 0.0,
                                  min_n_to_chunk = 1000,
+                                 min_seg = 1,
                                  max_k = length(x)) {
   wrapr::stop_if_dot_args(substitute(list(...)), "RcppDynProg::solve_for_partitionc")
   n <- length(x)
@@ -205,12 +212,13 @@ solve_for_partitionc <- function(x, y,
     w = 1 + numeric(n)
   }
   ord <- order(x)
-  fn <- function(x, y, w, indices) { const_costs(y, w, indices) }
-  f <- function(x, y, w, i, j) { const_cost(y, w, i, j) }
+  fn <- function(x, y, w, min_seg, indices) { const_costs(y, w, min_seg, indices) }
+  f <- function(x, y, w, min_seg, i, j) { const_cost(y, w, min_seg, i, j) }
   soln2 <- solve_for_partition_xs(x[ord], y[ord], 
                                   w = w[ord],
                                   penalty = penalty, 
                                   min_n_to_chunk = min_n_to_chunk,
+                                  min_seg = min_seg,
                                   max_k = max_k,
                                   cost_fn = fn, cost_f = f)
   # solve for constant funciton in each region to get endpoint values
