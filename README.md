@@ -106,7 +106,7 @@ The user would price all of the intervals individually, and then ask the solver 
 The complete solution is worked as follows (using the [`RcppDynProg::solve_for_partition()`](https://winvector.github.io/RcppDynProg/reference/solve_for_partition.html) function which wraps all the steps together, converting from indices to `x`-coordinates).
 
 ``` r
-x_cuts <- solve_for_partition(d$x, d$y_observed, penalty = 10)
+x_cuts <- solve_for_partition(d$x, d$y_observed, penalty = 1)
 print(x_cuts)
  #         x       pred group  what
  #  1   0.05 -0.1570880     1  left

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • RcppDynProg</title>
+<title>Piecewise linear fit coder factory. — piecewise_linear_coder • RcppDynProg</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,7 +30,10 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Piecewise linear fit coder factory. — piecewise_linear_coder" />
+
+<meta property="og:description" content="Build a piecewise linear fit coder with some parameters bound in." />
+<meta name="twitter:card" content="summary" />
 
 
 
@@ -46,7 +49,7 @@
   </head>
 
   <body>
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -113,102 +116,72 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Piecewise linear fit coder factory.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/WinVector/RcppDynProg//blob/master/R/vtreat_coders.R'><code>R/vtreat_coders.R</code></a></small>
+    <div class="hidden name"><code>piecewise_linear_coder.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    
+    <p>Build a piecewise linear fit coder with some parameters bound in.</p>
+    
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
-
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      <tr>
-        
-        <td>
-          <p><code><a href="RcppDynProg.html">RcppDynProg</a></code> </p>
-        </td>
-        <td><p>RcppDynProg</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="const_costs.html">const_costs()</a></code> </p>
-        </td>
-        <td><p>const_costs</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="lin_costs.html">lin_costs()</a></code> </p>
-        </td>
-        <td><p>lin_costs</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="piecewise_constant.html">piecewise_constant()</a></code> </p>
-        </td>
-        <td><p>Piecewise constant fit.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="piecewise_constant_coder.html">piecewise_constant_coder()</a></code> </p>
-        </td>
-        <td><p>Piecewise constant fit coder factory.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="piecewise_linear.html">piecewise_linear()</a></code> </p>
-        </td>
-        <td><p>Piecewise linear fit.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="piecewise_linear_coder.html">piecewise_linear_coder()</a></code> </p>
-        </td>
-        <td><p>Piecewise linear fit coder factory.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="score_solution.html">score_solution()</a></code> </p>
-        </td>
-        <td><p>compute the price of a partition solution (and check is valid).</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="solve_dynamic_program.html">solve_dynamic_program()</a></code> </p>
-        </td>
-        <td><p>solve_dynamic_program</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="solve_for_partition.html">solve_for_partition()</a></code> </p>
-        </td>
-        <td><p>Solve for a piecewise linear partiton.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="solve_for_partitionc.html">solve_for_partitionc()</a></code> </p>
-        </td>
-        <td><p>Solve for a piecewise constant partiton.</p></td>
-      </tr>
-    </tbody>
+    <pre class="usage"><span class='fu'>piecewise_linear_coder</span>(<span class='kw'>penalty</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>min_n_to_chunk</span> <span class='kw'>=</span> <span class='fl'>1000</span>,
+  <span class='kw'>min_seg</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>max_k</span> <span class='kw'>=</span> <span class='fl'>1000</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>penalty</th>
+      <td><p>per-segment cost penalty.</p></td>
+    </tr>
+    <tr>
+      <th>min_n_to_chunk</th>
+      <td><p>minimum n to subdivied problem.</p></td>
+    </tr>
+    <tr>
+      <th>min_seg</th>
+      <td><p>positive integer, minimum segment size.</p></td>
+    </tr>
+    <tr>
+      <th>max_k</th>
+      <td><p>maximum segments to divide into.</p></td>
+    </tr>
     </table>
-  </div>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
+    <p>a vtreat coder</p>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class='no'>coder</span> <span class='kw'>&lt;-</span> <span class='fu'>piecewise_linear_coder</span>(<span class='kw'>min_seg</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+<span class='fu'>coder</span>(<span class='st'>"x"</span>, <span class='fl'>1</span>:<span class='fl'>8</span>, <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span>, <span class='fl'>4</span>, <span class='fl'>3</span>, <span class='fl'>2</span>, <span class='fl'>1</span>))</div><div class='output co'>#&gt; [1] 1 2 3 4 4 3 2 1
+#&gt; attr(,"approx_table")
+#&gt;   predXs predYs
+#&gt; 1      1      1
+#&gt; 2      4      4
+#&gt; 3      5      4
+#&gt; 4      8      1
+#&gt; attr(,"method")
+#&gt; [1] "linear"</div><div class='input'>
+</div></pre>
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
     </ul>
+
   </div>
 </div>
 

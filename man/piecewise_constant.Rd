@@ -2,7 +2,7 @@
 % Please edit documentation in R/vtreat_coders.R
 \name{piecewise_constant}
 \alias{piecewise_constant}
-\title{Piecwise constant fit.}
+\title{Piecewise constant fit.}
 \usage{
 piecewise_constant(varName, x, y, w = NULL)
 }

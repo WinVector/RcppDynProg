@@ -125,7 +125,7 @@ d<span class="op">$</span>y_observed &lt;-<span class="st"> </span>d<span class=
   <span class="kw">print</span>(plt1)
 }</code></pre></div>
 <p><img src="SegmentationL_files/figure-html/r1-1.png" width="768" style="display: block; margin: auto;"></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x_cuts &lt;-<span class="st"> </span><span class="kw"><a href="../reference/solve_for_partition.html">solve_for_partition</a></span>(d<span class="op">$</span>x, d<span class="op">$</span>y_observed, <span class="dt">penalty =</span> <span class="dv">10</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x_cuts &lt;-<span class="st"> </span><span class="kw"><a href="../reference/solve_for_partition.html">solve_for_partition</a></span>(d<span class="op">$</span>x, d<span class="op">$</span>y_observed, <span class="dt">penalty =</span> <span class="dv">1</span>)
 <span class="kw">print</span>(x_cuts)</code></pre></div>
 <pre><code>##        x       pred group  what
 ## 1   0.05 -0.1570880     1  left

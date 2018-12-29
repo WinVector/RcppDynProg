@@ -131,7 +131,7 @@ Zero indexed.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>lin_cost</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>w</span>, <span class='no'>i</span>, <span class='no'>j</span>)</pre>
+    <pre class="usage"><span class='fu'>lin_cost</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>w</span>, <span class='no'>min_seg</span>, <span class='no'>i</span>, <span class='no'>j</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -149,6 +149,10 @@ Zero indexed.</p>
       <td><p>NumericVector, weights.</p></td>
     </tr>
     <tr>
+      <th>min_seg</th>
+      <td><p>positive integer, minimum segment size.</p></td>
+    </tr>
+    <tr>
       <th>i</th>
       <td><p>integer, first index (inclusive).</p></td>
     </tr>
@@ -160,12 +164,12 @@ Zero indexed.</p>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>linear cost of [i,...,j] interval (inclusive).</p>
+    <p>scalar, linear cost of [i,...,j] interval (inclusive).</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='fu'>lin_cost</span>(<span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span>), <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>1</span>), <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>), <span class='fl'>0</span>, <span class='fl'>3</span>)</div><div class='output co'>#&gt; [1] 6.576132</div><div class='input'>
+<span class='fu'>lin_cost</span>(<span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span>), <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>1</span>), <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>), <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>3</span>)</div><div class='output co'>#&gt; [1] 6.576132</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

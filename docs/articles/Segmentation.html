@@ -132,7 +132,7 @@ d<span class="op">$</span>y_observed &lt;-<span class="st"> </span>d<span class=
 solve_with_penalty &lt;-<span class="st"> </span><span class="cf">function</span>(ycol, penalty) {
   n &lt;-<span class="st"> </span><span class="kw">length</span>(ycol)
   indices =<span class="st"> </span><span class="kw">seq_len</span>(n)
-  x &lt;-<span class="st"> </span><span class="kw"><a href="../reference/const_costs.html">const_costs</a></span>(ycol, <span class="dv">1</span><span class="op">+</span><span class="kw">numeric</span>(n), indices)
+  x &lt;-<span class="st"> </span><span class="kw"><a href="../reference/const_costs.html">const_costs</a></span>(ycol, <span class="dv">1</span><span class="op">+</span><span class="kw">numeric</span>(n), <span class="dv">1</span>, indices)
   x &lt;-<span class="st"> </span>x <span class="op">+</span><span class="st"> </span>penalty
   <span class="kw"><a href="../reference/solve_dynamic_program.html">solve_dynamic_program</a></span>(x, n)
 }

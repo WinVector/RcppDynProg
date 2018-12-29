@@ -161,7 +161,7 @@ fit &lt;-<span class="st"> </span><span class="kw">lm</span>(y_observed <span cl
  <span class="co">#  [1] 5.242647</span></code></pre></div>
 <p>The user would price all of the intervals individually, and then ask the solver to find the best simultaneous set of intervals.</p>
 <p>The complete solution is worked as follows (using the <a href="https://winvector.github.io/RcppDynProg/reference/solve_for_partition.html"><code><a href="reference/solve_for_partition.html">RcppDynProg::solve_for_partition()</a></code></a> function which wraps all the steps together, converting from indices to <code>x</code>-coordinates).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x_cuts &lt;-<span class="st"> </span><span class="kw"><a href="reference/solve_for_partition.html">solve_for_partition</a></span>(d<span class="op">$</span>x, d<span class="op">$</span>y_observed, <span class="dt">penalty =</span> <span class="dv">10</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x_cuts &lt;-<span class="st"> </span><span class="kw"><a href="reference/solve_for_partition.html">solve_for_partition</a></span>(d<span class="op">$</span>x, d<span class="op">$</span>y_observed, <span class="dt">penalty =</span> <span class="dv">1</span>)
 <span class="kw">print</span>(x_cuts)
  <span class="co">#         x       pred group  what</span>
  <span class="co">#  1   0.05 -0.1570880     1  left</span>

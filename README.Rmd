@@ -157,7 +157,7 @@ The complete solution is worked as follows (using the [`RcppDynProg::solve_for_p
 
 
 ```{r r2, fig.height = 6, fig.width = 8, fig.align = "center"}
-x_cuts <- solve_for_partition(d$x, d$y_observed, penalty = 10)
+x_cuts <- solve_for_partition(d$x, d$y_observed, penalty = 1)
 print(x_cuts)
 
 d$estimate <- approx(x_cuts$x, x_cuts$pred, 

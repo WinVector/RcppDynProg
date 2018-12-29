@@ -90,7 +90,7 @@ To encode this as a dynamic programming problem we need to build a cost matrix t
 The following interval is a good interval, as all the chosen points (shown in dark blue) are in a nearly linear arrangement.  The in-sample price of the interval would be the total sum of residuals of a linear model fit on the selected region (and the out of sample price would be given by the PRESS statistic).
 
 ```{r rg1, fig.height = 6, fig.width = 8, fig.align = "center", echo=FALSE}
-x_cuts <- solve_for_partition(d$x, d$y_observed, penalty = 10)
+x_cuts <- solve_for_partition(d$x, d$y_observed, penalty = 1)
 d$group <- as.character(
   findInterval(d$x, x_cuts[x_cuts$what=="left", "x"]))
 d$group <- ifelse(d$group==2, "interval", "not interval")
@@ -161,7 +161,7 @@ The complete solution is worked as follows (using the [`RcppDynProg::solve_for_p
 
 
 ```{r r2, fig.height = 6, fig.width = 8, fig.align = "center"}
-x_cuts <- solve_for_partition(d$x, d$y_observed, penalty = 10)
+x_cuts <- solve_for_partition(d$x, d$y_observed, penalty = 1)
 print(x_cuts)
 
 d$estimate <- approx(x_cuts$x, x_cuts$pred, 

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Piecwise constant fit. — piecewise_constant • RcppDynProg</title>
+<title>Piecewise constant fit. — piecewise_constant • RcppDynProg</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,7 +30,7 @@
 
 
 
-<meta property="og:title" content="Piecwise constant fit. — piecewise_constant" />
+<meta property="og:title" content="Piecewise constant fit. — piecewise_constant" />
 
 <meta property="og:description" content="vtreat custom coder based on RcppDynProg::solve_for_partition()." />
 <meta name="twitter:card" content="summary" />
@@ -118,7 +118,7 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Piecwise constant fit.</h1>
+    <h1>Piecewise constant fit.</h1>
     <small class="dont-index">Source: <a href='https://github.com/WinVector/RcppDynProg//blob/master/R/vtreat_coders.R'><code>R/vtreat_coders.R</code></a></small>
     <div class="hidden name"><code>piecewise_constant.Rd</code></div>
     </div>
@@ -155,13 +155,11 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='fu'>piecewise_constant</span>(<span class='st'>"x"</span>, <span class='fl'>1</span>:<span class='fl'>8</span>, <span class='fu'>c</span>(-<span class='fl'>1</span>, -<span class='fl'>1</span>, -<span class='fl'>1</span>, -<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>))</div><div class='output co'>#&gt; [1] -1 -1 -1 -1  1  1  1  1
+<span class='fu'>piecewise_constant</span>(<span class='st'>"x"</span>, <span class='fl'>1</span>:<span class='fl'>8</span>, <span class='fu'>c</span>(-<span class='fl'>1</span>, -<span class='fl'>1</span>, -<span class='fl'>1</span>, -<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>))</div><div class='output co'>#&gt; [1] 0 0 0 0 0 0 0 0
 #&gt; attr(,"approx_table")
 #&gt;   predXs predYs
-#&gt; 1      1     -1
-#&gt; 2      4     -1
-#&gt; 3      5      1
-#&gt; 4      8      1
+#&gt; 1      1      0
+#&gt; 2      8      0
 #&gt; attr(,"method")
 #&gt; [1] "constant"</div><div class='input'>
 </div></pre>

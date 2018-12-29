@@ -134,7 +134,7 @@ function.</p>
     </div>
 
     <pre class="usage"><span class='fu'>solve_for_partition</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>, <span class='kw'>w</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>penalty</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>min_n_to_chunk</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>max_k</span> <span class='kw'>=</span> <span class='fu'>length</span>(<span class='no'>x</span>))</pre>
+  <span class='kw'>min_n_to_chunk</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>min_seg</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>max_k</span> <span class='kw'>=</span> <span class='fu'>length</span>(<span class='no'>x</span>))</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -162,6 +162,10 @@ function.</p>
     <tr>
       <th>min_n_to_chunk</th>
       <td><p>minimum n to subdivied problem.</p></td>
+    </tr>
+    <tr>
+      <th>min_seg</th>
+      <td><p>positive integer, minimum segment size.</p></td>
     </tr>
     <tr>
       <th>max_k</th>

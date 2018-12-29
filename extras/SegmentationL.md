@@ -140,8 +140,8 @@ knitr::kable(trt$scoreFrame[, c("varName", "rsq", "sig")])
 | x\_PiecewiseV   |  0.8064672|    0|
 | x\_knearest     |  0.7415207|    0|
 | x\_spline       |  0.8486192|    0|
-| x\_PiecewiseLin |  0.6278839|    0|
-| x\_PiecewiseC   |  0.4356028|    0|
+| x\_PiecewiseLin |  0.8380624|    0|
+| x\_PiecewiseC   |  0.6975840|    0|
 
 ``` r
 dt <- vtreat::prepare(trt, d)
