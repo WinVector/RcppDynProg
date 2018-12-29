@@ -113,21 +113,21 @@ d$group <- NULL
 The "cost" (or loss) of this interval can be estimated as shown.
 
 ```{r rg2, fig.height = 6, fig.width = 8, fig.align = "center"}
-print(good_interval_indexes)
+print(good_interval_indexes) # interval 
 print(1 + good_interval_indexes[2] - good_interval_indexes[1]) # width
 fit <- lm(y_observed ~ x, 
           data = d[good_interval_indexes[1]:good_interval_indexes[2], ])
-sum(fit$residuals^2)
+sum(fit$residuals^2) # cost for interval
 ```
 
 
 The following interval is a bad interval, as all the chosen points (shown in dark blue) are not in a nearly linear arrangement.
 
 ```{r rb1, fig.height = 6, fig.width = 8, fig.align = "center", echo=FALSE}
-x_cuts <- solve_for_partition(d$x, d$y_observed, penalty = 10)
 d$group <- "not interval"
 start <- 120
-d$group[seq(start, start+interval_len-1)] <- "interval"
+d$group[(good_interval_indexes[1]:good_interval_indexes[2]) + 
+          round((good_interval_indexes[2]-good_interval_indexes[1])/2)] <- "interval"
 bad_interval_indexes <- c(min(which(d$group=="interval")), max(which(d$group=="interval")))
 m <- lm(y_observed ~ x, data = d[d$group == "interval", ])
 pltb <- ggplot(data= d, aes(x = x)) + 
@@ -143,11 +143,11 @@ d$group <- NULL
 ```
 
 ```{r rb2, fig.height = 6, fig.width = 8, fig.align = "center"}
-print(bad_interval_indexes)
+print(bad_interval_indexes) # interval
 print(1 + bad_interval_indexes[2] - bad_interval_indexes[1]) # width
 fit <- lm(y_observed ~ x, 
           data = d[bad_interval_indexes[1]:bad_interval_indexes[2], ])
-sum(fit$residuals^2)
+sum(fit$residuals^2) # cost for interval
 ```
 
 

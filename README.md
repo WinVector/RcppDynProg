@@ -76,13 +76,13 @@ The following interval is a good interval, as all the chosen points (shown in da
 The "cost" (or loss) of this interval can be estimated as shown.
 
 ``` r
-print(good_interval_indexes)
+print(good_interval_indexes) # interval 
  #  [1]  94 139
 print(1 + good_interval_indexes[2] - good_interval_indexes[1]) # width
  #  [1] 46
 fit <- lm(y_observed ~ x, 
           data = d[good_interval_indexes[1]:good_interval_indexes[2], ])
-sum(fit$residuals^2)
+sum(fit$residuals^2) # cost for interval
  #  [1] 2.807998
 ```
 
@@ -91,14 +91,14 @@ The following interval is a bad interval, as all the chosen points (shown in dar
 <img src="tools/README-rb1-1.png" style="display: block; margin: auto;" />
 
 ``` r
-print(bad_interval_indexes)
- #  [1] 120 165
+print(bad_interval_indexes) # interval
+ #  [1] 116 161
 print(1 + bad_interval_indexes[2] - bad_interval_indexes[1]) # width
  #  [1] 46
 fit <- lm(y_observed ~ x, 
           data = d[bad_interval_indexes[1]:bad_interval_indexes[2], ])
-sum(fit$residuals^2)
- #  [1] 5.453532
+sum(fit$residuals^2) # cost for interval
+ #  [1] 5.242647
 ```
 
 The user would price all of the intervals individually, and then ask the solver to find the best simultaneous set of intervals.

@@ -135,24 +135,24 @@ soln &lt;-<span class="st"> </span><span class="kw"><a href="reference/solve_dyn
 <p>The following interval is a good interval, as all the chosen points (shown in dark blue) are in a nearly linear arrangement. The in-sample price of the interval would be the total sum of residuals of a linear model fit on the selected region (and the out of sample price would be given by the PRESS statistic).</p>
 <p><img src="https://raw.githubusercontent.com/WinVector/RcppDynProg/master/tools/README-rg1-1.png" width="768" style="display: block; margin: auto;"></p>
 <p>The “cost” (or loss) of this interval can be estimated as shown.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(good_interval_indexes)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(good_interval_indexes) <span class="co"># interval </span>
  <span class="co">#  [1]  94 139</span>
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>good_interval_indexes[<span class="dv">2</span>] <span class="op">-</span><span class="st"> </span>good_interval_indexes[<span class="dv">1</span>]) <span class="co"># width</span>
  <span class="co">#  [1] 46</span>
 fit &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/lm">lm</a></span>(y_observed <span class="op">~</span><span class="st"> </span>x, 
           <span class="dt">data =</span> d[good_interval_indexes[<span class="dv">1</span>]<span class="op">:</span>good_interval_indexes[<span class="dv">2</span>], ])
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sum">sum</a></span>(fit<span class="op">$</span>residuals<span class="op">^</span><span class="dv">2</span>)
+<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sum">sum</a></span>(fit<span class="op">$</span>residuals<span class="op">^</span><span class="dv">2</span>) <span class="co"># cost for interval</span>
  <span class="co">#  [1] 2.807998</span></code></pre></div>
 <p>The following interval is a bad interval, as all the chosen points (shown in dark blue) are not in a nearly linear arrangement.</p>
 <p><img src="https://raw.githubusercontent.com/WinVector/RcppDynProg/master/tools/README-rb1-1.png" width="768" style="display: block; margin: auto;"></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(bad_interval_indexes)
- <span class="co">#  [1] 120 165</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(bad_interval_indexes) <span class="co"># interval</span>
+ <span class="co">#  [1] 116 161</span>
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>bad_interval_indexes[<span class="dv">2</span>] <span class="op">-</span><span class="st"> </span>bad_interval_indexes[<span class="dv">1</span>]) <span class="co"># width</span>
  <span class="co">#  [1] 46</span>
 fit &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/lm">lm</a></span>(y_observed <span class="op">~</span><span class="st"> </span>x, 
           <span class="dt">data =</span> d[bad_interval_indexes[<span class="dv">1</span>]<span class="op">:</span>bad_interval_indexes[<span class="dv">2</span>], ])
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sum">sum</a></span>(fit<span class="op">$</span>residuals<span class="op">^</span><span class="dv">2</span>)
- <span class="co">#  [1] 5.453532</span></code></pre></div>
+<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sum">sum</a></span>(fit<span class="op">$</span>residuals<span class="op">^</span><span class="dv">2</span>) <span class="co"># cost for interval</span>
+ <span class="co">#  [1] 5.242647</span></code></pre></div>
 <p>The user would price all of the intervals individually, and then ask the solver to find the best simultaneous set of intervals.</p>
 <p>The complete solution is worked as follows (using the <a href="https://winvector.github.io/RcppDynProg/reference/solve_for_partition.html"><code><a href="reference/solve_for_partition.html">RcppDynProg::solve_for_partition()</a></code></a> function which wraps all the steps together, converting from indices to <code>x</code>-coordinates).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x_cuts &lt;-<span class="st"> </span><span class="kw"><a href="reference/solve_for_partition.html">solve_for_partition</a></span>(d<span class="op">$</span>x, d<span class="op">$</span>y_observed, <span class="dt">penalty =</span> <span class="dv">10</span>)
