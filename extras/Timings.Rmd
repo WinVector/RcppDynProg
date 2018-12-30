@@ -3,6 +3,9 @@ title: "Timings"
 output: github_document
 ---
 
+
+
+
 ```{r}
 knitr::opts_chunk$set(fig.width=12, fig.height=8) 
 library("RcppDynProg")
@@ -43,3 +46,20 @@ WVPlots::ScatterBoxPlotH(p,
                          "seconds", "method", 
                          "performance of same dynamic programming code in R and Rcpp (C++)")
 ```
+
+
+
+
+---------------------
+
+
+Timings on a 2018 Dell XPS-13 laptop, 16 Gib RAM, LPDDR3, 2133 MT/s, Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz (8 cores reported), idle, charged, and plugged into power supply. Ubuntu 18.04.1 LTS.
+
+```{r}
+R.version.string
+
+R.version
+
+sessionInfo()
+```
+

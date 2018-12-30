@@ -37,12 +37,12 @@ print(timings)
 ```
 
     ## Unit: milliseconds
-    ##                           expr         min          lq        mean
-    ##    solve_dynamic_program(x, n)    59.68229    59.99435    60.17219
-    ##  solve_dynamic_program_R(x, n) 20892.04221 20939.13869 21056.85710
-    ##       median         uq         max neval
-    ##     59.99515    60.1898    60.99935     5
-    ##  21067.49815 21112.6715 21272.93493     5
+    ##                           expr         min         lq        mean
+    ##    solve_dynamic_program(x, n)    57.75546    57.9288    58.11079
+    ##  solve_dynamic_program_R(x, n) 20956.00437 21000.8355 21090.62778
+    ##      median         uq         max neval
+    ##     58.0061    58.4141    58.44951     5
+    ##  21046.3587 21169.6930 21280.24735     5
 
 ``` r
 p <- data.frame(timings)
@@ -58,15 +58,15 @@ print(summary)
 ```
 
     ##                           method mean_seconds
-    ## 1: solve_dynamic_program_R(x, n)  21.05685710
-    ## 2:   solve_dynamic_program(x, n)   0.06017219
+    ## 1: solve_dynamic_program_R(x, n)  21.09062778
+    ## 2:   solve_dynamic_program(x, n)   0.05811079
 
 ``` r
 ratio <- max(summary$mean_seconds)/min(summary$mean_seconds)
 print(ratio)
 ```
 
-    ## [1] 349.9433
+    ## [1] 362.9382
 
 ``` r
 WVPlots::ScatterBoxPlotH(p, 
@@ -75,3 +75,77 @@ WVPlots::ScatterBoxPlotH(p,
 ```
 
 ![](Timings_files/figure-markdown_github/unnamed-chunk-1-1.png)
+
+------------------------------------------------------------------------
+
+Timings on a 2018 Dell XPS-13 laptop, 16 Gib RAM, LPDDR3, 2133 MT/s, Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz (8 cores reported), idle, charged, and plugged into power supply. Ubuntu 18.04.1 LTS.
+
+``` r
+R.version.string
+```
+
+    ## [1] "R version 3.5.1 (2018-07-02)"
+
+``` r
+R.version
+```
+
+    ##                _                           
+    ## platform       x86_64-pc-linux-gnu         
+    ## arch           x86_64                      
+    ## os             linux-gnu                   
+    ## system         x86_64, linux-gnu           
+    ## status                                     
+    ## major          3                           
+    ## minor          5.1                         
+    ## year           2018                        
+    ## month          07                          
+    ## day            02                          
+    ## svn rev        74947                       
+    ## language       R                           
+    ## version.string R version 3.5.1 (2018-07-02)
+    ## nickname       Feather Spray
+
+``` r
+sessionInfo()
+```
+
+    ## R version 3.5.1 (2018-07-02)
+    ## Platform: x86_64-pc-linux-gnu (64-bit)
+    ## Running under: Ubuntu 18.04.1 LTS
+    ## 
+    ## Matrix products: default
+    ## BLAS: /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.7.1
+    ## LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.7.1
+    ## 
+    ## locale:
+    ##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+    ##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+    ##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+    ##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+    ##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+    ## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+    ## 
+    ## attached base packages:
+    ## [1] stats     graphics  grDevices utils     datasets  methods   base     
+    ## 
+    ## other attached packages:
+    ## [1] rqdatatable_1.1.2    rquery_1.2.1         microbenchmark_1.4-6
+    ## [4] WVPlots_1.0.7        RcppDynProg_0.1.0   
+    ## 
+    ## loaded via a namespace (and not attached):
+    ##  [1] Rcpp_1.0.0        sigr_1.0.3        pillar_1.3.0     
+    ##  [4] compiler_3.5.1    plyr_1.8.4        bindr_0.1.1      
+    ##  [7] tools_3.5.1       digest_0.6.18     lattice_0.20-38  
+    ## [10] evaluate_0.12     tibble_1.4.2      gtable_0.2.0     
+    ## [13] nlme_3.1-137      mgcv_1.8-26       pkgconfig_2.0.2  
+    ## [16] rlang_0.3.0.1     Matrix_1.2-15     parallel_3.5.1   
+    ## [19] yaml_2.2.0        xfun_0.4          bindrcpp_0.2.2   
+    ## [22] gridExtra_2.3     withr_2.1.2       stringr_1.3.1    
+    ## [25] dplyr_0.7.8       knitr_1.21        grid_3.5.1       
+    ## [28] tidyselect_0.2.5  data.table_1.11.8 glue_1.3.0       
+    ## [31] R6_2.3.0          rmarkdown_1.11    wrapr_1.8.2      
+    ## [34] ggplot2_3.1.0     purrr_0.2.5       magrittr_1.5     
+    ## [37] scales_1.0.0      htmltools_0.3.6   assertthat_0.2.0 
+    ## [40] colorspace_1.3-2  labeling_0.3      stringi_1.2.4    
+    ## [43] lazyeval_0.2.1    munsell_0.5.0     crayon_1.3.4
