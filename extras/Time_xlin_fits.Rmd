@@ -1,0 +1,97 @@
+---
+title: "Time xlin_fits"
+output: github_document
+---
+
+```{r r2, fig.height = 6, fig.width = 8, fig.align = "center"}
+library("RcppDynProg")
+library("WVPlots")
+library("ggplot2")
+library("microbenchmark")
+library("rqdatatable")
+
+set.seed(2018)
+
+# data
+mk_data <- function(g) {
+  d <- data.frame(
+    x = 0.05*(1:(3*g))) # ordered in x
+  n <- nrow(d)
+  d$y_ideal <- sin((0.3*d$x)^2)
+  d$y_observed <- d$y_ideal + 0.25*rnorm(n)
+  d
+}
+
+d <- mk_data(100)
+n <- nrow(d)
+w <- 1 + numeric(n)
+
+
+timings <- microbenchmark(
+  Rcpp = xlin_fits(d$x, d$y_observed, w, 0, n-1),
+  R_lm = xlin_fits_lm(d$x, d$y_observed, w),
+  R_rowwise = xlin_fits_R(d$x, d$y_observed, w),
+  R_vectorized = xlin_fits_V(d$x, d$y_observed, w),
+  times = 10L)
+
+print(timings)
+
+p <- data.frame(timings)
+p$seconds <- p$time/1e+9
+p$method <- as.factor(p$expr)
+p$method <- reorder(p$method, p$seconds)
+
+summary <- p %.>%
+  project(., 
+          mean_seconds = mean(seconds),
+          groupby = "method")
+print(summary)
+
+
+WVPlots::ScatterBoxPlotH(
+  p, 
+  "seconds", "method", 
+  paste0("performance of PRESS statistic in R and Rcpp (n=", n, ")"))
+
+WVPlots::ScatterBoxPlotH(
+  p, 
+  "seconds", "method", 
+  paste0("performance of PRESS statistic in R and Rcpp (n=", n, ")")) + 
+  scale_y_log10()
+
+d <- mk_data(1000000)
+n <- nrow(d)
+w <- 1 + numeric(n)
+
+timings <- microbenchmark(
+  Rcpp = xlin_fits(d$x, d$y_observed, w, 0, n-1),
+  R_rowwise = xlin_fits_R(d$x, d$y_observed, w),
+  R_vectorized = xlin_fits_V(d$x, d$y_observed, w),
+  times = 10L)
+
+print(timings)
+
+p <- data.frame(timings)
+p$seconds <- p$time/1e+9
+p$method <- as.factor(p$expr)
+p$method <- reorder(p$method, p$seconds)
+
+summary <- p %.>%
+  project(., 
+          mean_seconds = mean(seconds),
+          groupby = "method")
+print(summary)
+
+
+WVPlots::ScatterBoxPlotH(
+  p, 
+  "seconds", "method", 
+  paste0("performance of PRESS statistic in R and Rcpp (n=", n, ")"))
+
+WVPlots::ScatterBoxPlotH(
+  p, 
+  "seconds", "method", 
+  paste0("performance of PRESS statistic in R and Rcpp (n=", n, ")")) + 
+  scale_y_log10()
+
+```
