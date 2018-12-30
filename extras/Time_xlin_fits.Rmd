@@ -63,6 +63,9 @@ d <- mk_data(1000000)
 n <- nrow(d)
 w <- 1 + numeric(n)
 
+# make data available for Python version
+write.csv(d, file = gzfile("xlin_data.csv.gz"), row.names = FALSE, quote = FALSE)
+
 timings <- microbenchmark(
   Rcpp = xlin_fits(d$x, d$y_observed, w, 0, n-1),
   R_rowwise = xlin_fits_R(d$x, d$y_observed, w),
