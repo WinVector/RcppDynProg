@@ -66,29 +66,6 @@ solve_dynamic_program <- function(x, kmax) {
     .Call('_RcppDynProg_solve_dynamic_program', PACKAGE = 'RcppDynProg', x, kmax)
 }
 
-#' xlin_fits
-#' 
-#' Calculate out of sample linear fit predictions.
-#' Zero indexed.
-#' 
-#' @param x NumericVector, x-coords of values to group (length>=2).
-#' @param y NumericVector, values to group in order.
-#' @param w NumericVector, weights (positive).
-#' @param i integer, first index (inclusive).
-#' @param j integer, j>=i+2 last index (inclusive);
-#' @return  vector of predictions.
-#' 
-#' @keywords internal
-#' 
-#' @examples
-#' 
-#' xlin_fits(c(1, 2, 3, 4), c(1, 2, 2, 1), c(1, 1, 1, 1), 0, 3)
-#' 
-#' @export
-xlin_fits <- function(x, y, w, i, j) {
-    .Call('_RcppDynProg_xlin_fits', PACKAGE = 'RcppDynProg', x, y, w, i, j)
-}
-
 #' lin_cost
 #' 
 #' Calculate cost of using linear model fit on points to estimate other points in the interval.
@@ -132,5 +109,28 @@ lin_cost <- function(x, y, w, min_seg, i, j) {
 #' @export
 lin_costs <- function(x, y, w, min_seg, indices) {
     .Call('_RcppDynProg_lin_costs', PACKAGE = 'RcppDynProg', x, y, w, min_seg, indices)
+}
+
+#' xlin_fits
+#' 
+#' Calculate out of sample linear fit predictions.
+#' Zero indexed.
+#' 
+#' @param x NumericVector, x-coords of values to group (length>=2).
+#' @param y NumericVector, values to group in order.
+#' @param w NumericVector, weights (positive).
+#' @param i integer, first index (inclusive).
+#' @param j integer, j>=i+2 last index (inclusive);
+#' @return  vector of predictions.
+#' 
+#' @keywords internal
+#' 
+#' @examples
+#' 
+#' xlin_fits(c(1, 2, 3, 4), c(1, 2, 2, 1), c(1, 1, 1, 1), 0, 3)
+#' 
+#' @export
+xlin_fits <- function(x, y, w, i, j) {
+    .Call('_RcppDynProg_xlin_fits', PACKAGE = 'RcppDynProg', x, y, w, i, j)
 }
 
