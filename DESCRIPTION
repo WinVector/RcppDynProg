@@ -2,7 +2,7 @@ Package: RcppDynProg
 Type: Package
 Title: 'Rcpp' Dynamic Programming
 Version: 0.1.0
-Date: 2018-12-29
+Date: 2018-12-31
 Authors@R: c(
     person("John", "Mount", email = "jmount@win-vector.com", role = c("aut", "cre")),
     person("Nina", "Zumel", email = "nzumel@win-vector.com", role = c("aut")),
@@ -20,7 +20,9 @@ Imports:
   wrapr (>= 1.8.0),
   utils,
   stats
-LinkingTo: Rcpp
+LinkingTo: 
+  Rcpp,
+  BH (>= 1.66.0-1)
 RoxygenNote: 6.1.1
 Suggests:
     testthat,

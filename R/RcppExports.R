@@ -60,7 +60,7 @@ const_costs <- function(y, w, min_seg, indices) {
 #' 
 #' costs <- matrix(c(1.5, NA ,NA ,1 ,0 , NA, 5, -1, 1), nrow = 3)
 #' solve_dynamic_program(costs, nrow(costs))
-#' 
+#'
 #' @export
 solve_dynamic_program <- function(x, kmax) {
     .Call('_RcppDynProg_solve_dynamic_program', PACKAGE = 'RcppDynProg', x, kmax)

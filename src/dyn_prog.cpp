@@ -1,6 +1,11 @@
 
 #include <Rcpp.h>
+#include <boost/numeric/ublas/matrix.hpp>
+
+// [[Rcpp::depends(BH)]]
+
 using namespace Rcpp;
+using namespace boost::numeric::ublas;
 
 //' solve_dynamic_program
 //' 
@@ -17,7 +22,7 @@ using namespace Rcpp;
 //' 
 //' costs <- matrix(c(1.5, NA ,NA ,1 ,0 , NA, 5, -1, 1), nrow = 3)
 //' solve_dynamic_program(costs, nrow(costs))
-//' 
+//'
 //' @export
 // [[Rcpp::export]]
 IntegerVector solve_dynamic_program(NumericMatrix x, int kmax) {
@@ -44,11 +49,11 @@ IntegerVector solve_dynamic_program(NumericMatrix x, int kmax) {
   }
 
   // best path cost up to i (row) with exactly k-steps (column)
-  NumericMatrix path_costs(n + R_SIZE_PAD, kmax + R_SIZE_PAD);
+  matrix<double> path_costs(n + R_SIZE_PAD, kmax + R_SIZE_PAD);
   // how many steps we actually took
-  IntegerMatrix k_actual(n + R_SIZE_PAD, kmax + R_SIZE_PAD);
+  matrix<int> k_actual(n + R_SIZE_PAD, kmax + R_SIZE_PAD);
   // how we realized each above cost
-  IntegerMatrix prev_step(n + R_SIZE_PAD, kmax + R_SIZE_PAD);
+  matrix<int> prev_step(n + R_SIZE_PAD, kmax + R_SIZE_PAD);
   
   // fill in path and costs tables
   for(int i=1; i<=n; ++i) {
