@@ -60,7 +60,9 @@ ggplot(data = sp500, aes(x = date)) +
   geom_line(aes(y=raw), color = "lightgray") +
   geom_line(aes(y=estimate, color = group)) +
   ggtitle("segment approximation of historic data",
-          subtitle = "per-segment penalty = 250000")
+          subtitle = "per-segment penalty = 250000") +
+  theme(legend.position = "none") +
+  scale_color_brewer(palette = "Dark2")
 ```
 
 Notice in our definition of piecewise we do not insist the pieces touch.
@@ -81,7 +83,9 @@ sp500$group <- as.character(
 ggplot(data = sp500, aes(x = date)) +
   geom_line(aes(y=raw), color = "lightgray") +
   geom_line(aes(y=estimate, color = group)) +
-  ggtitle("5 segment approximation of historic data")
+  ggtitle("5 segment approximation of historic data") +
+  theme(legend.position = "none") +
+  scale_color_brewer(palette = "Dark2")
 ```
 
 
@@ -127,6 +131,8 @@ ggplot(data = sp500, aes(x = date)) +
   geom_line(aes(y=raw), color = "lightgray") +
   geom_line(aes(y=estimate, color = group)) +
   ggtitle("segment approximation of historic data",
-          subtitle = paste("per-segment penalty =", penalty))
+          subtitle = paste("per-segment penalty =", penalty)) +
+  theme(legend.position = "none") +
+  scale_color_brewer(palette = "Dark2")
 
 ```
