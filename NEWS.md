@@ -1,5 +1,5 @@
 
-# RcppDynProg 0.1.0 2018/12/31
+# RcppDynProg 0.1.0 2019/01/01
 
  * Initial version.
 
