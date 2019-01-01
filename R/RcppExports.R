@@ -45,7 +45,7 @@ const_costs <- function(y, w, min_seg, indices) {
     .Call('_RcppDynProg_const_costs', PACKAGE = 'RcppDynProg', y, w, min_seg, indices)
 }
 
-#' solve_dynamic_program
+#' solve_dynamic_program interval partition problem.
 #' 
 #' Solve a for a minimal cost partition of the integers [1,...,nrow(x)] problem where for j>=i x(i,j).
 #' is the cost of choosing the partition element [i,...,j]. 

@@ -1,13 +1,13 @@
 
 #include <Rcpp.h>
-#include <boost/numeric/ublas/matrix.hpp>
+#include <armadillo>
 
-// [[Rcpp::depends(BH)]]
+// [[Rcpp::depends(RcppArmadillo)]]
 
 using namespace Rcpp;
-using namespace boost::numeric::ublas;
+using namespace arma;
 
-//' solve_dynamic_program
+//' solve_dynamic_program interval partition problem.
 //' 
 //' Solve a for a minimal cost partition of the integers [1,...,nrow(x)] problem where for j>=i x(i,j).
 //' is the cost of choosing the partition element [i,...,j]. 
@@ -49,11 +49,11 @@ IntegerVector solve_dynamic_program(NumericMatrix x, int kmax) {
   }
 
   // best path cost up to i (row) with exactly k-steps (column)
-  matrix<double> path_costs(n + R_SIZE_PAD, kmax + R_SIZE_PAD);
+  Mat<double> path_costs(n + R_SIZE_PAD, kmax + R_SIZE_PAD, fill::zeros);
   // how many steps we actually took
-  matrix<int> k_actual(n + R_SIZE_PAD, kmax + R_SIZE_PAD);
+  Mat<int> k_actual(n + R_SIZE_PAD, kmax + R_SIZE_PAD, fill::zeros);
   // how we realized each above cost
-  matrix<int> prev_step(n + R_SIZE_PAD, kmax + R_SIZE_PAD);
+  Mat<int> prev_step(n + R_SIZE_PAD, kmax + R_SIZE_PAD, fill::zeros);
   
   // fill in path and costs tables
   for(int i=1; i<=n; ++i) {

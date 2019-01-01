@@ -18,11 +18,12 @@ Depends:
 Imports:
   Rcpp (>= 1.0.0),
   wrapr (>= 1.8.0),
+  RcppArmadillo,
   utils,
   stats
 LinkingTo: 
   Rcpp,
-  BH (>= 1.66.0-1)
+  RcppArmadillo
 RoxygenNote: 6.1.1
 Suggests:
     testthat,

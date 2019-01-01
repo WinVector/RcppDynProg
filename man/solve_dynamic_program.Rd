@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{solve_dynamic_program}
 \alias{solve_dynamic_program}
-\title{solve_dynamic_program}
+\title{solve_dynamic_program interval partition problem.}
 \usage{
 solve_dynamic_program(x, kmax)
 }
