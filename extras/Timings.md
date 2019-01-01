@@ -16,33 +16,33 @@ set.seed(2018)
 n <- 500
 x <- matrix(runif(n*n), nrow=n, ncol=n)
 
-solve_dynamic_program(x, n)
+solve_interval_partition(x, n)
 ```
 
     ## [1]   1 109 230 267 501
 
 ``` r
-solve_dynamic_program_R(x, n)
+solve_interval_partition_R(x, n)
 ```
 
     ## [1]   1 109 230 267 501
 
 ``` r
 timings <- microbenchmark(
-  solve_dynamic_program(x, n),
-  solve_dynamic_program_R(x, n),
+  solve_interval_partition(x, n),
+  solve_interval_partition_R(x, n),
   times = 5L)
 
 print(timings)
 ```
 
     ## Unit: milliseconds
-    ##                           expr         min         lq        mean
-    ##    solve_dynamic_program(x, n)    76.14608    76.5954    76.84853
-    ##  solve_dynamic_program_R(x, n) 21173.39201 21181.8037 21262.96700
+    ##                              expr         min          lq        mean
+    ##    solve_interval_partition(x, n)    77.06462    77.27451    77.97917
+    ##  solve_interval_partition_R(x, n) 20921.34167 20952.31931 21056.13098
     ##       median          uq         max neval
-    ##     76.79016    77.23583    77.47516     5
-    ##  21243.79751 21283.00730 21432.83442     5
+    ##     78.20095    78.31472    79.04104     5
+    ##  21029.92573 21107.88462 21269.18358     5
 
 ``` r
 p <- data.frame(timings)
@@ -57,16 +57,16 @@ summary <- p %.>%
 print(summary)
 ```
 
-    ##                           method mean_seconds
-    ## 1: solve_dynamic_program_R(x, n)  21.26296700
-    ## 2:   solve_dynamic_program(x, n)   0.07684853
+    ##                              method mean_seconds
+    ## 1: solve_interval_partition_R(x, n)  21.05613098
+    ## 2:   solve_interval_partition(x, n)   0.07797917
 
 ``` r
 ratio <- max(summary$mean_seconds)/min(summary$mean_seconds)
 print(ratio)
 ```
 
-    ## [1] 276.6867
+    ## [1] 270.0225
 
 ``` r
 WVPlots::ScatterBoxPlotH(p, 
