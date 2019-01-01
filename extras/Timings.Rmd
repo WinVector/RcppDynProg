@@ -18,13 +18,13 @@ set.seed(2018)
 n <- 500
 x <- matrix(runif(n*n), nrow=n, ncol=n)
 
-solve_dynamic_program(x, n)
+solve_interval_partition(x, n)
 
-solve_dynamic_program_R(x, n)
+solve_interval_partition_R(x, n)
 
 timings <- microbenchmark(
-  solve_dynamic_program(x, n),
-  solve_dynamic_program_R(x, n),
+  solve_interval_partition(x, n),
+  solve_interval_partition_R(x, n),
   times = 5L)
 
 print(timings)

@@ -1,6 +1,6 @@
 
 
-#' solve_dynamic_program (R version)
+#' solve_interval_partition (R version)
 #' 
 #' Solve a for a minimal cost partition of the integers [1,...,nrow(x)] problem where for j>=i x(i,j).
 #' is the cost of choosing the partition element [i,...,j]. 
@@ -17,12 +17,12 @@
 #' 
 #' x <- matrix(c(1,1,5,1,1,0,5,0,1), nrow=3)
 #' k <- 3
-#' solve_dynamic_program_R(x, k)
-#' solve_dynamic_program(x, k)
+#' solve_interval_partition_R(x, k)
+#' solve_interval_partition(x, k)
 #' 
 #' @export
 #' 
-solve_dynamic_program_R <- function(x, kmax) {
+solve_interval_partition_R <- function(x, kmax) {
   # for cleaner notation
   # solution and x will be indexed from 1 using
   # R_INDEX_DELTA

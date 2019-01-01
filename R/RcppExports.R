@@ -45,27 +45,6 @@ const_costs <- function(y, w, min_seg, indices) {
     .Call('_RcppDynProg_const_costs', PACKAGE = 'RcppDynProg', y, w, min_seg, indices)
 }
 
-#' solve_dynamic_program interval partition problem.
-#' 
-#' Solve a for a minimal cost partition of the integers [1,...,nrow(x)] problem where for j>=i x(i,j).
-#' is the cost of choosing the partition element [i,...,j]. 
-#' Returned solution is an ordered vector v of length k where: v[1]==1, v[k]==nrow(x)+1, and the 
-#' partition is of the form [v[i], v[i+1]) (intervals open on the right).
-#' 
-#' @param x NumericMatix, for j>=i x(i,j) is the cost of partition element [i,...,j] (inclusive).
-#' @param kmax int, maximum number of segments in solution. 
-#' @return dynamic program solution.
-#' 
-#' @examples
-#' 
-#' costs <- matrix(c(1.5, NA ,NA ,1 ,0 , NA, 5, -1, 1), nrow = 3)
-#' solve_dynamic_program(costs, nrow(costs))
-#'
-#' @export
-solve_dynamic_program <- function(x, kmax) {
-    .Call('_RcppDynProg_solve_dynamic_program', PACKAGE = 'RcppDynProg', x, kmax)
-}
-
 #' lin_cost
 #' 
 #' Calculate cost of using linear model fit on points to estimate other points in the interval.
@@ -109,6 +88,27 @@ lin_cost <- function(x, y, w, min_seg, i, j) {
 #' @export
 lin_costs <- function(x, y, w, min_seg, indices) {
     .Call('_RcppDynProg_lin_costs', PACKAGE = 'RcppDynProg', x, y, w, min_seg, indices)
+}
+
+#' solve_interval_partition interval partition problem.
+#' 
+#' Solve a for a minimal cost partition of the integers [1,...,nrow(x)] problem where for j>=i x(i,j).
+#' is the cost of choosing the partition element [i,...,j]. 
+#' Returned solution is an ordered vector v of length k where: v[1]==1, v[k]==nrow(x)+1, and the 
+#' partition is of the form [v[i], v[i+1]) (intervals open on the right).
+#' 
+#' @param x NumericMatix, for j>=i x(i,j) is the cost of partition element [i,...,j] (inclusive).
+#' @param kmax int, maximum number of segments in solution. 
+#' @return dynamic program solution.
+#' 
+#' @examples
+#' 
+#' costs <- matrix(c(1.5, NA ,NA ,1 ,0 , NA, 5, -1, 1), nrow = 3)
+#' solve_interval_partition(costs, nrow(costs))
+#'
+#' @export
+solve_interval_partition <- function(x, kmax) {
+    .Call('_RcppDynProg_solve_interval_partition', PACKAGE = 'RcppDynProg', x, kmax)
 }
 
 #' xlin_fits

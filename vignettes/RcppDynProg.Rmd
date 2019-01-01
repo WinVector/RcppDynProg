@@ -15,7 +15,7 @@ vignette: >
 
 ## The abstract problem
 
-The primary problem [`RcppDynProg::solve_dynamic_program()`](https://winvector.github.io/RcppDynProg/reference/solve_dynamic_program.html) is designed to solve is formally given as follows.
+The primary problem [`RcppDynProg::solve_interval_partition()`](https://winvector.github.io/RcppDynProg/reference/solve_interval_partition.html) is designed to solve is formally given as follows.
 
 > Minimum cost partition into intervals.
 > 
@@ -39,7 +39,7 @@ Then the optimal partition is found as follows.
 
 ```{r}
 library("RcppDynProg")
-soln <- solve_dynamic_program(costs, nrow(costs))
+soln <- solve_interval_partition(costs, nrow(costs))
 print(soln)
 ```
 

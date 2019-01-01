@@ -88,7 +88,7 @@
       <h1>RcppDynProg package</h1>
                         <h4 class="author">John Mount</h4>
             
-            <h4 class="date">2018-12-31</h4>
+            <h4 class="date">2019-01-01</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/WinVector/RcppDynProg//blob/master/vignettes/RcppDynProg.Rmd"><code>vignettes/RcppDynProg.Rmd</code></a></small>
       <div class="hidden name"><code>RcppDynProg.Rmd</code></div>
@@ -105,7 +105,7 @@
 <div id="the-abstract-problem" class="section level2">
 <h2 class="hasAnchor">
 <a href="#the-abstract-problem" class="anchor"></a>The abstract problem</h2>
-<p>The primary problem <a href="https://winvector.github.io/RcppDynProg/reference/solve_dynamic_program.html"><code><a href="../reference/solve_dynamic_program.html">RcppDynProg::solve_dynamic_program()</a></code></a> is designed to solve is formally given as follows.</p>
+<p>The primary problem <a href="https://winvector.github.io/RcppDynProg/reference/solve_interval_partition.html"><code><a href="../reference/solve_interval_partition.html">RcppDynProg::solve_interval_partition()</a></code></a> is designed to solve is formally given as follows.</p>
 <blockquote>
 <p>Minimum cost partition into intervals.</p>
 <p>Given: a positive integer <code>n</code> and an a <span class="math inline">\(n\)</span> by <code>n</code> matrix called <code>costs</code>.</p>
@@ -123,7 +123,7 @@
 ## [3,]   NA   NA    1</code></pre>
 <p>Then the optimal partition is found as follows.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">"RcppDynProg"</span>)
-soln &lt;-<span class="st"> </span><span class="kw"><a href="../reference/solve_dynamic_program.html">solve_dynamic_program</a></span>(costs, <span class="kw">nrow</span>(costs))
+soln &lt;-<span class="st"> </span><span class="kw"><a href="../reference/solve_interval_partition.html">solve_interval_partition</a></span>(costs, <span class="kw">nrow</span>(costs))
 <span class="kw">print</span>(soln)</code></pre></div>
 <pre><code>## [1] 1 2 4</code></pre>
 <p>The sequence <code>[1, 2, 4]</code> is a just compact representation for the following sequence of intervals.</p>

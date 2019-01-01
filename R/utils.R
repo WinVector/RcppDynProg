@@ -143,7 +143,7 @@ test_solvers <- function(x, k) {
     sm <- min(sc)
  
     
-    soln1 <- solve_dynamic_program_R(x, k)
+    soln1 <- solve_interval_partition_R(x, k)
     score1 <- score_solution(x, soln1)
     if(!(length(soln1)<=(k+1))) {
       stop("soln1 too long")
@@ -152,7 +152,7 @@ test_solvers <- function(x, k) {
       stop("R solution has wrong score")
     }
     
-    soln2 <- solve_dynamic_program(x, k)
+    soln2 <- solve_interval_partition(x, k)
     score2 <- score_solution(x, soln2)
     if(!(length(soln2)<=(k+1))) {
       stop("soln2 too long")

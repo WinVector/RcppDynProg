@@ -8,7 +8,7 @@ The package
 The abstract problem
 --------------------
 
-The primary problem [`RcppDynProg::solve_dynamic_program()`](https://winvector.github.io/RcppDynProg/reference/solve_dynamic_program.html) is designed to solve is formally given as follows.
+The primary problem [`RcppDynProg::solve_interval_partition()`](https://winvector.github.io/RcppDynProg/reference/solve_interval_partition.html) is designed to solve is formally given as follows.
 
 > Minimum cost partition into intervals.
 >
@@ -36,7 +36,7 @@ Then the optimal partition is found as follows.
 
 ``` r
 library("RcppDynProg")
-soln <- solve_dynamic_program(costs, nrow(costs))
+soln <- solve_interval_partition(costs, nrow(costs))
 print(soln)
  #  [1] 1 2 4
 ```
@@ -162,3 +162,16 @@ The solver is fast through to the use of 3 techniques:
 Some [basic timings](https://github.com/WinVector/RcppDynProg/blob/master/extras/Timings.md) show [the `C++` implementation](https://github.com/WinVector/RcppDynProg/blob/master/src/dyn_prog.cpp) can be over 200 times faster than [a direct transliteration `R`](https://github.com/WinVector/RcppDynProg/blob/master/R/solve_dyn_R.R) of the same code (so not vectorized, not fully R idiomatic, some time lost to [`seqi()`](https://winvector.github.io/wrapr/reference/seqi.html) abstraction), and [over 400 times faster](https://github.com/WinVector/RcppDynProg/blob/master/extras/time_python.ipynb) than a [`Python` direct transliteration](https://github.com/WinVector/RcppDynProg/blob/master/extras/DynProg.py) of the same code (so not optimized, and not "Pythonic"). The non-optimized and non-adapted nature of the code translations unfortunately exaggerates the speedup, however the `Rcpp` is likely buying as a solid factor of over 100- as `C++` is going to be much more efficient at all of the index-chasing this dynamic programming solution is based on.
 
 A note on problem complexity: general partition problems (where we do not restrict the subsets to be intervals) are NP-hard, so not thought to be amenable to efficient general solutions at scale (subset sum problems being good examples).
+
+------------------------------------------------------------------------
+
+Note: this packages is not yet up on `CRAN`, the following will install the package from [`Github`](https://github.com/WinVector/RcppDynProg):
+
+``` r
+# install dependencies
+install.packages(c("wrapr", "Rcpp", "RcppArmadillo"))
+# install devtools
+install.packages("devtools")
+# install RcppDynProg
+devtools::install_github("WinVector/RcppDynProg")
+```

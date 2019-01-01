@@ -16,8 +16,8 @@ License: GPL-3
 Depends:
   R (>= 3.4.0)
 Imports:
-  Rcpp (>= 1.0.0),
   wrapr (>= 1.8.0),
+  Rcpp (>= 1.0.0),
   RcppArmadillo,
   utils,
   stats

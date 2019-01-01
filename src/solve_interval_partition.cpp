@@ -7,7 +7,7 @@
 using namespace Rcpp;
 using namespace arma;
 
-//' solve_dynamic_program interval partition problem.
+//' solve_interval_partition interval partition problem.
 //' 
 //' Solve a for a minimal cost partition of the integers [1,...,nrow(x)] problem where for j>=i x(i,j).
 //' is the cost of choosing the partition element [i,...,j]. 
@@ -21,11 +21,11 @@ using namespace arma;
 //' @examples
 //' 
 //' costs <- matrix(c(1.5, NA ,NA ,1 ,0 , NA, 5, -1, 1), nrow = 3)
-//' solve_dynamic_program(costs, nrow(costs))
+//' solve_interval_partition(costs, nrow(costs))
 //'
 //' @export
 // [[Rcpp::export]]
-IntegerVector solve_dynamic_program(NumericMatrix x, int kmax) {
+IntegerVector solve_interval_partition(NumericMatrix x, int kmax) {
   // for cleaner notation
   // solution and x will be indexed from 1 using
   // R_INDEX_DELTA

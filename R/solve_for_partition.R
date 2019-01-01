@@ -58,7 +58,7 @@ solve_for_partition_xs <- function(x, y,
   # solve dynamic program
   xmat <- cost_fn(x, y, w, min_seg, indices)
   xmat <- xmat + penalty
-  soln1 <- solve_dynamic_program(xmat, max_k)
+  soln1 <- solve_interval_partition(xmat, max_k)
   if(length(soln1)<=2) {
     return(c(1, n+1))
   }

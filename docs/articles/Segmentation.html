@@ -88,7 +88,7 @@
       <h1>Segmentation</h1>
                         <h4 class="author">John Mount</h4>
             
-            <h4 class="date">2018-12-31</h4>
+            <h4 class="date">2019-01-01</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/WinVector/RcppDynProg//blob/master/vignettes/Segmentation.Rmd"><code>vignettes/Segmentation.Rmd</code></a></small>
       <div class="hidden name"><code>Segmentation.Rmd</code></div>
@@ -134,7 +134,7 @@ solve_with_penalty &lt;-<span class="st"> </span><span class="cf">function</span
   indices =<span class="st"> </span><span class="kw">seq_len</span>(n)
   x &lt;-<span class="st"> </span><span class="kw"><a href="../reference/const_costs.html">const_costs</a></span>(ycol, <span class="dv">1</span><span class="op">+</span><span class="kw">numeric</span>(n), <span class="dv">1</span>, indices)
   x &lt;-<span class="st"> </span>x <span class="op">+</span><span class="st"> </span>penalty
-  <span class="kw"><a href="../reference/solve_dynamic_program.html">solve_dynamic_program</a></span>(x, n)
+  <span class="kw"><a href="../reference/solve_interval_partition.html">solve_interval_partition</a></span>(x, n)
 }
 
 lb &lt;-<span class="st"> </span><span class="dv">1</span>

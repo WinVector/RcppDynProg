@@ -1,7 +1,7 @@
 Linear Segmentation
 ================
 John Mount
-2018-12-29
+2019-01-01
 
 In this example we fit a piecewise linear function to example data.
 Please see [here](https://github.com/WinVector/RcppDynProg) for an discussion of the methodology.

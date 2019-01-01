@@ -52,9 +52,9 @@ test_that("test_dynprog1: test basic operaton", {
   
   slast <- NA
   for(k in 1:nrow(x)) {
-    s1 <- solve_dynamic_program_R(x, k)
+    s1 <- solve_interval_partition_R(x, k)
     sc1 <- score_solution(x, s1)
-    s2 <- solve_dynamic_program(x, k)
+    s2 <- solve_interval_partition(x, k)
     sc2 <- score_solution(x, s2)
     if(!(abs(sc1-sc2)<=1e-5)) {
       stop("R and C++ solutions disagree")

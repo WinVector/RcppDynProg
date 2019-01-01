@@ -35,18 +35,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// solve_dynamic_program
-IntegerVector solve_dynamic_program(NumericMatrix x, int kmax);
-RcppExport SEXP _RcppDynProg_solve_dynamic_program(SEXP xSEXP, SEXP kmaxSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
-    Rcpp::traits::input_parameter< int >::type kmax(kmaxSEXP);
-    rcpp_result_gen = Rcpp::wrap(solve_dynamic_program(x, kmax));
-    return rcpp_result_gen;
-END_RCPP
-}
 // lin_cost
 double lin_cost(NumericVector x, NumericVector y, NumericVector w, const int min_seg, const int i, const int j);
 RcppExport SEXP _RcppDynProg_lin_cost(SEXP xSEXP, SEXP ySEXP, SEXP wSEXP, SEXP min_segSEXP, SEXP iSEXP, SEXP jSEXP) {
@@ -78,6 +66,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// solve_interval_partition
+IntegerVector solve_interval_partition(NumericMatrix x, int kmax);
+RcppExport SEXP _RcppDynProg_solve_interval_partition(SEXP xSEXP, SEXP kmaxSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type kmax(kmaxSEXP);
+    rcpp_result_gen = Rcpp::wrap(solve_interval_partition(x, kmax));
+    return rcpp_result_gen;
+END_RCPP
+}
 // xlin_fits
 NumericVector xlin_fits(NumericVector x, NumericVector y, NumericVector w, const int i, const int j);
 RcppExport SEXP _RcppDynProg_xlin_fits(SEXP xSEXP, SEXP ySEXP, SEXP wSEXP, SEXP iSEXP, SEXP jSEXP) {
@@ -97,9 +97,9 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_RcppDynProg_const_cost", (DL_FUNC) &_RcppDynProg_const_cost, 5},
     {"_RcppDynProg_const_costs", (DL_FUNC) &_RcppDynProg_const_costs, 4},
-    {"_RcppDynProg_solve_dynamic_program", (DL_FUNC) &_RcppDynProg_solve_dynamic_program, 2},
     {"_RcppDynProg_lin_cost", (DL_FUNC) &_RcppDynProg_lin_cost, 6},
     {"_RcppDynProg_lin_costs", (DL_FUNC) &_RcppDynProg_lin_costs, 5},
+    {"_RcppDynProg_solve_interval_partition", (DL_FUNC) &_RcppDynProg_solve_interval_partition, 2},
     {"_RcppDynProg_xlin_fits", (DL_FUNC) &_RcppDynProg_xlin_fits, 5},
     {NULL, NULL, 0}
 };
