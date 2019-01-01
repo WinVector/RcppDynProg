@@ -38,11 +38,11 @@ print(timings)
 
     ## Unit: milliseconds
     ##                           expr         min         lq        mean
-    ##    solve_dynamic_program(x, n)    88.17143    88.7287    88.90226
-    ##  solve_dynamic_program_R(x, n) 21038.02932 21071.3553 21145.69389
+    ##    solve_dynamic_program(x, n)    76.14608    76.5954    76.84853
+    ##  solve_dynamic_program_R(x, n) 21173.39201 21181.8037 21262.96700
     ##       median          uq         max neval
-    ##     89.05366    89.24005    89.31746     5
-    ##  21097.14136 21110.78553 21411.15801     5
+    ##     76.79016    77.23583    77.47516     5
+    ##  21243.79751 21283.00730 21432.83442     5
 
 ``` r
 p <- data.frame(timings)
@@ -58,15 +58,15 @@ print(summary)
 ```
 
     ##                           method mean_seconds
-    ## 1: solve_dynamic_program_R(x, n)  21.14569389
-    ## 2:   solve_dynamic_program(x, n)   0.08890226
+    ## 1: solve_dynamic_program_R(x, n)  21.26296700
+    ## 2:   solve_dynamic_program(x, n)   0.07684853
 
 ``` r
 ratio <- max(summary$mean_seconds)/min(summary$mean_seconds)
 print(ratio)
 ```
 
-    ## [1] 237.8533
+    ## [1] 276.6867
 
 ``` r
 WVPlots::ScatterBoxPlotH(p, 
