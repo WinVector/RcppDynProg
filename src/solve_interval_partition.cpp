@@ -1,11 +1,9 @@
 
-#include <Rcpp.h>
-#include <armadillo>
+#include <RcppArmadillo.h>
 
 // [[Rcpp::depends(RcppArmadillo)]]
 
 using namespace Rcpp;
-using namespace arma;
 
 //' solve_interval_partition interval partition problem.
 //' 
@@ -49,11 +47,11 @@ IntegerVector solve_interval_partition(NumericMatrix x, int kmax) {
   }
 
   // best path cost up to i (row) with exactly k-steps (column)
-  Mat<double> path_costs(n + R_SIZE_PAD, kmax + R_SIZE_PAD, fill::zeros);
+  arma::Mat<double> path_costs(n + R_SIZE_PAD, kmax + R_SIZE_PAD);
   // how many steps we actually took
-  Mat<int> k_actual(n + R_SIZE_PAD, kmax + R_SIZE_PAD, fill::zeros);
+  arma::Mat<int> k_actual(n + R_SIZE_PAD, kmax + R_SIZE_PAD);
   // how we realized each above cost
-  Mat<int> prev_step(n + R_SIZE_PAD, kmax + R_SIZE_PAD, fill::zeros);
+  arma::Mat<int> prev_step(n + R_SIZE_PAD, kmax + R_SIZE_PAD);
   
   // fill in path and costs tables
   for(int i=1; i<=n; ++i) {
