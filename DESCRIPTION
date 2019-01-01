@@ -11,7 +11,7 @@ Authors@R: c(
 URL: https://github.com/WinVector/RcppDynProg/, https://winvector.github.io/RcppDynProg/
 BugReports: https://github.com/WinVector/RcppDynProg/issues
 Maintainer: John Mount <jmount@win-vector.com>
-Description: Dynamic Programming implemented in 'Rcpp'.  Includes example partition and out of sample fitting applications.  Also supplies additional custom coders for the `vtreat` package.
+Description: Dynamic Programming implemented in 'Rcpp'.  Includes example partition and out of sample fitting applications.  Also supplies additional custom coders for the 'vtreat' package.
 License: GPL-3
 Depends:
   R (>= 3.4.0)
