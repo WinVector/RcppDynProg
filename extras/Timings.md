@@ -38,11 +38,11 @@ print(timings)
 
     ## Unit: milliseconds
     ##                              expr         min          lq        mean
-    ##    solve_interval_partition(x, n)    77.06462    77.27451    77.97917
-    ##  solve_interval_partition_R(x, n) 20921.34167 20952.31931 21056.13098
+    ##    solve_interval_partition(x, n)    87.30949    87.56452    87.96436
+    ##  solve_interval_partition_R(x, n) 20932.52901 21096.78018 21188.00710
     ##       median          uq         max neval
-    ##     78.20095    78.31472    79.04104     5
-    ##  21029.92573 21107.88462 21269.18358     5
+    ##     88.01139    88.22678    88.70962     5
+    ##  21128.80190 21215.39725 21566.52718     5
 
 ``` r
 p <- data.frame(timings)
@@ -58,15 +58,15 @@ print(summary)
 ```
 
     ##                              method mean_seconds
-    ## 1: solve_interval_partition_R(x, n)  21.05613098
-    ## 2:   solve_interval_partition(x, n)   0.07797917
+    ## 1: solve_interval_partition_R(x, n)  21.18800710
+    ## 2:   solve_interval_partition(x, n)   0.08796436
 
 ``` r
 ratio <- max(summary$mean_seconds)/min(summary$mean_seconds)
 print(ratio)
 ```
 
-    ## [1] 270.0225
+    ## [1] 240.8704
 
 ``` r
 WVPlots::ScatterBoxPlotH(p, 

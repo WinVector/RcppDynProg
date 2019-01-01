@@ -6,7 +6,7 @@ output: github_document
 ---
 
 In this example we fit a piecewise linear function to example data.  
-Please see [here](https://github.com/WinVector/RcppDynProg) for an discussion of the methodology.
+Please see [here](https://github.com/WinVector/RcppDynProg) for a discussion of the methodology.
 
 ```{r r1, fig.height = 6, fig.width = 8, fig.align = "center"}
 library("RcppDynProg")

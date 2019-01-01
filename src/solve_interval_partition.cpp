@@ -47,20 +47,23 @@ IntegerVector solve_interval_partition(NumericMatrix x, int kmax) {
   }
 
   // best path cost up to i (row) with exactly k-steps (column)
-  arma::Mat<double> path_costs(n + R_SIZE_PAD, kmax + R_SIZE_PAD);
+  arma::Mat<double> path_costs(n + R_SIZE_PAD, 2, arma::fill::none);
   // how many steps we actually took
-  arma::Mat<int> k_actual(n + R_SIZE_PAD, kmax + R_SIZE_PAD);
+  arma::Mat<int> k_actual(n + R_SIZE_PAD, 2, arma::fill::ones);
   // how we realized each above cost
-  arma::Mat<int> prev_step(n + R_SIZE_PAD, kmax + R_SIZE_PAD);
+  arma::Mat<int> prev_step(n + R_SIZE_PAD, kmax + R_SIZE_PAD, arma::fill::ones);
   
   // fill in path and costs tables
   for(int i=1; i<=n; ++i) {
-    prev_step(i, 1) = 1;
-    path_costs(i, 1) = x(1 + R_INDEX_DELTA, i + R_INDEX_DELTA);
-    k_actual(i, 1) = 1;
+    const double xi = x(1 + R_INDEX_DELTA, i + R_INDEX_DELTA);
+    path_costs(i, 0) = xi;
+    path_costs(i, 1) = xi;
   }
   // refine dynprog table
+  int kcurrent = 0;
   for(int ksteps=2; ksteps<=kmax; ++ksteps) {
+    kcurrent = ksteps%2;
+    const int kprev = 1 - kcurrent;
     // compute larger paths
     for(int i=1; i<=n; ++i) {
       // no split case
@@ -69,9 +72,9 @@ IntegerVector solve_interval_partition(NumericMatrix x, int kmax) {
       double pick_cost = x(1 + R_INDEX_DELTA, i + R_INDEX_DELTA);
       // split cases
       for(int candidate=1; candidate<i; ++candidate) {
-        const double cost = path_costs(candidate, ksteps-1) +
+        const double cost = path_costs(candidate, kprev) +
           x(candidate + 1 + R_INDEX_DELTA, i + R_INDEX_DELTA);
-        const int k_cost = k_actual(candidate, ksteps-1) + 1;
+        const int k_cost = k_actual(candidate, kprev) + 1;
         if((cost<=pick_cost) &&
            ((cost<pick_cost)||(k_cost<k_seen))) {
           pick = candidate;
@@ -79,14 +82,14 @@ IntegerVector solve_interval_partition(NumericMatrix x, int kmax) {
           k_seen = k_cost;
         }
       }
-      path_costs(i, ksteps) = pick_cost;
+      path_costs(i, kcurrent) = pick_cost;
       prev_step(i, ksteps) = pick;
-      k_actual(i, ksteps) = k_seen;
+      k_actual(i, kcurrent) = k_seen;
     }
   }
   
   // now back-chain for solution
-  const int k_opt = k_actual(n, kmax);
+  const int k_opt = k_actual(n, kcurrent);
   IntegerVector solution(k_opt+1);
   solution(1 + R_INDEX_DELTA) = 1;
   solution(k_opt + 1 + R_INDEX_DELTA) = n+1;

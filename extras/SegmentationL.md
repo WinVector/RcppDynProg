@@ -4,7 +4,7 @@ John Mount
 2019-01-01
 
 In this example we fit a piecewise linear function to example data.
-Please see [here](https://github.com/WinVector/RcppDynProg) for an discussion of the methodology.
+Please see [here](https://github.com/WinVector/RcppDynProg) for a discussion of the methodology.
 
 ``` r
 library("RcppDynProg")
@@ -141,7 +141,7 @@ knitr::kable(trt$scoreFrame[, c("varName", "rsq", "sig")])
 | x\_knearest     |  0.7415207|    0|
 | x\_spline       |  0.8486192|    0|
 | x\_PiecewiseLin |  0.8380624|    0|
-| x\_PiecewiseC   |  0.6975840|    0|
+| x\_PiecewiseC   |  0.6652028|    0|
 
 ``` r
 dt <- vtreat::prepare(trt, d)
