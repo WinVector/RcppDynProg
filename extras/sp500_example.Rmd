@@ -9,9 +9,7 @@ Another approach to segmentation is given by Koh, Kim, and Boyd's L1-Trend filte
 
 where $D$ is the second-order difference matrix that calculates $x_{k-1} - 2 x_{k} + x_{k+1}$ for all $k$.  Or in other words find $x$ minimizing:
 
-\[ latex (1/2)||x-y||^2_2 + \lambda \sum_{k=2}^{N-1} |x_{k-1} - 2 x_{k} + x_{k+1}| \]
-
-
+\[ (1/2)||x-y||^2_2 + \lambda \sum_{k=2}^{N-1} |x_{k-1} - 2 x_{k} + x_{k+1}| \]
 
 They call the above Hodric-Prescott Filtering.  It is *very* important to note that this sort of filtering is *not* appropriate for forecasting time-series (or *ex ante* work), as it is moving data from the future into the estimate in 2 ways:
 

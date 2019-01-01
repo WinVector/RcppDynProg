@@ -221,6 +221,17 @@ plt2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="d
 <span class="kw">install.packages</span>(<span class="st">"devtools"</span>)
 <span class="co"># install RcppDynProg</span>
 devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"WinVector/RcppDynProg"</span>)</code></pre></div>
+<hr>
+<p>Some other relevant segmentation and dynamic programming methods include:</p>
+<ul>
+<li>Piecewise or <a href="https://en.wikipedia.org/wiki/Segmented_regression">segmented regression</a> in general.</li>
+<li>
+<a href="https://CRAN.R-project.org/package=gam"><code>GAM</code></a>, <a href="https://CRAN.R-project.org/package=mgcv"><code>mgcv</code></a>, <a href="https://github.com/WinVector/vtreat/blob/master/R/segmented_variable.R">quantile segmentation</a>, <a href="https://github.com/WinVector/vtreat/blob/master/R/spline_variable.R"><code>spline</code></a> methods.</li>
+<li>The <a href="https://CRAN.R-project.org/package=segmented"><code>segmented</code> package</a> break-point/change-point regression package.</li>
+<li>
+<span class="math inline">\(l_1\)</span> Trend Filtering, which we discuss <a href="https://github.com/WinVector/RcppDynProg/blob/master/extras/sp500_example.pdf">here</a>.</li>
+<li>The <a href="https://CRAN.R-project.org/package=dynprog"><code>dynprog</code> package</a>, which is a general DSL based memoizer.</li>
+</ul>
 </div>
   </div>
 
