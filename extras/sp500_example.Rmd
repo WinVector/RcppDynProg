@@ -1,27 +1,28 @@
 ---
 title: "sp500 Example"
-output: github_document
+output: pdf_document
 ---
 
-Another approach to segmentation is given by Koh, Kim, and Boyd's L1-Trend filter (refs [here](http://web.stanford.edu/~boyd/l1_tf/) and [here](http://web.stanford.edu/~boyd/papers/l1_trend_filter.html)).  The approach is to, given a sequence $y$ of length $N$, use a global optimizer solve for a $x$ minimizing:
+Another approach to segmentation is given by Koh, Kim, and Boyd's L1-Trend filter (refs [here](http://web.stanford.edu/~boyd/l1_tf/) and [here](http://web.stanford.edu/~boyd/papers/l1_trend_filter.html)).  The approach is to, given a sequence $y$ of length $N$, use a global optimizer solve for a n-vector $x$ minimizing:
 
-$$(1/2)||x-y||^2_2 + \lambda ||D x||_1$$
+\[ (1/2)||x-y||^2_2 + \lambda ||D x||_1 \]
 
 where $D$ is the second-order difference matrix that calculates $x_{k-1} - 2 x_{k} + x_{k+1}$ for all $k$.  Or in other words find $x$ minimizing:
 
-$$(1/2)||x-y||^2_2 + \lambda \sum_{k=2}^{N-1} |x_{k-1} - 2 x_{k} + x_{k+1}|$$
+\[ latex (1/2)||x-y||^2_2 + \lambda \sum_{k=2}^{N-1} |x_{k-1} - 2 x_{k} + x_{k+1}| \]
+
 
 
 They call the above Hodric-Prescott Filtering.  It is *very* important to note that this sort of filtering is *not* appropriate for forecasting time-series (or *ex ante* work), as it is moving data from the future into the estimate in 2 ways:
 
-  * $x_{k+1}$ is directly in the penalty term for $x_{k}$ (moving fit quality information known at time $k+1$ to time $k$).
-  * It is using a global optimization to find all $x$ simultaneously, meaning choices of later $x$ can affect earlier choices.
+  * $x_{k+1}$ is directly in the penalty term for $x_{k}$ (moving fit quality information known at time k+1 to time k).
+  * It is using a global optimization to find all $x$ simultaneously, meaning choices of later $x$s can affect earlier choices.
 
 However, this sort of can be used to look at *ex post* (after the fact) changes in behavior.
 
 Richard Bellman wrote about a related smoothing filter in *Dynamic Programming*, Princeton 1958, Ch 1, section 7, minimizing:
 
-$$\sum_{k=1}^{N} g_k(x_{k} - r_{k}) + \sum_{k=2}^{N} h_k(x_{k} - x_{k-1})$$
+\[ \sum_{k=1}^{N} g_k(x_{k} - r_{k}) + \sum_{k=2}^{N} h_k(x_{k} - x_{k-1}) \]
 
 (here we are solving for $x$, given $r$ and the $g_k()$ and $h_k()$ are sequences of arbitrary penalty functions.
 
