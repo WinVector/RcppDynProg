@@ -11,18 +11,22 @@ library("ggplot2")
 # https://finance.yahoo.com/quote/%5EGSPC/history?period1=-630950400&period2=1546416000&interval=1d&filter=history&frequency=1d
 sp500 <- read.csv("^GSPC.csv")
 sp500$Date <- as.Date(sp500$Date)
-sp500 <- sp500[sp500$Date >= as.Date('2000-01-01'), ]
-
 sp500$x <- as.numeric(sp500$Date)
 sp500$log_price <- log(sp500$Adj.Close)
 
+
+sp500recent <- sp500[sp500$Date >= as.Date('2000-01-01'), ]
+
+
 # find penalty
-sp500$permuted <- sp500$log_price[sample.int(nrow(sp500), nrow(sp500), replace = FALSE)]
+sp500recent$permuted <- sp500recent$log_price[sample.int(nrow(sp500recent), 
+                                                         nrow(sp500recent), 
+                                                         replace = FALSE)]
 # look for a penalty that prefers 1 segment on permuted data
 lb <- 0
 ub <- 100
 while(TRUE) {
-  soln <- solve_for_partition(sp500$x, sp500$permuted, penalty = ub, max_k = 3)
+  soln <- solve_for_partition(sp500recent$x, sp500recent$permuted, penalty = ub, max_k = 3)
   if(nrow(soln)==2) {
     break
   }
@@ -34,7 +38,7 @@ while(TRUE) {
   if(penalty>=ub) {
     break
   }
-  soln <- solve_for_partition(sp500$x, sp500$permuted, penalty = penalty, max_k = 3)
+  soln <- solve_for_partition(sp500recent$x, sp500recent$permuted, penalty = penalty, max_k = 3)
   if(nrow(soln)==2) {
     ub <- penalty
   } else {
@@ -43,15 +47,35 @@ while(TRUE) {
 }
 print(penalty)
 
-soln <- solve_for_partition(sp500$x, sp500$log_price, penalty = penalty)
-sp500$estimate <- exp(approx(soln$x, soln$pred, 
-                             xout = sp500$x, 
+soln <- solve_for_partition(sp500recent$x, sp500recent$log_price, penalty = penalty)
+sp500recent$estimate <- exp(approx(soln$x, soln$pred, 
+                             xout = sp500recent$x, 
                              method = "linear", rule = 2)$y)
-sp500$group <- as.character(
-  findInterval(sp500$x, soln[soln$what=="left", "x"]))
+sp500recent$group <- as.character(
+  findInterval(sp500recent$x, soln[soln$what=="left", "x"]))
 
-ggplot(data = sp500, aes(x = Date)) +
-  geom_line(aes(y=Adj.Close), color = "lightgray") +
+ggplot(data = sp500recent, aes(x = Date)) +
+  geom_line(aes(y=Adj.Close), color = "darkgray") +
+  geom_line(aes(y=estimate, color = group)) +
+  ggtitle("segment approximation of historic sp500recent data",
+          subtitle = paste("per-segment penalty =", penalty)) +
+  theme(legend.position = "none") +
+  scale_color_brewer(palette = "Dark2") +
+  scale_y_log10()
+```
+
+```{r r2, fig.height = 6, fig.width = 8, fig.align = "center"}
+penalty <- 1
+
+soln <- solve_for_partition(sp500recent$x, sp500recent$log_price, penalty = penalty)
+sp500recent$estimate <- exp(approx(soln$x, soln$pred, 
+                             xout = sp500recent$x, 
+                             method = "linear", rule = 2)$y)
+sp500recent$group <- as.character(
+  findInterval(sp500recent$x, soln[soln$what=="left", "x"]))
+
+ggplot(data = sp500recent, aes(x = Date)) +
+  geom_line(aes(y=Adj.Close), color = "darkgray") +
   geom_line(aes(y=estimate, color = group)) +
   ggtitle("segment approximation of historic sp500 data",
           subtitle = paste("per-segment penalty =", penalty)) +
@@ -60,7 +84,7 @@ ggplot(data = sp500, aes(x = Date)) +
   scale_y_log10()
 ```
 
-```{r r2, fig.height = 6, fig.width = 8, fig.align = "center"}
+```{r r3, fig.height = 6, fig.width = 8, fig.align = "center"}
 penalty <- 1
 
 soln <- solve_for_partition(sp500$x, sp500$log_price, penalty = penalty)
@@ -71,8 +95,8 @@ sp500$group <- as.character(
   findInterval(sp500$x, soln[soln$what=="left", "x"]))
 
 ggplot(data = sp500, aes(x = Date)) +
-  geom_line(aes(y=Adj.Close), color = "lightgray") +
-  geom_line(aes(y=estimate, color = group)) +
+  geom_line(aes(y=Adj.Close), color = "darkgray") +
+  geom_line(aes(y=estimate), color = "darkgreen") +
   ggtitle("segment approximation of historic sp500 data",
           subtitle = paste("per-segment penalty =", penalty)) +
   theme(legend.position = "none") +
