@@ -100,11 +100,10 @@ sp500$estimate <- exp(approx(soln$x, soln$pred,
 
 sp500$group <- as.character(
   findInterval(sp500$x, soln[soln$what=="left", "x"]))
-colors <- rep("darkgreen", length(unique(sp500$group)) + 5)
 
 ggplot(data = sp500, aes(x = Date)) +
   geom_line(aes(y=Adj.Close), color = "darkgray") +
-  geom_line(aes(y=estimate, color = group)) +
+  geom_line(aes(y=estimate, group = group), color = "darkgreen") +
   ggtitle("segment approximation of historic sp500 data",
           subtitle = paste("per-segment penalty =", penalty)) +
   theme(legend.position = "none") +
