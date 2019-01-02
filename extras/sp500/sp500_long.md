@@ -97,8 +97,6 @@ soln <- solve_for_partition(sp500$x, sp500$log_price, penalty = penalty)
 sp500$estimate <- exp(approx(soln$x, soln$pred, 
                              xout = sp500$x, 
                              method = "linear", rule = 2)$y)
-sp500$group <- as.character(
-  findInterval(sp500$x, soln[soln$what=="left", "x"]))
 
 ggplot(data = sp500, aes(x = Date)) +
   geom_line(aes(y=Adj.Close), color = "darkgray") +
@@ -111,3 +109,58 @@ ggplot(data = sp500, aes(x = Date)) +
 ```
 
 <img src="sp500_long_files/figure-markdown_github/r3-1.png" style="display: block; margin: auto;" />
+
+Naive gaps (TODO: need to find breakpoints that are good for the no-gap solution).
+
+``` r
+sl <- soln[soln$what=='left', ]
+fit <- vtreat:::encode_x_as_lambdas(
+  sp500$x, min(sp500$x), max(sp500$x),
+  sl$x)
+vars <- setdiff(colnames(fit), "intercept")
+fit$y <- sp500$log_price
+fmla <- wrapr::mk_formula("y", vars)
+model <- lm(fmla, data = fit)
+sp500$pred <- exp(predict(model, newdata = fit))
+
+ggplot(data = sp500, aes(x = Date)) +
+  geom_line(aes(y=Adj.Close), color = "darkgray") +
+  geom_line(aes(y=pred), color = "darkgreen") +
+  ggtitle("segment approximation (no gaps) of historic sp500 data",
+          subtitle = paste("per-segment penalty =", penalty)) +
+  theme(legend.position = "none") +
+  scale_color_brewer(palette = "Dark2") +
+  scale_y_log10()
+```
+
+<img src="sp500_long_files/figure-markdown_github/r4-1.png" style="display: block; margin: auto;" />
+
+Fit piecewise constant on delta series.
+
+``` r
+penalty <- 0.01
+
+sp500$delta_log_price <- c(0, sp500$log_price[-1] - sp500$log_price[-nrow(sp500)])
+  
+soln <- solve_for_partitionc(sp500$x, sp500$delta_log_price, penalty = penalty)
+sl <- soln[soln$what=='left', ]
+fit <- vtreat:::encode_x_as_lambdas(
+  sp500$x, min(sp500$x), max(sp500$x),
+  sl$x)
+vars <- setdiff(colnames(fit), "intercept")
+fit$y <- sp500$log_price
+fmla <- wrapr::mk_formula("y", vars)
+model <- lm(fmla, data = fit)
+sp500$pred <- exp(predict(model, newdata = fit))
+
+ggplot(data = sp500, aes(x = Date)) +
+  geom_line(aes(y=Adj.Close), color = "darkgray") +
+  geom_line(aes(y=pred), color = "darkgreen") +
+  ggtitle("segment approximation (slope ests, no gaps) of historic sp500 data",
+          subtitle = paste("per-segment penalty =", penalty)) +
+  theme(legend.position = "none") +
+  scale_color_brewer(palette = "Dark2") +
+  scale_y_log10()
+```
+
+<img src="sp500_long_files/figure-markdown_github/r5-1.png" style="display: block; margin: auto;" />
