@@ -1,9 +1,7 @@
----
-title: "sp500 long"
-output: github_document
----
+sp500 long
+================
 
-```{r r1, fig.height = 6, fig.width = 8, fig.align = "center"}
+``` r
 library("RcppDynProg")
 library("ggplot2")
 
@@ -46,7 +44,11 @@ while(TRUE) {
   }
 }
 print(penalty)
+```
 
+    ## [1] 9
+
+``` r
 soln <- solve_for_partition(sp500recent$x, sp500recent$log_price, penalty = penalty)
 sp500recent$estimate <- exp(approx(soln$x, soln$pred, 
                              xout = sp500recent$x, 
@@ -64,7 +66,9 @@ ggplot(data = sp500recent, aes(x = Date)) +
   scale_y_log10()
 ```
 
-```{r r2, fig.height = 6, fig.width = 8, fig.align = "center"}
+<img src="sp500_long_files/figure-markdown_github/r1-1.png" style="display: block; margin: auto;" />
+
+``` r
 penalty <- 1
 
 soln <- solve_for_partition(sp500recent$x, sp500recent$log_price, penalty = penalty)
@@ -84,7 +88,9 @@ ggplot(data = sp500recent, aes(x = Date)) +
   scale_y_log10()
 ```
 
-```{r r3, fig.height = 6, fig.width = 8, fig.align = "center"}
+<img src="sp500_long_files/figure-markdown_github/r2-1.png" style="display: block; margin: auto;" />
+
+``` r
 penalty <- 5
 
 soln <- solve_for_partition(sp500$x, sp500$log_price, penalty = penalty)
@@ -104,3 +110,4 @@ ggplot(data = sp500, aes(x = Date)) +
   scale_y_log10()
 ```
 
+<img src="sp500_long_files/figure-markdown_github/r3-1.png" style="display: block; margin: auto;" />

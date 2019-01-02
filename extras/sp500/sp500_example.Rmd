@@ -97,7 +97,7 @@ a plausible value using a permutation test.
 lb <- 0
 ub <- 100
 while(TRUE) {
-  soln <- solve_for_partition(sp500$x, sp500$permuted, penalty = ub)
+  soln <- solve_for_partition(sp500$x, sp500$permuted, penalty = ub, max_k = 3)
   if(nrow(soln)==2) {
     break
   }
@@ -109,7 +109,7 @@ while(TRUE) {
   if(penalty>=ub) {
     break
   }
-  soln <- solve_for_partition(sp500$x, sp500$permuted, penalty = penalty)
+  soln <- solve_for_partition(sp500$x, sp500$permuted, penalty = penalty, max_k = 3)
   if(nrow(soln)==2) {
     ub <- penalty
   } else {
