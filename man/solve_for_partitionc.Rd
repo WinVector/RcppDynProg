@@ -30,10 +30,34 @@ a data frame appropriate for stats::approx().
 \description{
 Solve for a good set of right-exclusive x-cuts such that the 
 overall graph of y~x is well-approximated by a piecewise linear
-function.
+function. Solution is a ready for use with
+with \code{base::findInterval()} and \code{stats::approx()}
+(demonstrated in the examples).
 }
 \examples{
 
-solve_for_partitionc(1:8, c(-1, -1, -1, -1, 1, 1, 1, 1))
+# example data
+d <- data.frame(
+  x = 1:8,
+  y = c(-1, -1, -1, -1, 1, 1, 1, 1))
+
+# solve for break points
+soln <- solve_for_partitionc(d$x, d$y)
+# show solution
+print(soln)
+
+# label each point
+d$group <- base::findInterval(
+  d$x,
+  soln$x[soln$what=='left'])
+# apply piecewise approximation
+d$estimate <- stats::approx(
+  soln$x,
+  soln$pred,
+  xout = d$x,
+  method = 'constant',
+  rule = 2)$y
+# show result
+print(d)
 
 }
