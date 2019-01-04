@@ -214,7 +214,9 @@ plt2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="d
 <p>Some <a href="https://github.com/WinVector/RcppDynProg/blob/master/extras/Timings.html">basic timings</a> show <a href="https://github.com/WinVector/RcppDynProg/blob/master/src/solve_interval_partition.cpp">the <code>C++</code> implementation</a> can be over 200 times faster than <a href="https://github.com/WinVector/RcppDynProg/blob/master/R/solve_dyn_R.R">a direct transliteration <code>R</code></a> of the same code (so not vectorized, not fully R idiomatic, some time lost to <a href="https://winvector.github.io/wrapr/reference/seqi.html"><code>seqi()</code></a> abstraction), and <a href="https://github.com/WinVector/RcppDynProg/blob/master/extras/time_python.ipynb">over 400 times faster</a> than a <a href="https://github.com/WinVector/RcppDynProg/blob/master/extras/DynProg.py"><code>Python</code> direct transliteration</a> of the same code (so not optimized, and not “Pythonic”). The non-optimized and non-adapted nature of the code translations unfortunately exaggerates the speedup, however the <code>Rcpp</code> is likely buying as a solid factor of over 100- as <code>C++</code> is going to be much more efficient at all of the index-chasing this dynamic programming solution is based on.</p>
 <p>A note on problem complexity: general partition problems (where we do not restrict the subsets to be intervals) are NP-hard, so not thought to be amenable to efficient general solutions at scale (subset sum problems being good examples).</p>
 <hr>
-<p>The following will install the package from <a href="https://github.com/WinVector/RcppDynProg"><code>Github</code></a>:</p>
+<p><code>RcppDynProg</code> can be installed from <code>CRAN</code> with:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"RcppDynProg"</span>)</code></pre></div>
+<p>Or, the following will install the package from <a href="https://github.com/WinVector/RcppDynProg"><code>Github</code></a>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install dependencies</span>
 <span class="kw">install.packages</span>(<span class="kw">c</span>(<span class="st">"wrapr"</span>, <span class="st">"Rcpp"</span>, <span class="st">"RcppArmadillo"</span>))
 <span class="co"># install devtools</span>
@@ -239,6 +241,8 @@ devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocument
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
+<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=RcppDynProg">https://​cloud.r-project.org/​package=RcppDynProg</a>
+</li>
 <li>Browse source code at <br><a href="https://github.com/WinVector/RcppDynProg/">https://​github.com/​WinVector/​RcppDynProg/​</a>
 </li>
 <li>Report a bug at <br><a href="https://github.com/WinVector/RcppDynProg/issues">https://​github.com/​WinVector/​RcppDynProg/​issues</a>

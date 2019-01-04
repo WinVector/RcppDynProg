@@ -165,7 +165,13 @@ A note on problem complexity: general partition problems (where we do not restri
 
 ------------------------------------------------------------------------
 
-The following will install the package from [`Github`](https://github.com/WinVector/RcppDynProg):
+`RcppDynProg` can be installed from `CRAN` with:
+
+``` r
+install.packages("RcppDynProg")
+```
+
+Or, the following will install the package from [`Github`](https://github.com/WinVector/RcppDynProg):
 
 ``` r
 # install dependencies
