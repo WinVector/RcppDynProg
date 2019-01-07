@@ -1,5 +1,5 @@
 ---
-title: "The 2 by 2 Pseudo Inverse"
+title: "The 2 by 2 Real Pseudo Inverse"
 output: pdf_document
 ---
 
@@ -16,6 +16,7 @@ found in the [`RcppDynProg`](https://github.com/WinVector/RcppDynProg) package.
 (a d - b c) 
 \begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix}
 \]
+($a$, $b$, $c$, and $d$ all real).
 
 The above can be directly checked just by applying the rules for multiplying matrices to the left two matrices.  This has a particularly pleasant presentation if we recognize that $a d - b c$ is  the determinant of the left matrix which allows us to write the expression as follows.
 
@@ -57,29 +58,34 @@ There is an additional lesser known algebraic relation for two by two matrices.
 \begin{pmatrix} -d & c \\ b & -a \end{pmatrix} 
 \]
 
-This means, if $a d - b c$ is zero then:
-
-\[ 
-\begin{pmatrix} a & b \\ c & d \end{pmatrix}
-\begin{pmatrix} a & c \\ b & d \end{pmatrix}
-\begin{pmatrix} a & b \\ c & d \end{pmatrix}
-=
-(a^2 + b^2 + c^2 + d^2) 
-\begin{pmatrix} a & b \\ c & d \end{pmatrix} 
-\]
-
-Or (using transpose notation), if if $a d - b c$ is zero then:
+Or (using transpose, matrix norm, and determinant notation):
 
 \[ 
 \begin{pmatrix} a & b \\ c & d \end{pmatrix}
 \begin{pmatrix} a & b \\ c & d \end{pmatrix}^{\top}
 \begin{pmatrix} a & b \\ c & d \end{pmatrix}
 =
-(a^2 + b^2 + c^2 + d^2) 
-\begin{pmatrix} a & b \\ c & d \end{pmatrix}
+\begin{Vmatrix} a & b \\ c & d \end{Vmatrix}_2^2
+\begin{pmatrix} a & b \\ c & d \end{pmatrix} 
++
+\begin{vmatrix} a & b \\ c & d \end{vmatrix}
+\begin{pmatrix} -d & c \\ b & -a \end{pmatrix} 
 \]
 
 The superscript "top" denoting the transpose operation.
+
+This means, if $a d - b c$ is zero then:
+
+
+\[ 
+\begin{pmatrix} a & b \\ c & d \end{pmatrix}
+\begin{pmatrix} a & b \\ c & d \end{pmatrix}^{\top}
+\begin{pmatrix} a & b \\ c & d \end{pmatrix}
+=
+\begin{Vmatrix} a & b \\ c & d \end{Vmatrix}_2^2
+\begin{pmatrix} a & b \\ c & d \end{pmatrix}
+\]
+
 
 
 
