@@ -1,0 +1,180 @@
+
+\documentclass{article}
+
+\usepackage{hyperref}
+\usepackage{amsmath}
+
+
+\begin{document}
+
+\title{The 2 by 2 Real Pseudo Inverse}
+\author{John Mount}
+\date{2019-01-07}
+
+
+
+
+\maketitle
+
+
+This is a brief note on the math behind the direct
+PRESS statistic calculation\footnote{\url{http://www.win-vector.com/blog/2014/09/estimating-generalization-error-with-the-press-statistic/}} 
+found in the RcppDynProg package\footnote{\url{https://github.com/WinVector/RcppDynProg}}.
+
+The actual `C++` code\footnote{\url{https://github.com/WinVector/RcppDynProg/blob/master/src/xlin_fits.cpp}} is a bit ugly and intimidating.  That is because we are using a verbose scalar notation to represent matrix concepts.  In matrix notation we are solving a linear system by inverting a two by two matrix (yes, there are the usual admonitions that one should not invert a matrix to solve a linear system, but for system this small they do not apply).  We are in turn inverting the two by two matrix by exploiting the following well know rule.
+
+
+If $a d - b c$ is not zero then:
+
+\[ 
+\begin{pmatrix} a & b \\ c & d \end{pmatrix}^{-1}
+=
+\frac{1}{a d - b c}
+\begin{pmatrix} d & -b \\ -c & a \end{pmatrix}
+\]
+
+Throughout $a$, $b$, $c$, and $d$ all real scalars.
+
+This can be re-written as the following general relation.
+
+\[ 
+\begin{pmatrix} a & b \\ c & d \end{pmatrix}
+\begin{pmatrix} d & -b \\ -c & a \end{pmatrix}
+=
+(a d - b c) 
+\begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix}
+\]
+
+The above can be directly checked just by applying the rules for multiplying matrices to the left two matrices.  This has a particularly pleasant presentation if we recognize that $a d - b c$ is  the determinant of the left matrix and use the traditional vertical bar determinant notation.
+
+\[ 
+\begin{pmatrix} a & b \\ c & d \end{pmatrix}
+\begin{pmatrix} d & -b \\ -c & a \end{pmatrix}
+=
+\begin{vmatrix} a & b \\ c & d \end{vmatrix}
+\begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix}
+\]
+
+
+
+Now there is an issue of what to do when $a d - b c$ is zero.  For our implementation we apply Tikhonov regularized\footnote{\url{https://en.wikipedia.org/wiki/Tikhonov_regularization}} which (barring the exact numeric coincidence of minus two times the expected value of the independent variable equaling our regularization constant) is going to be non-singular.  For our actual application, we could simply switch degenerate situations to the out-of sample mean implementation\footnote{\url{https://github.com/WinVector/RcppDynProg/blob/master/src/const_costs.cpp}}.
+
+But, for fun, let's play with the math a bit.
+
+There is an additional lesser known algebraic relation for two by two matrices.
+
+
+\[ 
+\begin{pmatrix} a & b \\ c & d \end{pmatrix}
+\begin{pmatrix} a & c \\ b & d \end{pmatrix}
+\begin{pmatrix} a & b \\ c & d \end{pmatrix}
+=
+(a^2 + b^2 + c^2 + d^2) 
+\begin{pmatrix} a & b \\ c & d \end{pmatrix} 
++
+(a d - b c)
+\begin{pmatrix} -d & c \\ b & -a \end{pmatrix} 
+\]
+
+Or (using transpose, matrix Frobenius norm, and determinant notation):
+
+\[
+\begin{pmatrix} a & b \\ c & d \end{pmatrix}
+\begin{pmatrix} a & b \\ c & d \end{pmatrix}^{\top}
+\begin{pmatrix} a & b \\ c & d \end{pmatrix}
+=
+\begin{Vmatrix} a & b \\ c & d \end{Vmatrix}_2^2
+\begin{pmatrix} a & b \\ c & d \end{pmatrix} 
++
+\begin{vmatrix} a & b \\ c & d \end{vmatrix}
+\begin{pmatrix} -d & c \\ b & -a \end{pmatrix} 
+\]
+
+The superscript "top" denoting the transpose operation, the $||.||^2_2$ denoting sum of squares norm, and the single $|.|$ denoting determinant.
+
+This means, if $a d - b c$ is zero then:
+
+
+\[ 
+\begin{pmatrix} a & b \\ c & d \end{pmatrix}
+\begin{pmatrix} a & b \\ c & d \end{pmatrix}^{\top}
+\begin{pmatrix} a & b \\ c & d \end{pmatrix}
+=
+\begin{Vmatrix} a & b \\ c & d \end{Vmatrix}_2^2
+\begin{pmatrix} a & b \\ c & d \end{pmatrix}
+\]
+
+
+
+
+
+Once we [confirm the above relation\footnote{\url{https://github.com/WinVector/RcppDynProg/blob/master/extras/PseudoInverse.ipynb}} we can also confirm that if $a^2 + b^2 + c^2 + d^2$ is not zero, then the following matrix:
+
+\[ 
+\begin{pmatrix} a & b \\ c & d \end{pmatrix}^{+}
+=
+\frac{1}{a^2 + b^2 + c^2 + d^2}
+\begin{pmatrix} a & c \\ b & d \end{pmatrix}
+\]
+
+satisfies all of the conditions for being the Moore–Penrose inverse\footnote{\url{https://en.wikipedia.org/wiki/Moore–Penrose_inverse}} (or pseudo-inverse) of our original matrix.  The superscript-plus denoting the Moore–Penrose inverse operation.
+
+Or in transpose notation:
+
+\[ 
+\begin{pmatrix} a & b \\ c & d \end{pmatrix}^{+}
+=
+\frac{1}{a^2 + b^2 + c^2 + d^2}
+\begin{pmatrix} a & b \\ c & d \end{pmatrix}^{\top}
+\]
+
+This is called the pseudo-inverse because it acts like an inverse, even for non-invertible matrices.  For the pseudo-inverse we have:
+
+\[
+A A^{+} A = A
+\]
+
+And the above looks a lot like an inverse.  We can think of it having almost canceled the $A$ to the left or the $A$ to the right.
+
+For general matrices the situation is much more complicated. 
+
+However, for a real 2 by 2 matrix:
+
+\[
+\begin{pmatrix} a & b \\ c & d \end{pmatrix}
+\]
+
+The  Moore–Penrose inverse is:
+
+
+\begin{itemize}
+
+
+\item []when $a d - b c$ is not zero:
+
+\[
+\frac{1}{a d - b c}
+\begin{pmatrix} d & -b \\ -c & a \end{pmatrix} 
+\]
+
+\item []when $a d - b c$ is zero and $a^2 + b^2 + c^2 + d^2$ is not zero:
+
+\[ 
+\frac{1}{a^2 + b^2 + c^2 + d^2}
+\begin{pmatrix} a & c \\ b & d \end{pmatrix}
+\]
+
+\item []otherwise:
+
+\[ 
+\begin{pmatrix} 0 & 0 \\ 0 & 0 \end{pmatrix}
+\]
+.
+\end{itemize}
+
+The wealth of symmetries and relations is really kind of neat.
+
+
+
+
+\end{document}
