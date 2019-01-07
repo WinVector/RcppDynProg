@@ -3,7 +3,9 @@
 
 \usepackage{hyperref}
 \usepackage{amsmath}
+\usepackage{amssymb}
 
+\newtheorem{theorem}{Theorem}
 
 \begin{document}
 
@@ -21,7 +23,7 @@ This is a brief note on the math behind the direct
 PRESS statistic calculation\footnote{\url{http://www.win-vector.com/blog/2014/09/estimating-generalization-error-with-the-press-statistic/}} 
 found in the RcppDynProg package\footnote{\url{https://github.com/WinVector/RcppDynProg}}.
 
-The actual `C++` code\footnote{\url{https://github.com/WinVector/RcppDynProg/blob/master/src/xlin_fits.cpp}} is a bit ugly and intimidating.  That is because we are using a verbose scalar notation to represent matrix concepts.  In matrix notation we are solving a linear system by inverting a two by two matrix (yes, there are the usual admonitions that one should not invert a matrix to solve a linear system, but for system this small they do not apply).  We are in turn inverting the two by two matrix by exploiting the following well know rule.
+The actual `C++` code\footnote{\url{https://github.com/WinVector/RcppDynProg/blob/master/src/xlin_fits.cpp}} is a bit ugly and intimidating.  That is because we are using a verbose scalar notation to represent matrix concepts.  In matrix notation we are solving a linear system by inverting a two by two matrix (yes, there are the usual admonitions that one should not invert a matrix to solve a linear system, but for system this small they do not apply).  We are in turn inverting the two by two matrix by exploiting the following well know rule of how to invert a two by two matrix.
 
 
 If $a d - b c$ is not zero then:
@@ -78,6 +80,11 @@ There is an additional lesser known algebraic relation for two by two matrices.
 
 Or (using transpose, matrix Frobenius norm, and determinant notation):
 
+\begin{theorem}
+For any real 2 by 2 matrix
+$\begin{pmatrix} a & b \\ c & d \end{pmatrix}$ we have:
+
+
 \[
 \begin{pmatrix} a & b \\ c & d \end{pmatrix}
 \begin{pmatrix} a & b \\ c & d \end{pmatrix}^{\top}
@@ -88,9 +95,12 @@ Or (using transpose, matrix Frobenius norm, and determinant notation):
 +
 \begin{vmatrix} a & b \\ c & d \end{vmatrix}
 \begin{pmatrix} -d & c \\ b & -a \end{pmatrix} 
-\]
-
+\].
 The superscript "top" denoting the transpose operation, the $||.||^2_2$ denoting sum of squares norm, and the single $|.|$ denoting determinant.
+\\ $\square$
+\label{thm:fmla}
+\end{theorem}
+
 
 This means, if $a d - b c$ is zero then:
 
@@ -105,9 +115,6 @@ This means, if $a d - b c$ is zero then:
 \]
 
 
-
-
-
 Once we [confirm the above relation\footnote{\url{https://github.com/WinVector/RcppDynProg/blob/master/extras/PseudoInverse.ipynb}} we can also confirm that if $a^2 + b^2 + c^2 + d^2$ is not zero, then the following matrix:
 
 \[ 
@@ -117,7 +124,7 @@ Once we [confirm the above relation\footnote{\url{https://github.com/WinVector/R
 \begin{pmatrix} a & c \\ b & d \end{pmatrix}
 \]
 
-satisfies all of the conditions for being the Moore–Penrose inverse\footnote{\url{https://en.wikipedia.org/wiki/Moore–Penrose_inverse}} (or pseudo-inverse) of our original matrix.  The superscript-plus denoting the Moore–Penrose inverse operation.
+satisfies all of the conditions for being the Moore-Penrose inverse\footnote{\url{https://en.wikipedia.org/wiki/Moore–Penrose_inverse}} (or pseudo-inverse) of our original matrix.  The superscript-plus denoting the Moore-Penrose inverse operation.
 
 Or in transpose notation:
 
@@ -128,49 +135,55 @@ Or in transpose notation:
 \begin{pmatrix} a & b \\ c & d \end{pmatrix}^{\top}
 \]
 
-This is called the pseudo-inverse because it acts like an inverse, even for non-invertible matrices.  For the pseudo-inverse we have:
+This is called the pseudo-inverse because it acts like an inverse, even for non-invertible matrices.  For $A^{+}$ to be
+a More-Penrose inverse we must confirm it obeys the following relations:
 
-\[
-A A^{+} A = A
-\]
+\begin{align*}
+A A^{+} A &= A \\
+A^{+} A A^{+} &= A^{+} \\
+(A A^{+})^{\top} &= A A^{+} \\
+(A^{+} A)^{\top} &= A^{+} A
+\end{align*}
 
-And the above looks a lot like an inverse.  We can think of it having almost canceled the $A$ to the left or the $A$ to the right.
+Theorem \ref{thm:fmla} lets us check the first relation, the other follow quickly as our $A^{+}$ is a simple scalar multiple of the transpose.\footnote{With the same scaling for both $A^{+}$ and $(A^{\top})^{+}$.}
 
-For general matrices the situation is much more complicated. 
+All of the above check relations would be true for a classic inverse.  We can think of $A^{+}$ as almost canceling a single $A$ to the left or the $A$ to the right.
 
-However, for a real 2 by 2 matrix:
 
-\[
-\begin{pmatrix} a & b \\ c & d \end{pmatrix}
-\]
+\begin{theorem}
+For any real 2 by 2 matrix $\begin{pmatrix} a & b \\ c & d \end{pmatrix}$
 
-The  Moore–Penrose inverse is:
+The  Moore-Penrose inverse is:
 
 
 \begin{itemize}
 
 
-\item []when $a d - b c$ is not zero:
+\item When $a d - b c$ is not zero:
 
 \[
 \frac{1}{a d - b c}
 \begin{pmatrix} d & -b \\ -c & a \end{pmatrix} 
 \]
 
-\item []when $a d - b c$ is zero and $a^2 + b^2 + c^2 + d^2$ is not zero:
+\item When $a d - b c$ is zero and $a^2 + b^2 + c^2 + d^2$ is not zero:
 
 \[ 
 \frac{1}{a^2 + b^2 + c^2 + d^2}
 \begin{pmatrix} a & c \\ b & d \end{pmatrix}
 \]
 
-\item []otherwise:
+\item Otherwise:
 
 \[ 
 \begin{pmatrix} 0 & 0 \\ 0 & 0 \end{pmatrix}
 \]
-.
 \end{itemize}
+.
+\\ $\square$
+\end{theorem}
+
+For general matrices the situation is much more complicated. 
 
 The wealth of symmetries and relations is really kind of neat.
 
