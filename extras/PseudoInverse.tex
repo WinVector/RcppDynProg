@@ -23,7 +23,7 @@ This is a brief note on the math behind the direct
 PRESS statistic calculation\footnote{\url{http://www.win-vector.com/blog/2014/09/estimating-generalization-error-with-the-press-statistic/}} 
 found in the RcppDynProg package\footnote{\url{https://github.com/WinVector/RcppDynProg}}.
 
-The actual `C++` code\footnote{\url{https://github.com/WinVector/RcppDynProg/blob/master/src/xlin_fits.cpp}} is a bit ugly and intimidating.  That is because we are using a verbose scalar notation to represent matrix concepts.  In matrix notation we are solving a linear system by inverting a two by two matrix (yes, there are the usual admonitions that one should not invert a matrix to solve a linear system, but for system this small they do not apply).  We are in turn inverting the two by two matrix by exploiting the following well know rule of how to invert a two by two matrix.
+The actual `C++` code\footnote{\url{https://github.com/WinVector/RcppDynProg/blob/master/src/xlin_fits.cpp}} is a bit ugly and intimidating.  That is because we are using a verbose scalar notation to represent matrix concepts.  In matrix notation we are solving a linear system by inverting a two by two matrix.\footnote{Yes, there are the usual admonitions that one should not invert a matrix to solve a linear system, but for systems this small they do not apply.}  We are in turn inverting the two by two matrix by exploiting the following well know rule of how to invert a two by two matrix.
 
 
 If $a d - b c$ is not zero then:
