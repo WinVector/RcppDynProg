@@ -1,6 +1,9 @@
 
 #include <Rcpp.h>
-using namespace Rcpp;
+using Rcpp::NumericVector;
+using Rcpp::NumericMatrix;
+using Rcpp::IntegerVector;
+
 
 
 //' xlin_fits

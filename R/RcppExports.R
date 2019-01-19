@@ -3,7 +3,7 @@
 
 #' const_cost
 #' 
-#' Calculate cost of using mean of points to estimate other points in interval.
+#' Calculate out of sample total square error cost of using mean of points to estimate other points in interval.
 #' Zero indexed.
 #' 
 #' @param y NumericVector, values to group in order.
@@ -26,7 +26,7 @@ const_cost <- function(y, w, min_seg, i, j) {
 
 #' const_costs
 #' 
-#' Built matrix of interval costs for held-out means.
+#' Built matrix of total out of sample interval square error costs for held-out means.
 #' One indexed.
 #' 
 #' @param y NumericVector, values to group in order.
@@ -43,6 +43,50 @@ const_cost <- function(y, w, min_seg, i, j) {
 #' @export
 const_costs <- function(y, w, min_seg, indices) {
     .Call('_RcppDynProg_const_costs', PACKAGE = 'RcppDynProg', y, w, min_seg, indices)
+}
+
+#' const_cost_logistic
+#' 
+#' Calculate logistic cost of using mean of points to estimate other points in interval.
+#' Zero indexed.
+#' 
+#' @param y NumericVector, 0/1 values to group in order.
+#' @param w NumericVector, weights.
+#' @param min_seg positive integer, minimum segment size.
+#' @param i integer, first index (inclusive).
+#' @param j integer, j>=i last index (inclusive);
+#' @return scalar, const cost of [i,...,j] interval (inclusive).
+#' 
+#' @keywords internal
+#' 
+#' @examples
+#' 
+#' const_cost_logistic(c(1, 1, 2, 2), c(1, 1, 1, 1), 1, 0, 3)
+#' 
+#' @export
+const_cost_logistic <- function(y, w, min_seg, i, j) {
+    .Call('_RcppDynProg_const_cost_logistic', PACKAGE = 'RcppDynProg', y, w, min_seg, i, j)
+}
+
+#' const_costs_logistic
+#' 
+#' Built matrix of interval logistic costs for held-out means.
+#' One indexed.
+#' 
+#' @param y NumericVector, 0/1 values to group in order.
+#' @param w NumericVector, weights.
+#' @param min_seg positive integer, minimum segment size.
+#' @param indices IntegerVector, order list of indices to pair.
+#' @return xcosts NumericMatix, for j>=i xcosts(i,j) is the cost of partition element [i,...,j] (inclusive).
+#' 
+#' 
+#' @examples
+#' 
+#' const_costs_logistic(c(1, 1, 2, 2), c(1, 1, 1, 1), 1, 1:4)
+#' 
+#' @export
+const_costs_logistic <- function(y, w, min_seg, indices) {
+    .Call('_RcppDynProg_const_costs_logistic', PACKAGE = 'RcppDynProg', y, w, min_seg, indices)
 }
 
 #' lin_cost

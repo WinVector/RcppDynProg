@@ -2,7 +2,9 @@
 
 export(all_partitions)
 export(const_cost)
+export(const_cost_logistic)
 export(const_costs)
+export(const_costs_logistic)
 export(lin_cost)
 export(lin_costs)
 export(piecewise_constant)

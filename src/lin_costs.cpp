@@ -1,7 +1,8 @@
 
 #include <Rcpp.h>
-using namespace Rcpp;
-
+using Rcpp::NumericVector;
+using Rcpp::NumericMatrix;
+using Rcpp::IntegerVector;
 
 
 NumericVector xlin_fits(NumericVector x, NumericVector y, NumericVector w,
@@ -33,12 +34,6 @@ double lin_cost(NumericVector x, NumericVector y, NumericVector w,
                 const int i, const int j) {
   if(j <= (i + (min_seg-1))) {
     return std::numeric_limits<double>::max();
-  }
-  if(j == (i+1)) {
-    // special case small systems
-    // weights not needed here
-    const double diff = y(i)-y(j);
-    return 2*diff*diff;
   }
   NumericVector fits = xlin_fits(x, y, w, i, j);
   double sum_loss = 0.0;

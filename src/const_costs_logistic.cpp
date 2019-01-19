@@ -1,15 +1,16 @@
 
 #include <Rcpp.h>
+#include <math.h>
 using Rcpp::NumericVector;
 using Rcpp::NumericMatrix;
 using Rcpp::IntegerVector;
 
-//' const_cost
+//' const_cost_logistic
 //' 
-//' Calculate out of sample total square error cost of using mean of points to estimate other points in interval.
+//' Calculate logistic cost of using mean of points to estimate other points in interval.
 //' Zero indexed.
 //' 
-//' @param y NumericVector, values to group in order.
+//' @param y NumericVector, 0/1 values to group in order.
 //' @param w NumericVector, weights.
 //' @param min_seg positive integer, minimum segment size.
 //' @param i integer, first index (inclusive).
@@ -20,11 +21,11 @@ using Rcpp::IntegerVector;
 //' 
 //' @examples
 //' 
-//' const_cost(c(1, 1, 2, 2), c(1, 1, 1, 1), 1, 0, 3)
+//' const_cost_logistic(c(1, 1, 2, 2), c(1, 1, 1, 1), 1, 0, 3)
 //' 
 //' @export
 // [[Rcpp::export]]
-double const_cost(NumericVector y, NumericVector w, 
+double const_cost_logistic(NumericVector y, NumericVector w, 
                   const int min_seg,
                   const int i, const int j) {
   if(j <= (i + (min_seg-1))) {
@@ -38,20 +39,26 @@ double const_cost(NumericVector y, NumericVector w,
   }
   double sum_loss = 0.0;
   for(int k=i; k<=j; ++k) {
+    // out of sample estimate
     const double mean_ijk = (sum_ij - y(k)*w(k))/(w_ij - w(k));
-    const double diff = y(k) - mean_ijk;
-    const double loss = w(k)*diff*diff;
-    sum_loss = sum_loss + loss;
+    double loss = 0.0;
+    if(y(k)>0) {
+      loss = loss + y(k)*std::log(mean_ijk);
+    }
+    if(y(k)<1) {
+      loss = loss = (1-y(k))*std::log(1.0-mean_ijk);
+    }
+    sum_loss = sum_loss + w(k)*loss;
   }
   return sum_loss;
 }
 
-//' const_costs
+//' const_costs_logistic
 //' 
-//' Built matrix of total out of sample interval square error costs for held-out means.
+//' Built matrix of interval logistic costs for held-out means.
 //' One indexed.
 //' 
-//' @param y NumericVector, values to group in order.
+//' @param y NumericVector, 0/1 values to group in order.
 //' @param w NumericVector, weights.
 //' @param min_seg positive integer, minimum segment size.
 //' @param indices IntegerVector, order list of indices to pair.
@@ -60,11 +67,11 @@ double const_cost(NumericVector y, NumericVector w,
 //' 
 //' @examples
 //' 
-//' const_costs(c(1, 1, 2, 2), c(1, 1, 1, 1), 1, 1:4)
+//' const_costs_logistic(c(1, 1, 2, 2), c(1, 1, 1, 1), 1, 1:4)
 //' 
 //' @export
 // [[Rcpp::export]]
-NumericMatrix const_costs(NumericVector y, NumericVector w, 
+NumericMatrix const_costs_logistic(NumericVector y, NumericVector w, 
                           const int min_seg,
                           IntegerVector indices) {
   const int n = indices.size();
@@ -73,7 +80,7 @@ NumericMatrix const_costs(NumericVector y, NumericVector w,
   for(int i=0; i<n; ++i) {
     xcosts(i,i) = single_value;
     for(int j=i+1; j<n; ++j) {
-      const double sum_loss = const_cost(y, w, min_seg, indices(i)-1, indices(j)-1);
+      const double sum_loss = const_cost_logistic(y, w, min_seg, indices(i)-1, indices(j)-1);
       xcosts(i,j) = sum_loss;
       xcosts(j,i) = sum_loss;
     }

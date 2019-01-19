@@ -3,7 +3,10 @@
 
 // [[Rcpp::depends(RcppArmadillo)]]
 
-using namespace Rcpp;
+using Rcpp::NumericVector;
+using Rcpp::NumericMatrix;
+using Rcpp::IntegerVector;
+
 
 //' solve_interval_partition interval partition problem.
 //' 
