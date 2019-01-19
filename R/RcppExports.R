@@ -206,7 +206,7 @@ solve_interval_partition <- function(x, kmax) {
 
 #' xlin_fits
 #' 
-#' Calculate out of sample linear fit predictions.
+#' Calculate out of sample linear fit predictions using regularization.
 #' Zero indexed.
 #' 
 #' @param x NumericVector, x-coords of values to group (length>=2).
@@ -225,5 +225,29 @@ solve_interval_partition <- function(x, kmax) {
 #' @export
 xlin_fits <- function(x, y, w, i, j) {
     .Call('_RcppDynProg_xlin_fits', PACKAGE = 'RcppDynProg', x, y, w, i, j)
+}
+
+#' xlin_pfits
+#' 
+#' Calculate out of sample linear fit predictions using pseudo-inverse.
+#' Please see: \url{http://www.win-vector.com/blog/2019/01/a-beautiful-2-by-2-matrix-identity/}.
+#' Zero indexed.
+#' 
+#' @param x NumericVector, x-coords of values to group (length>=2).
+#' @param y NumericVector, values to group in order.
+#' @param w NumericVector, weights (positive).
+#' @param i integer, first index (inclusive).
+#' @param j integer, j>=i+2 last index (inclusive);
+#' @return  vector of predictions.
+#' 
+#' @keywords internal
+#' 
+#' @examples
+#' 
+#' xlin_pfits(c(1, 2, 3, 4), c(1, 2, 2, 1), c(1, 1, 1, 1), 0, 3)
+#' 
+#' @export
+xlin_pfits <- function(x, y, w, i, j) {
+    .Call('_RcppDynProg_xlin_pfits', PACKAGE = 'RcppDynProg', x, y, w, i, j)
 }
 

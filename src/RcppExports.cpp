@@ -153,6 +153,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// xlin_pfits
+NumericVector xlin_pfits(NumericVector x, NumericVector y, NumericVector w, const int i, const int j);
+RcppExport SEXP _RcppDynProg_xlin_pfits(SEXP xSEXP, SEXP ySEXP, SEXP wSEXP, SEXP iSEXP, SEXP jSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type w(wSEXP);
+    Rcpp::traits::input_parameter< const int >::type i(iSEXP);
+    Rcpp::traits::input_parameter< const int >::type j(jSEXP);
+    rcpp_result_gen = Rcpp::wrap(xlin_pfits(x, y, w, i, j));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_RcppDynProg_const_cost", (DL_FUNC) &_RcppDynProg_const_cost, 5},
@@ -165,6 +180,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_RcppDynProg_lin_costs_logistic", (DL_FUNC) &_RcppDynProg_lin_costs_logistic, 5},
     {"_RcppDynProg_solve_interval_partition", (DL_FUNC) &_RcppDynProg_solve_interval_partition, 2},
     {"_RcppDynProg_xlin_fits", (DL_FUNC) &_RcppDynProg_xlin_fits, 5},
+    {"_RcppDynProg_xlin_pfits", (DL_FUNC) &_RcppDynProg_xlin_pfits, 5},
     {NULL, NULL, 0}
 };
 

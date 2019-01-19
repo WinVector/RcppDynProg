@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>xlin_fits — xlin_fits • RcppDynProg</title>
+<title>xlin_pfits — xlin_pfits • RcppDynProg</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,10 @@
 
 
 
-<meta property="og:title" content="xlin_fits — xlin_fits" />
+<meta property="og:title" content="xlin_pfits — xlin_pfits" />
 
-<meta property="og:description" content="Calculate out of sample linear fit predictions using regularization.
+<meta property="og:description" content="Calculate out of sample linear fit predictions using pseudo-inverse.
+Please see: http://www.win-vector.com/blog/2019/01/a-beautiful-2-by-2-matrix-identity/.
 Zero indexed." />
 <meta name="twitter:card" content="summary" />
 
@@ -119,19 +120,20 @@ Zero indexed." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>xlin_fits</h1>
+    <h1>xlin_pfits</h1>
     <small class="dont-index">Source: <a href='https://github.com/WinVector/RcppDynProg//blob/master/R/RcppExports.R'><code>R/RcppExports.R</code></a></small>
-    <div class="hidden name"><code>xlin_fits.Rd</code></div>
+    <div class="hidden name"><code>xlin_pfits.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Calculate out of sample linear fit predictions using regularization.
+    <p>Calculate out of sample linear fit predictions using pseudo-inverse.
+Please see: <a href='http://www.win-vector.com/blog/2019/01/a-beautiful-2-by-2-matrix-identity/'>http://www.win-vector.com/blog/2019/01/a-beautiful-2-by-2-matrix-identity/</a>.
 Zero indexed.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>xlin_fits</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>w</span>, <span class='no'>i</span>, <span class='no'>j</span>)</pre>
+    <pre class="usage"><span class='fu'>xlin_pfits</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>w</span>, <span class='no'>i</span>, <span class='no'>j</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -165,7 +167,7 @@ Zero indexed.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='fu'>xlin_fits</span>(<span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span>), <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>1</span>), <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>), <span class='fl'>0</span>, <span class='fl'>3</span>)</div><div class='output co'>#&gt; [1] 2.666715 1.285715 1.285712 2.666668</div><div class='input'>
+<span class='fu'>xlin_pfits</span>(<span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span>), <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>1</span>), <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>), <span class='fl'>0</span>, <span class='fl'>3</span>)</div><div class='output co'>#&gt; [1] 2.666667 1.285714 1.285714 2.666667</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
