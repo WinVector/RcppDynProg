@@ -7,9 +7,9 @@
 const_cost_logistic(y, w, min_seg, i, j)
 }
 \arguments{
-\item{y}{NumericVector, 0/1 values to group in order.}
+\item{y}{NumericVector, 0/1 values to group in order (should be in interval [0,1]).}
 
-\item{w}{NumericVector, weights.}
+\item{w}{NumericVector, weights (should be positive).}
 
 \item{min_seg}{positive integer, minimum segment size.}
 
@@ -26,7 +26,7 @@ Zero indexed.
 }
 \examples{
 
-const_cost_logistic(c(1, 1, 2, 2), c(1, 1, 1, 1), 1, 0, 3)
+const_cost_logistic(c(0.1, 0.1, 0.2, 0.2), c(1, 1, 1, 1), 1, 0, 3)
 
 }
 \keyword{internal}

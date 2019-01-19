@@ -50,8 +50,8 @@ const_costs <- function(y, w, min_seg, indices) {
 #' Calculate logistic cost of using mean of points to estimate other points in interval.
 #' Zero indexed.
 #' 
-#' @param y NumericVector, 0/1 values to group in order.
-#' @param w NumericVector, weights.
+#' @param y NumericVector, 0/1 values to group in order (should be in interval [0,1]).
+#' @param w NumericVector, weights (should be positive).
 #' @param min_seg positive integer, minimum segment size.
 #' @param i integer, first index (inclusive).
 #' @param j integer, j>=i last index (inclusive);
@@ -61,7 +61,7 @@ const_costs <- function(y, w, min_seg, indices) {
 #' 
 #' @examples
 #' 
-#' const_cost_logistic(c(1, 1, 2, 2), c(1, 1, 1, 1), 1, 0, 3)
+#' const_cost_logistic(c(0.1, 0.1, 0.2, 0.2), c(1, 1, 1, 1), 1, 0, 3)
 #' 
 #' @export
 const_cost_logistic <- function(y, w, min_seg, i, j) {
@@ -73,8 +73,8 @@ const_cost_logistic <- function(y, w, min_seg, i, j) {
 #' Built matrix of interval logistic costs for held-out means.
 #' One indexed.
 #' 
-#' @param y NumericVector, 0/1 values to group in order.
-#' @param w NumericVector, weights.
+#' @param y NumericVector, 0/1 values to group in order (should be in interval [0,1]).
+#' @param w NumericVector, weights (should be positive).
 #' @param min_seg positive integer, minimum segment size.
 #' @param indices IntegerVector, order list of indices to pair.
 #' @return xcosts NumericMatix, for j>=i xcosts(i,j) is the cost of partition element [i,...,j] (inclusive).
@@ -82,7 +82,7 @@ const_cost_logistic <- function(y, w, min_seg, i, j) {
 #' 
 #' @examples
 #' 
-#' const_costs_logistic(c(1, 1, 2, 2), c(1, 1, 1, 1), 1, 1:4)
+#' const_costs_logistic(c(0.1, 0.1, 0.2, 0.2), c(1, 1, 1, 1), 1, 1:4)
 #' 
 #' @export
 const_costs_logistic <- function(y, w, min_seg, indices) {
@@ -132,6 +132,55 @@ lin_cost <- function(x, y, w, min_seg, i, j) {
 #' @export
 lin_costs <- function(x, y, w, min_seg, indices) {
     .Call('_RcppDynProg_lin_costs', PACKAGE = 'RcppDynProg', x, y, w, min_seg, indices)
+}
+
+#' lin_cost_logistic logistic deviance pricing
+#' 
+#' Calculate deviance cost of using linear model fit on points to estimate other points in the interval.
+#' Zero indexed.
+#' 
+#' Note: this is the deviance cost of a linear fit, not the deviance loss of a logistic fit.
+#' 
+#' @param x NumericVector, x-coords of values to group.
+#' @param y NumericVector, values to group in order (should be in interval [0,1]).
+#' @param w NumericVector, weights (positive).
+#' @param min_seg positive integer, minimum segment size.
+#' @param i integer, first index (inclusive).
+#' @param j integer, j>=i last index (inclusive);
+#' @return scalar, linear cost of [i,...,j] interval (inclusive).
+#' 
+#' @keywords internal
+#' 
+#' @examples
+#' 
+#' lin_cost_logistic(c(1, 2, 3, 4), c(0.1, 0.2, 0.2, 0.1), c(1, 1, 1, 1), 1, 0, 3)
+#' 
+#' @export
+lin_cost_logistic <- function(x, y, w, min_seg, i, j) {
+    .Call('_RcppDynProg_lin_cost_logistic', PACKAGE = 'RcppDynProg', x, y, w, min_seg, i, j)
+}
+
+#' lin_costs_logistic deviance costs.
+#' 
+#' Built matrix of interval deviance costs for held-out linear models.
+#' One indexed.
+#' 
+#' Note: this is the deviance cost of a linear fit, not the deviance loss of a logistic fit.
+#' 
+#' @param x NumericVector, x-coords of values to group.
+#' @param y NumericVector, values to group in order (should be in interval [0,1]).
+#' @param w NumericVector, weights (should be positive).
+#' @param min_seg positive integer, minimum segment size.
+#' @param indices IntegerVector, ordered list of indices to pair.
+#' @return xcosts NumericMatix, for j>=i xcosts(i,j) is the cost of partition element [i,...,j] (inclusive).
+#' 
+#' @examples
+#' 
+#' lin_costs_logistic(c(1, 2, 3, 4), c(0.1, 0.2, 0.2, 0.1), c(1, 1, 1, 1), 1, 1:4)
+#' 
+#' @export
+lin_costs_logistic <- function(x, y, w, min_seg, indices) {
+    .Call('_RcppDynProg_lin_costs_logistic', PACKAGE = 'RcppDynProg', x, y, w, min_seg, indices)
 }
 
 #' solve_interval_partition interval partition problem.

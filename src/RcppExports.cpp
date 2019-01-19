@@ -95,6 +95,37 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// lin_cost_logistic
+double lin_cost_logistic(NumericVector x, NumericVector y, NumericVector w, const int min_seg, const int i, const int j);
+RcppExport SEXP _RcppDynProg_lin_cost_logistic(SEXP xSEXP, SEXP ySEXP, SEXP wSEXP, SEXP min_segSEXP, SEXP iSEXP, SEXP jSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type w(wSEXP);
+    Rcpp::traits::input_parameter< const int >::type min_seg(min_segSEXP);
+    Rcpp::traits::input_parameter< const int >::type i(iSEXP);
+    Rcpp::traits::input_parameter< const int >::type j(jSEXP);
+    rcpp_result_gen = Rcpp::wrap(lin_cost_logistic(x, y, w, min_seg, i, j));
+    return rcpp_result_gen;
+END_RCPP
+}
+// lin_costs_logistic
+NumericMatrix lin_costs_logistic(NumericVector x, NumericVector y, NumericVector w, const int min_seg, IntegerVector indices);
+RcppExport SEXP _RcppDynProg_lin_costs_logistic(SEXP xSEXP, SEXP ySEXP, SEXP wSEXP, SEXP min_segSEXP, SEXP indicesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type w(wSEXP);
+    Rcpp::traits::input_parameter< const int >::type min_seg(min_segSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type indices(indicesSEXP);
+    rcpp_result_gen = Rcpp::wrap(lin_costs_logistic(x, y, w, min_seg, indices));
+    return rcpp_result_gen;
+END_RCPP
+}
 // solve_interval_partition
 IntegerVector solve_interval_partition(NumericMatrix x, int kmax);
 RcppExport SEXP _RcppDynProg_solve_interval_partition(SEXP xSEXP, SEXP kmaxSEXP) {
@@ -130,6 +161,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_RcppDynProg_const_costs_logistic", (DL_FUNC) &_RcppDynProg_const_costs_logistic, 4},
     {"_RcppDynProg_lin_cost", (DL_FUNC) &_RcppDynProg_lin_cost, 6},
     {"_RcppDynProg_lin_costs", (DL_FUNC) &_RcppDynProg_lin_costs, 5},
+    {"_RcppDynProg_lin_cost_logistic", (DL_FUNC) &_RcppDynProg_lin_cost_logistic, 6},
+    {"_RcppDynProg_lin_costs_logistic", (DL_FUNC) &_RcppDynProg_lin_costs_logistic, 5},
     {"_RcppDynProg_solve_interval_partition", (DL_FUNC) &_RcppDynProg_solve_interval_partition, 2},
     {"_RcppDynProg_xlin_fits", (DL_FUNC) &_RcppDynProg_xlin_fits, 5},
     {NULL, NULL, 0}

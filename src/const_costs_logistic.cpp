@@ -10,8 +10,8 @@ using Rcpp::IntegerVector;
 //' Calculate logistic cost of using mean of points to estimate other points in interval.
 //' Zero indexed.
 //' 
-//' @param y NumericVector, 0/1 values to group in order.
-//' @param w NumericVector, weights.
+//' @param y NumericVector, 0/1 values to group in order (should be in interval [0,1]).
+//' @param w NumericVector, weights (should be positive).
 //' @param min_seg positive integer, minimum segment size.
 //' @param i integer, first index (inclusive).
 //' @param j integer, j>=i last index (inclusive);
@@ -21,7 +21,7 @@ using Rcpp::IntegerVector;
 //' 
 //' @examples
 //' 
-//' const_cost_logistic(c(1, 1, 2, 2), c(1, 1, 1, 1), 1, 0, 3)
+//' const_cost_logistic(c(0.1, 0.1, 0.2, 0.2), c(1, 1, 1, 1), 1, 0, 3)
 //' 
 //' @export
 // [[Rcpp::export]]
@@ -39,16 +39,18 @@ double const_cost_logistic(NumericVector y, NumericVector w,
   }
   double sum_loss = 0.0;
   for(int k=i; k<=j; ++k) {
-    // out of sample estimate
-    const double mean_ijk = (sum_ij - y(k)*w(k))/(w_ij - w(k));
-    double loss = 0.0;
-    if(y(k)>0) {
-      loss = loss + y(k)*std::log(mean_ijk);
+    if(w(k)>0.0) {
+      // out of sample estimate
+      const double mean_ijk = (sum_ij - y(k)*w(k))/(w_ij - w(k));
+      double loss = 0.0;
+      if(y(k)>0.0) {
+        loss = loss + y(k)*std::log(mean_ijk);
+      }
+      if(y(k)<1.0) {
+        loss = loss = (1.0-y(k))*std::log(1.0-mean_ijk);
+      }
+      sum_loss = sum_loss + w(k)*loss;
     }
-    if(y(k)<1) {
-      loss = loss = (1-y(k))*std::log(1.0-mean_ijk);
-    }
-    sum_loss = sum_loss + w(k)*loss;
   }
   return sum_loss;
 }
@@ -58,8 +60,8 @@ double const_cost_logistic(NumericVector y, NumericVector w,
 //' Built matrix of interval logistic costs for held-out means.
 //' One indexed.
 //' 
-//' @param y NumericVector, 0/1 values to group in order.
-//' @param w NumericVector, weights.
+//' @param y NumericVector, 0/1 values to group in order (should be in interval [0,1]).
+//' @param w NumericVector, weights (should be positive).
 //' @param min_seg positive integer, minimum segment size.
 //' @param indices IntegerVector, order list of indices to pair.
 //' @return xcosts NumericMatix, for j>=i xcosts(i,j) is the cost of partition element [i,...,j] (inclusive).
@@ -67,7 +69,7 @@ double const_cost_logistic(NumericVector y, NumericVector w,
 //' 
 //' @examples
 //' 
-//' const_costs_logistic(c(1, 1, 2, 2), c(1, 1, 1, 1), 1, 1:4)
+//' const_costs_logistic(c(0.1, 0.1, 0.2, 0.2), c(1, 1, 1, 1), 1, 1:4)
 //' 
 //' @export
 // [[Rcpp::export]]
