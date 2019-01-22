@@ -126,7 +126,7 @@ score_solution <- function(x, solution) {
 test_solvers <- function(x, k) {
   msg <- NULL
   tryCatch({
-    sl <- all_partitions(3, k)
+    sl <- all_partitions(nrow(x), k)
     if(length(sl)<1) {
       stop("brute force didn't return any solutions")
     }

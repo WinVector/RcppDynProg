@@ -149,8 +149,8 @@ IntegerVector solve_interval_partition_no_k(NumericMatrix x) {
   }
   
   // best path cost up to i (row) with exactly k-steps (column)
-  arma::Col<double> path_costs(n + R_SIZE_PAD, arma::fill::none);
-  // how we realized each above cost
+  arma::Col<double> path_costs(n + R_SIZE_PAD, arma::fill::zeros);
+  // how we realized each above cost entry is rhs of last interval (0 at start)
   arma::Col<int> prev_step(n + R_SIZE_PAD, arma::fill::ones);
   
   // fill in path and costs tables
@@ -158,10 +158,10 @@ IntegerVector solve_interval_partition_no_k(NumericMatrix x) {
   // compute larger paths
   for(int i=1; i<=n; ++i) {
     // no split case
-    int pick = 1;
+    int pick = 0;
     double pick_cost = x(1 + R_INDEX_DELTA, i + R_INDEX_DELTA);
     // split cases
-    for(int candidate=2; candidate<i; ++candidate) {
+    for(int candidate=1; candidate<i; ++candidate) {
       const double cost = path_costs(candidate) +
         x(candidate + 1 + R_INDEX_DELTA, i + R_INDEX_DELTA);
       if(cost<=pick_cost) {
@@ -176,7 +176,7 @@ IntegerVector solve_interval_partition_no_k(NumericMatrix x) {
   // now back-chain for solution
   int k_at = 1;
   int i_at = n;
-  while(prev_step(i_at)>1) {
+  while(prev_step(i_at)>0) {
     k_at = k_at + 1;
     i_at = prev_step(i_at);
   }
@@ -188,11 +188,11 @@ IntegerVector solve_interval_partition_no_k(NumericMatrix x) {
   k_at = k_opt;
   while(k_at>1) {
     const int prev_i = prev_step(i_at);
-    solution(k_at + R_INDEX_DELTA) = prev_i;
+    solution(k_at + R_INDEX_DELTA) = prev_i + 1;
     i_at = prev_i;
     k_at = k_at - 1;
   }
-  
+
   return solution;
 }
 
