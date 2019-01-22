@@ -13,6 +13,10 @@ test_that("test_dynprog1: test basic operaton", {
                     0.823423527413979, 0.907007380854338), nrow=3)
   testthat::expect_true(RcppDynProg:::test_solvers(x2, k))
   
+  x3 <- matrix(c(0.15401595, 0.04822183, 0.19091068, 0.45166874, 0.91731301, 0.65618810,
+                 0.35495444, 0.12153691, 0.56267106), nrow=3)
+  testthat::expect_true(RcppDynProg:::test_solvers(x3, k))
+  
   set.seed(1515)
   for(i in 1:10) {
     x3 <- matrix(runif(9), nrow=3)

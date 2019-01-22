@@ -126,14 +126,37 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// solve_interval_partition
-IntegerVector solve_interval_partition(NumericMatrix x, int kmax);
-RcppExport SEXP _RcppDynProg_solve_interval_partition(SEXP xSEXP, SEXP kmaxSEXP) {
+// solve_interval_partition_k
+IntegerVector solve_interval_partition_k(NumericMatrix x, int kmax);
+RcppExport SEXP _RcppDynProg_solve_interval_partition_k(SEXP xSEXP, SEXP kmaxSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
     Rcpp::traits::input_parameter< int >::type kmax(kmaxSEXP);
+    rcpp_result_gen = Rcpp::wrap(solve_interval_partition_k(x, kmax));
+    return rcpp_result_gen;
+END_RCPP
+}
+// solve_interval_partition_no_k
+IntegerVector solve_interval_partition_no_k(NumericMatrix x);
+RcppExport SEXP _RcppDynProg_solve_interval_partition_no_k(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(solve_interval_partition_no_k(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// solve_interval_partition
+IntegerVector solve_interval_partition(NumericMatrix x, const int kmax);
+RcppExport SEXP _RcppDynProg_solve_interval_partition(SEXP xSEXP, SEXP kmaxSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const int >::type kmax(kmaxSEXP);
     rcpp_result_gen = Rcpp::wrap(solve_interval_partition(x, kmax));
     return rcpp_result_gen;
 END_RCPP
@@ -178,6 +201,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_RcppDynProg_lin_costs", (DL_FUNC) &_RcppDynProg_lin_costs, 5},
     {"_RcppDynProg_lin_cost_logistic", (DL_FUNC) &_RcppDynProg_lin_cost_logistic, 6},
     {"_RcppDynProg_lin_costs_logistic", (DL_FUNC) &_RcppDynProg_lin_costs_logistic, 5},
+    {"_RcppDynProg_solve_interval_partition_k", (DL_FUNC) &_RcppDynProg_solve_interval_partition_k, 2},
+    {"_RcppDynProg_solve_interval_partition_no_k", (DL_FUNC) &_RcppDynProg_solve_interval_partition_no_k, 1},
     {"_RcppDynProg_solve_interval_partition", (DL_FUNC) &_RcppDynProg_solve_interval_partition, 2},
     {"_RcppDynProg_xlin_fits", (DL_FUNC) &_RcppDynProg_xlin_fits, 5},
     {"_RcppDynProg_xlin_pfits", (DL_FUNC) &_RcppDynProg_xlin_pfits, 5},

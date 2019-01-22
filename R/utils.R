@@ -152,13 +152,33 @@ test_solvers <- function(x, k) {
       stop("R solution has wrong score")
     }
     
-    soln2 <- solve_interval_partition(x, k)
+    soln2 <- solve_interval_partition_k(x, k)
     score2 <- score_solution(x, soln2)
     if(!(length(soln2)<=(k+1))) {
       stop("soln2 too long")
     }
     if(!(abs(score2-sm)<=1e-5)) {
+      stop("C++ k solution has wrong score")
+    }
+    
+    soln3 <- solve_interval_partition(x, k)
+    score3 <- score_solution(x, soln3)
+    if(!(length(soln3)<=(k+1))) {
+      stop("soln3 too long")
+    }
+    if(!(abs(score3-sm)<=1e-5)) {
       stop("C++ solution has wrong score")
+    }
+    
+    if(k>=nrow(x)) {
+      soln4 <- solve_interval_partition_no_k(x)
+      score4 <- score_solution(x, soln4)
+      if(!(length(soln4)<=(k+1))) {
+        stop("soln4 too long")
+      }
+      if(!(abs(score4-sm)<=1e-5)) {
+        stop("C++ no_k solution has wrong score")
+      }
     }
   },
   error = function(e) { msg <<- paste(as.character(e), sep = " ") }
