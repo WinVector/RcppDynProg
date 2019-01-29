@@ -1,5 +1,5 @@
 
-# RcppDynProg 0.1.1 2019/01/21
+# RcppDynProg 0.1.1 2019/01/29
 
  * Add logistic scoring.
  * No k-bound variation.
