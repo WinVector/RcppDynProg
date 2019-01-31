@@ -216,6 +216,37 @@ logistic_solve1 <- function(x, y, w, initial_link, i, j, skip) {
     .Call('_RcppDynProg_logistic_solve1', PACKAGE = 'RcppDynProg', x, y, w, initial_link, i, j, skip)
 }
 
+#' Out of sample logistic predictions (in link space).
+#' 
+#' 1-hold out logistic regression predections.
+#' Zero indexed.
+#' 
+#' @param x NumericVector, expanatory variable.
+#' @param y NumericVector, 0/1 values to fit.
+#' @param w NumericVector, weights (required, positive).
+#' @param i integer, first index (inclusive).
+#' @param j integer, last index (inclusive).
+#' @return vector of predictions for interval.
+#' 
+#' @keywords internal
+#' 
+#' @examples
+#' 
+#' set.seed(5)
+#' d <- data.frame(
+#'   x =  rnorm(10),
+#'   y = sample(c(0,1), 10, replace = TRUE)
+#' )
+#' weights <- runif(nrow(d))
+#' m <- glm(y~x, data = d, family = binomial, weights = weights)
+#' coef(m)
+#' xlog_fits(d$x, d$y, weights, 0, nrow(d)-1)
+#' 
+#' @export
+xlog_fits <- function(x, y, w, i, j) {
+    .Call('_RcppDynProg_xlog_fits', PACKAGE = 'RcppDynProg', x, y, w, i, j)
+}
+
 #' solve_interval_partition interval partition problem with a bound on number of steps.
 #' 
 #' Solve a for a minimal cost partition of the integers [1,...,nrow(x)] problem where for j>=i x(i,j).

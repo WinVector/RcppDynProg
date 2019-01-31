@@ -187,3 +187,69 @@ NumericVector logistic_solve1(NumericVector x, NumericVector y,
   coef(1) = c1;
   return coef;
 }
+
+
+//' Out of sample logistic predictions (in link space).
+//' 
+//' 1-hold out logistic regression predections.
+//' Zero indexed.
+//' 
+//' @param x NumericVector, expanatory variable.
+//' @param y NumericVector, 0/1 values to fit.
+//' @param w NumericVector, weights (required, positive).
+//' @param i integer, first index (inclusive).
+//' @param j integer, last index (inclusive).
+//' @return vector of predictions for interval.
+//' 
+//' @keywords internal
+//' 
+//' @examples
+//' 
+//' set.seed(5)
+//' d <- data.frame(
+//'   x =  rnorm(10),
+//'   y = sample(c(0,1), 10, replace = TRUE)
+//' )
+//' weights <- runif(nrow(d))
+//' m <- glm(y~x, data = d, family = binomial, weights = weights)
+//' coef(m)
+//' xlog_fits(d$x, d$y, weights, 0, nrow(d)-1)
+//' 
+//' @export
+// [[Rcpp::export]]
+NumericVector xlog_fits(NumericVector x, NumericVector y, 
+                        NumericVector w,
+                        const int i, const int j) {
+  const int n = j-i+1;
+  Rcpp::NumericVector final_links(n);
+  for(int i = 0; i<n; ++i) {
+    final_links(i) = 0.0;
+  }
+  if(n<=1) {
+    return final_links;
+  }
+  const int nx = x.length();
+  Rcpp::NumericVector initial_link(nx);
+  for(int k = 0; k<nx; ++k) {
+    initial_link(i) = 0.0;
+  }
+  // solve whole system to get a good start for hold-out systems.
+  Rcpp::NumericVector coefs = logistic_solve1(x, y, 
+                                              w,
+                                              initial_link,
+                                              i, j,
+                                              -1);
+  for(int k=i; k<=j; ++k) {
+    initial_link(k) = coefs(0) + coefs(1)*x(k);
+  }
+  // solve hold-out systems
+  for(int k=i; k<=j; ++k) {
+    Rcpp::NumericVector coefsi = logistic_solve1(x, y, 
+                                                 w,
+                                                 initial_link,
+                                                 i, j,
+                                                 k);
+    final_links(k-i) = coefsi(0) + coefsi(1)*x(k-i);
+  }
+  return final_links;
+}
