@@ -1,5 +1,7 @@
 
 #include <Rcpp.h>
+#include <math.h>
+
 using Rcpp::NumericVector;
 using Rcpp::NumericMatrix;
 using Rcpp::IntegerVector;
@@ -56,11 +58,18 @@ NumericVector xlin_fits(NumericVector x, NumericVector y, NumericVector w,
     const double xyk_0 = xy_0 - w(k)*y(k);
     const double xyk_1 = xy_1 - w(k)*x(k)*y(k);
     // solve linear system
-    const double det = xxk_0_0*xxk_1_1 - xxk_0_1*xxk_1_0;
-    const double c0 = (xxk_1_1*xyk_0 - xxk_0_1*xyk_1)/det;
-    const double c1 = (-xxk_1_0*xyk_0 + xxk_0_0*xyk_1)/det;
-    // form estimate
-    const double y_est = c0 + c1*x(k);
+    double y_est = 0.0;
+    if(xx_0_0>0.0) {
+      const double det = xxk_0_0*xxk_1_1 - xxk_0_1*xxk_1_0;
+      if(abs(det)>0) {
+        const double c0 = (xxk_1_1*xyk_0 - xxk_0_1*xyk_1)/det;
+        const double c1 = (-xxk_1_0*xyk_0 + xxk_0_0*xyk_1)/det;
+        // form estimate
+        y_est = c0 + c1*x(k);
+      } else {
+        y_est = xy_0/xx_0_0;
+      }
+    }
     fits(k-i) = y_est;
   }
   return fits;

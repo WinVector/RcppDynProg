@@ -1,5 +1,7 @@
 
 #include <Rcpp.h>
+#include <math.h>
+
 using Rcpp::NumericVector;
 using Rcpp::NumericMatrix;
 using Rcpp::IntegerVector;
@@ -56,7 +58,7 @@ NumericVector xlin_pfits(NumericVector x, NumericVector y, NumericVector w,
     const double syk_0 = sy_0 - w(k)*y(k);
     const double xyk_1 = xy_1 - w(k)*x(k)*y(k);
     const double det = xxk_0_0*xxk_1_1 - xxk_0_1*xxk_1_0;
-    if(det>0) {
+    if(abs(det)>0) {
       // solve linear system and form estimate
       const double c0 = (xxk_1_1*syk_0 - xxk_0_1*xyk_1)/det;
       const double c1 = (-xxk_1_0*syk_0 + xxk_0_0*xyk_1)/det;

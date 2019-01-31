@@ -52,15 +52,19 @@ NumericVector logistic_solve1(NumericVector x, NumericVector y,
                               const int skip) {
   // init return structure
   NumericVector coef = NumericVector(2);
-  coef(0) = 0;
-  coef(1) = 0;
   // no-data cases
   if((j<i) || ((j==i)&&(skip==j))) {
+    coef(0) = 0;
+    coef(1) = 0;
     return coef;
   }
-  // corner cases
+  // look for corner cases
   double max_x = std::numeric_limits<double>::min();
   double min_x = std::numeric_limits<double>::max();
+  double max_x_pos = std::numeric_limits<double>::min();
+  double min_x_pos = std::numeric_limits<double>::max();
+  double max_x_neg = std::numeric_limits<double>::min();
+  double min_x_neg = std::numeric_limits<double>::max();
   double max_y = std::numeric_limits<double>::min();
   double min_y = std::numeric_limits<double>::max();
   double total_wy = 0.0;
@@ -73,29 +77,54 @@ NumericVector logistic_solve1(NumericVector x, NumericVector y,
       min_y = std::min(min_y, y(k));
       total_w = total_w + w(k);
       total_wy = total_wy + w(k)*y(k);
+      if(y(k)>=0.5) {
+        max_x_pos = std::max(max_x_pos, x(k));
+        min_x_pos = std::min(min_x_pos, x(k));
+      } else {
+        max_x_neg = std::max(max_x_neg, x(k));
+        min_x_neg = std::min(min_x_neg, x(k));
+      }
     }
   }
   if(min_y>=max_y) {
     // y-pure
     if(min_y>0.5) {
-      coef(1) = std::numeric_limits<double>::max();
+      coef(0) = std::numeric_limits<double>::max();
+      coef(1) = 0;
     } else {
-      coef(1) = std::numeric_limits<double>::min();
+      coef(0) = std::numeric_limits<double>::min();
+      coef(1) = 0;
     }
     return(coef);
   }
+  // we now know y varies
   if(min_x>=max_x) {
-    // x not varying
+    // x not varying case
     coef(0) = logit(total_wy/total_w);
+    coef(1) = 0;
     return(coef);
   }
-  // TODO: check for seperable data
+  // check for seperable data cases, x able to perfectly sort y
+  if(min_x_pos>max_x_neg) {
+    coef(0) = logit(total_wy/total_w);
+    coef(1) = std::numeric_limits<double>::max();
+    return(coef);
+  }
+  if(min_x_neg>max_x_pos) {
+    coef(0) = logit(total_wy/total_w);
+    coef(1) = std::numeric_limits<double>::min();
+    return(coef);
+  }
+  // Set up structers for IRwLS
+  // https://www.cs.purdue.edu/homes/zhang923/notes/irwls.pdf
   arma::colvec link(j-i+1, arma::fill::zeros);
   arma::colvec preds(j-i+1, arma::fill::zeros);
   arma::colvec z(j-i+1, arma::fill::zeros);
   arma::colvec wadj(j-i+1, arma::fill::ones);
   for(int k=i; k<=j; ++k) {
-    link(k-i) = initial_link(k);
+    if(k!=skip) {
+      link(k-i) = initial_link(k);
+    }
   }
   // Iteratively re-weighted least squares solution
   double c0 = 0.0;
@@ -104,9 +133,11 @@ NumericVector logistic_solve1(NumericVector x, NumericVector y,
   for(int rep = 0; (rep<20) && (diff>1.e-6); ++rep) {
     // build composite weights and z-target
     for(int k=i; k<=j; ++k) {
-      preds(k-i) = sigmoid(link(k-i));
-      z(k-i) = link(k-i) + (y(k) - preds(k-i))/(preds(k-i)*(1.0-preds(k-i)));
-      wadj(k-i) = preds(k-i)*(1.0-preds(k-i))*w(k);
+      if(k!=skip) {
+        preds(k-i) = sigmoid(link(k-i));
+        z(k-i) = link(k-i) + (y(k) - preds(k-i))/(preds(k-i)*(1.0-preds(k-i)));
+        wadj(k-i) = preds(k-i)*(1.0-preds(k-i))*w(k);
+      }
     }
     // build linear fitting data
     double xx_0_0 = 0;
@@ -132,24 +163,27 @@ NumericVector logistic_solve1(NumericVector x, NumericVector y,
     c1 = 0.0;
     if(sum_w>0.0) {
       const double det = xx_0_0*xx_1_1 - xx_0_1*xx_1_0;
-      if(det>0) {
+      if(abs(det)>0) {
         // solve linear system and form estimate
         c0 = (xx_1_1*sy_0 - xx_0_1*xy_1)/det;
         c1 = (-xx_1_0*sy_0 + xx_0_0*xy_1)/det;
       } else {
         c0 = sy_0/sum_w;
+        c1 = 0.0;
       }
     }
     // build next link
     diff = 0.0;
     for(int k=i; k<=j; ++k) {
-      const double nvi = c0 + c1*x(k);
-      const double diffi = nvi - link(k-i);
-      diff = diff + diffi*diffi;
-      link(k-i) = nvi;
+      if(k!=skip) {
+        const double nvi = c0 + c1*x(k);
+        const double diffi = nvi - link(k-i);
+        diff = diff + diffi*diffi;
+        link(k-i) = nvi;
+      }
     }
   }
   coef(0) = c0;
-  coef(1) =  c1;
+  coef(1) = c1;
   return coef;
 }
