@@ -11,8 +11,8 @@ using Rcpp::IntegerVector;
 //' Calculate out of sample linear fit predictions using regularization.
 //' Zero indexed.
 //' 
-//' @param x NumericVector, x-coords of values to group (length>=2).
-//' @param y NumericVector, values to group in order.
+//' @param x NumericVector, explanatory variable (length>=2).
+//' @param y NumericVector, values fit.
 //' @param w NumericVector, weights (positive).
 //' @param i integer, first index (inclusive).
 //' @param j integer, j>=i+2 last index (inclusive);

@@ -126,6 +126,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// logistic_solve1
+NumericVector logistic_solve1(NumericVector x, NumericVector y, NumericVector w, NumericVector initial_link, const int i, const int j, const int skip);
+RcppExport SEXP _RcppDynProg_logistic_solve1(SEXP xSEXP, SEXP ySEXP, SEXP wSEXP, SEXP initial_linkSEXP, SEXP iSEXP, SEXP jSEXP, SEXP skipSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type w(wSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type initial_link(initial_linkSEXP);
+    Rcpp::traits::input_parameter< const int >::type i(iSEXP);
+    Rcpp::traits::input_parameter< const int >::type j(jSEXP);
+    Rcpp::traits::input_parameter< const int >::type skip(skipSEXP);
+    rcpp_result_gen = Rcpp::wrap(logistic_solve1(x, y, w, initial_link, i, j, skip));
+    return rcpp_result_gen;
+END_RCPP
+}
 // solve_interval_partition_k
 IntegerVector solve_interval_partition_k(NumericMatrix x, int kmax);
 RcppExport SEXP _RcppDynProg_solve_interval_partition_k(SEXP xSEXP, SEXP kmaxSEXP) {
@@ -201,6 +218,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_RcppDynProg_lin_costs", (DL_FUNC) &_RcppDynProg_lin_costs, 5},
     {"_RcppDynProg_lin_cost_logistic", (DL_FUNC) &_RcppDynProg_lin_cost_logistic, 6},
     {"_RcppDynProg_lin_costs_logistic", (DL_FUNC) &_RcppDynProg_lin_costs_logistic, 5},
+    {"_RcppDynProg_logistic_solve1", (DL_FUNC) &_RcppDynProg_logistic_solve1, 7},
     {"_RcppDynProg_solve_interval_partition_k", (DL_FUNC) &_RcppDynProg_solve_interval_partition_k, 2},
     {"_RcppDynProg_solve_interval_partition_no_k", (DL_FUNC) &_RcppDynProg_solve_interval_partition_no_k, 1},
     {"_RcppDynProg_solve_interval_partition", (DL_FUNC) &_RcppDynProg_solve_interval_partition, 2},

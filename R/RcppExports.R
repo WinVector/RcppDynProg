@@ -183,6 +183,39 @@ lin_costs_logistic <- function(x, y, w, min_seg, indices) {
     .Call('_RcppDynProg_lin_costs_logistic', PACKAGE = 'RcppDynProg', x, y, w, min_seg, indices)
 }
 
+#' logistic_fit
+#' 
+#' Calculate y ~ sigmoid(a + b x) using iteratively re-weighted least squares.
+#' Zero indexed.
+#' 
+#' @param x NumericVector, expanatory variable.
+#' @param y NumericVector, 0/1 values to fit.
+#' @param w NumericVector, weights (required, positive).
+#' @param initial_link, initial link estimates (required, all zeroes is a good start).
+#' @param i integer, first index (inclusive).
+#' @param j integer, last index (inclusive).
+#' @param skip integer, index to skip (-1 to not skip).
+#' @return vector of a and b.
+#' 
+#' @keywords internal
+#' 
+#' @examples
+#' 
+#' set.seed(5)
+#' d <- data.frame(
+#'   x =  rnorm(10),
+#'   y = sample(c(0,1), 10, replace = TRUE)
+#' )
+#' weights <- runif(nrow(d))
+#' m <- glm(y~x, data = d, family = binomial, weights = weights)
+#' coef(m)
+#' logistic_solve1(d$x, d$y, weights, rep(0.0, nrow(d)), 0, nrow(d)-1, -1)
+#' 
+#' @export
+logistic_solve1 <- function(x, y, w, initial_link, i, j, skip) {
+    .Call('_RcppDynProg_logistic_solve1', PACKAGE = 'RcppDynProg', x, y, w, initial_link, i, j, skip)
+}
+
 #' solve_interval_partition interval partition problem with a bound on number of steps.
 #' 
 #' Solve a for a minimal cost partition of the integers [1,...,nrow(x)] problem where for j>=i x(i,j).
@@ -252,8 +285,8 @@ solve_interval_partition <- function(x, kmax) {
 #' Calculate out of sample linear fit predictions using regularization.
 #' Zero indexed.
 #' 
-#' @param x NumericVector, x-coords of values to group (length>=2).
-#' @param y NumericVector, values to group in order.
+#' @param x NumericVector, explanatory variable (length>=2).
+#' @param y NumericVector, values fit.
 #' @param w NumericVector, weights (positive).
 #' @param i integer, first index (inclusive).
 #' @param j integer, j>=i+2 last index (inclusive);
@@ -276,8 +309,8 @@ xlin_fits <- function(x, y, w, i, j) {
 #' Please see: \url{http://www.win-vector.com/blog/2019/01/a-beautiful-2-by-2-matrix-identity/}.
 #' Zero indexed.
 #' 
-#' @param x NumericVector, x-coords of values to group (length>=2).
-#' @param y NumericVector, values to group in order.
+#' @param x NumericVector, explanatory variable (length>=2).
+#' @param y NumericVector, values to fit.
 #' @param w NumericVector, weights (positive).
 #' @param i integer, first index (inclusive).
 #' @param j integer, j>=i+2 last index (inclusive);

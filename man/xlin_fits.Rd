@@ -7,9 +7,9 @@
 xlin_fits(x, y, w, i, j)
 }
 \arguments{
-\item{x}{NumericVector, x-coords of values to group (length>=2).}
+\item{x}{NumericVector, explanatory variable (length>=2).}
 
-\item{y}{NumericVector, values to group in order.}
+\item{y}{NumericVector, values fit.}
 
 \item{w}{NumericVector, weights (positive).}
 

@@ -12,8 +12,8 @@ using Rcpp::IntegerVector;
 //' Please see: \url{http://www.win-vector.com/blog/2019/01/a-beautiful-2-by-2-matrix-identity/}.
 //' Zero indexed.
 //' 
-//' @param x NumericVector, x-coords of values to group (length>=2).
-//' @param y NumericVector, values to group in order.
+//' @param x NumericVector, explanatory variable (length>=2).
+//' @param y NumericVector, values to fit.
 //' @param w NumericVector, weights (positive).
 //' @param i integer, first index (inclusive).
 //' @param j integer, j>=i+2 last index (inclusive);
