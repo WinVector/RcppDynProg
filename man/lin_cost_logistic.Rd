@@ -24,7 +24,7 @@ scalar, linear cost of [i,...,j] interval (inclusive).
 }
 \description{
 Calculate deviance cost of using logistic model fit on points to estimate other points in the interval.
-Fits are in-sample.
+Fits are evaluated in-sample.
 Zero indexed.
 }
 \examples{

@@ -16,7 +16,7 @@ NumericVector logistic_fits(NumericVector x, NumericVector y,
 //' lin_cost_logistic logistic deviance pricing
 //' 
 //' Calculate deviance cost of using logistic model fit on points to estimate other points in the interval.
-//' Fits are in-sample.
+//' Fits are evaluated in-sample.
 //' Zero indexed.
 //' 
 //' 
@@ -42,6 +42,53 @@ double lin_cost_logistic(NumericVector x, NumericVector y, NumericVector w,
   if(j <= (i + (min_seg-1))) {
     return std::numeric_limits<double>::max();
   }
+  // get corner cases
+  if(j<i+1) {
+    // no data or small enough for perfect fit
+    return 0.0;
+  }
+  // look for corner cases
+  double max_x = -std::numeric_limits<double>::max();
+  double min_x = std::numeric_limits<double>::max();
+  double max_x_pos = -std::numeric_limits<double>::max();
+  double min_x_pos = std::numeric_limits<double>::max();
+  double max_x_neg = -std::numeric_limits<double>::max();
+  double min_x_neg = std::numeric_limits<double>::max();
+  double max_y = -std::numeric_limits<double>::max();
+  double min_y = std::numeric_limits<double>::max();
+  double total_w = 0.0;
+  for(int k=i; k<=j; ++k) {
+    max_x = std::max(max_x, x(k));
+    min_x = std::min(min_x, x(k));
+    max_y = std::max(max_y, y(k));
+    min_y = std::min(min_y, y(k));
+    total_w = total_w + w(k);
+    if(y(k)>=0.5) {
+      max_x_pos = std::max(max_x_pos, x(k));
+      min_x_pos = std::min(min_x_pos, x(k));
+    } else {
+      max_x_neg = std::max(max_x_neg, x(k));
+      min_x_neg = std::min(min_x_neg, x(k));
+    }
+  }
+  if(total_w<=0.0) {
+    return 0.0;
+  }
+  if(min_y>=max_y) {
+    // y-pure constant
+    return 0.0;
+  }
+  // we now know y varies
+  if(min_x<max_x) {
+    // check for seperable data cases, x able to perfectly sort y
+    if(min_x_pos>max_x_neg) {
+      return 0.0;
+    }
+    if(min_x_neg>max_x_pos) {
+      return 0.0;
+    }
+  }
+  // // TODO: try to get out of sample calculation working.
   // NumericVector fits;
   // if((j-i)<=100) {
   //   fits = xlogistic_fits(x, y, w, i, j);
@@ -69,7 +116,7 @@ double lin_cost_logistic(NumericVector x, NumericVector y, NumericVector w,
 //' lin_costs_logistic deviance costs.
 //' 
 //' Built matrix of interval deviance costs for held-out logistic models.
-//' Fits are in-sample.
+//' Fits are evaluated in-sample.
 //' One indexed.
 //' 
 //' 
