@@ -233,18 +233,49 @@ logistic_solve1 <- function(x, y, w, initial_link, i, j, skip) {
 #' @examples
 #' 
 #' set.seed(5)
-#' d <- data.frame(
-#'   x =  rnorm(10),
-#'   y = sample(c(0,1), 10, replace = TRUE)
-#' )
+#' d <- data.frame(x = rnorm(10))
+#' d$y <- d$x + rnorm(nrow(d))>0
 #' weights <- runif(nrow(d))
 #' m <- glm(y~x, data = d, family = binomial, weights = weights)
-#' coef(m)
-#' xlog_fits(d$x, d$y, weights, 0, nrow(d)-1)
+#' d$pred1 <- predict(m, newdata = d, type = "link")
+#' d$pred2 <- xlogistic_fits(d$x, d$y, weights, 0, nrow(d)-1)
+#' d <- d[order(d$x), , drop = FALSE]
+#' print(d)
 #' 
 #' @export
-xlog_fits <- function(x, y, w, i, j) {
-    .Call('_RcppDynProg_xlog_fits', PACKAGE = 'RcppDynProg', x, y, w, i, j)
+xlogistic_fits <- function(x, y, w, i, j) {
+    .Call('_RcppDynProg_xlogistic_fits', PACKAGE = 'RcppDynProg', x, y, w, i, j)
+}
+
+#' In sample logistic predictions (in link space).
+#' 
+#' logistic regression predections.
+#' Zero indexed.
+#' 
+#' @param x NumericVector, expanatory variable.
+#' @param y NumericVector, 0/1 values to fit.
+#' @param w NumericVector, weights (required, positive).
+#' @param i integer, first index (inclusive).
+#' @param j integer, last index (inclusive).
+#' @return vector of predictions for interval.
+#' 
+#' @keywords internal
+#' 
+#' @examples
+#' 
+#' set.seed(5)
+#' d <- data.frame(x = rnorm(10))
+#' d$y <- d$x + rnorm(nrow(d))>0
+#' weights <- runif(nrow(d))
+#' m <- glm(y~x, data = d, family = binomial, weights = weights)
+#' d$pred1 <- predict(m, newdata = d, type = "link")
+#' d$pred2 <- logistic_fits(d$x, d$y, weights, 0, nrow(d)-1)
+#' d <- d[order(d$x), , drop = FALSE]
+#' print(d)
+#' 
+#' @export
+logistic_fits <- function(x, y, w, i, j) {
+    .Call('_RcppDynProg_logistic_fits', PACKAGE = 'RcppDynProg', x, y, w, i, j)
 }
 
 #' solve_interval_partition interval partition problem with a bound on number of steps.

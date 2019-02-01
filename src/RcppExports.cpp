@@ -143,9 +143,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// xlog_fits
-NumericVector xlog_fits(NumericVector x, NumericVector y, NumericVector w, const int i, const int j);
-RcppExport SEXP _RcppDynProg_xlog_fits(SEXP xSEXP, SEXP ySEXP, SEXP wSEXP, SEXP iSEXP, SEXP jSEXP) {
+// xlogistic_fits
+NumericVector xlogistic_fits(NumericVector x, NumericVector y, NumericVector w, const int i, const int j);
+RcppExport SEXP _RcppDynProg_xlogistic_fits(SEXP xSEXP, SEXP ySEXP, SEXP wSEXP, SEXP iSEXP, SEXP jSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -154,7 +154,22 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< NumericVector >::type w(wSEXP);
     Rcpp::traits::input_parameter< const int >::type i(iSEXP);
     Rcpp::traits::input_parameter< const int >::type j(jSEXP);
-    rcpp_result_gen = Rcpp::wrap(xlog_fits(x, y, w, i, j));
+    rcpp_result_gen = Rcpp::wrap(xlogistic_fits(x, y, w, i, j));
+    return rcpp_result_gen;
+END_RCPP
+}
+// logistic_fits
+NumericVector logistic_fits(NumericVector x, NumericVector y, NumericVector w, const int i, const int j);
+RcppExport SEXP _RcppDynProg_logistic_fits(SEXP xSEXP, SEXP ySEXP, SEXP wSEXP, SEXP iSEXP, SEXP jSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type w(wSEXP);
+    Rcpp::traits::input_parameter< const int >::type i(iSEXP);
+    Rcpp::traits::input_parameter< const int >::type j(jSEXP);
+    rcpp_result_gen = Rcpp::wrap(logistic_fits(x, y, w, i, j));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -234,7 +249,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_RcppDynProg_lin_cost_logistic", (DL_FUNC) &_RcppDynProg_lin_cost_logistic, 6},
     {"_RcppDynProg_lin_costs_logistic", (DL_FUNC) &_RcppDynProg_lin_costs_logistic, 5},
     {"_RcppDynProg_logistic_solve1", (DL_FUNC) &_RcppDynProg_logistic_solve1, 7},
-    {"_RcppDynProg_xlog_fits", (DL_FUNC) &_RcppDynProg_xlog_fits, 5},
+    {"_RcppDynProg_xlogistic_fits", (DL_FUNC) &_RcppDynProg_xlogistic_fits, 5},
+    {"_RcppDynProg_logistic_fits", (DL_FUNC) &_RcppDynProg_logistic_fits, 5},
     {"_RcppDynProg_solve_interval_partition_k", (DL_FUNC) &_RcppDynProg_solve_interval_partition_k, 2},
     {"_RcppDynProg_solve_interval_partition_no_k", (DL_FUNC) &_RcppDynProg_solve_interval_partition_no_k, 1},
     {"_RcppDynProg_solve_interval_partition", (DL_FUNC) &_RcppDynProg_solve_interval_partition, 2},

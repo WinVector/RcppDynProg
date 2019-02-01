@@ -206,18 +206,18 @@ NumericVector logistic_solve1(NumericVector x, NumericVector y,
 //' @examples
 //' 
 //' set.seed(5)
-//' d <- data.frame(
-//'   x =  rnorm(10),
-//'   y = sample(c(0,1), 10, replace = TRUE)
-//' )
+//' d <- data.frame(x = rnorm(10))
+//' d$y <- d$x + rnorm(nrow(d))>0
 //' weights <- runif(nrow(d))
 //' m <- glm(y~x, data = d, family = binomial, weights = weights)
-//' coef(m)
-//' xlog_fits(d$x, d$y, weights, 0, nrow(d)-1)
+//' d$pred1 <- predict(m, newdata = d, type = "link")
+//' d$pred2 <- xlogistic_fits(d$x, d$y, weights, 0, nrow(d)-1)
+//' d <- d[order(d$x), , drop = FALSE]
+//' print(d)
 //' 
 //' @export
 // [[Rcpp::export]]
-NumericVector xlog_fits(NumericVector x, NumericVector y, 
+NumericVector xlogistic_fits(NumericVector x, NumericVector y, 
                         NumericVector w,
                         const int i, const int j) {
   const int n = j-i+1;
@@ -253,3 +253,67 @@ NumericVector xlog_fits(NumericVector x, NumericVector y,
   }
   return final_links;
 }
+
+//' In sample logistic predictions (in link space).
+//' 
+//' logistic regression predections.
+//' Zero indexed.
+//' 
+//' @param x NumericVector, expanatory variable.
+//' @param y NumericVector, 0/1 values to fit.
+//' @param w NumericVector, weights (required, positive).
+//' @param i integer, first index (inclusive).
+//' @param j integer, last index (inclusive).
+//' @return vector of predictions for interval.
+//' 
+//' @keywords internal
+//' 
+//' @examples
+//' 
+//' set.seed(5)
+//' d <- data.frame(x = rnorm(10))
+//' d$y <- d$x + rnorm(nrow(d))>0
+//' weights <- runif(nrow(d))
+//' m <- glm(y~x, data = d, family = binomial, weights = weights)
+//' d$pred1 <- predict(m, newdata = d, type = "link")
+//' d$pred2 <- logistic_fits(d$x, d$y, weights, 0, nrow(d)-1)
+//' d <- d[order(d$x), , drop = FALSE]
+//' print(d)
+//' 
+//' @export
+// [[Rcpp::export]]
+NumericVector logistic_fits(NumericVector x, NumericVector y, 
+                       NumericVector w,
+                       const int i, const int j) {
+  const int n = j-i+1;
+  Rcpp::NumericVector final_links(n);
+  for(int i = 0; i<n; ++i) {
+    final_links(i) = 0.0;
+  }
+  if(n<=1) {
+    if(n==1) {
+      if(y(0)>0.5) {
+        final_links(0) = std::numeric_limits<double>::max();
+      } else {
+        final_links(0) = std::numeric_limits<double>::min();
+      }
+    }
+    return final_links;
+  }
+  const int nx = x.length();
+  Rcpp::NumericVector initial_link(nx);
+  for(int k = 0; k<nx; ++k) {
+    initial_link(i) = 0.0;
+  }
+  // solve whole system 
+  Rcpp::NumericVector coefs = logistic_solve1(x, y, 
+                                              w,
+                                              initial_link,
+                                              i, j,
+                                              -1);
+  for(int k=i; k<=j; ++k) {
+   final_links(k-i) = coefs(0) + coefs(1)*x(k-i);
+  }
+  return final_links;
+}
+
