@@ -32,7 +32,7 @@ NumericVector logistic_fits(NumericVector x, NumericVector y,
 //' 
 //' @examples
 //' 
-//' lin_cost_logistic(c(1, 2, 3, 4, 5, 6, 7), c(0, 0, 1, 0, 1, 1, 0), c(1, 1, 1, 1, 1, 1, 1), 1, 0, 6)
+//' lin_cost_logistic(c(1, 2, 3, 4, 5, 6, 7), c(0, 0, 1, 0, 1, 1, 0), c(1, 1, 1, 1, 1, 1, 1), 3, 0, 6)
 //' 
 //' @export
 // [[Rcpp::export]]
@@ -82,7 +82,7 @@ double lin_cost_logistic(NumericVector x, NumericVector y, NumericVector w,
 //' 
 //' @examples
 //' 
-//' lin_costs_logistic(c(1, 2, 3, 4, 5, 6, 7), c(0, 0, 1, 0, 1, 1, 0), c(1, 1, 1, 1, 1, 1, 1), 1, 1:7)
+//' lin_costs_logistic(c(1, 2, 3, 4, 5, 6, 7), c(0, 0, 1, 0, 1, 1, 0), c(1, 1, 1, 1, 1, 1, 1), 3, 1:7)
 //' 
 //' @export
 // [[Rcpp::export]]
