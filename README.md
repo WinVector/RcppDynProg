@@ -171,17 +171,6 @@ A note on problem complexity: general partition problems (where we do not restri
 install.packages("RcppDynProg")
 ```
 
-Or, the following will install the package from [`Github`](https://github.com/WinVector/RcppDynProg):
-
-``` r
-# install dependencies
-install.packages(c("wrapr", "Rcpp", "RcppArmadillo"))
-# install devtools
-install.packages("devtools")
-# install RcppDynProg
-devtools::install_github("WinVector/RcppDynProg")
-```
-
 ------------------------------------------------------------------------
 
 Some other relevant segmentation and dynamic programming methods include:
