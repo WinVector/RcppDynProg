@@ -16,5 +16,12 @@ test_that("test_logistic_cost: test scoring", {
     testthat::expect_false(any(is.na(lf)))
     testthat::expect_false(any(is.nan(lf)))
     testthat::expect_false(any(is.infinite(lf)))
+    if(k>=3) {
+      d <- data.frame(x = x[1:(k+1)], y  = y[1:(k+1)])
+      m <- glm(y~x, data=d, family = binomial)
+      p <- as.numeric(predict(m, newdata = d, type = "link"))
+      diff <- max(abs(lf-p))
+      testthat::expect_true(diff<=1.0e-5)
+    }
   }
 })

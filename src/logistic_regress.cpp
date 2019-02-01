@@ -59,13 +59,13 @@ NumericVector logistic_solve1(NumericVector x, NumericVector y,
     return coef;
   }
   // look for corner cases
-  double max_x = std::numeric_limits<double>::min();
+  double max_x = -std::numeric_limits<double>::max();
   double min_x = std::numeric_limits<double>::max();
-  double max_x_pos = std::numeric_limits<double>::min();
+  double max_x_pos = -std::numeric_limits<double>::max();
   double min_x_pos = std::numeric_limits<double>::max();
-  double max_x_neg = std::numeric_limits<double>::min();
+  double max_x_neg = -std::numeric_limits<double>::max();
   double min_x_neg = std::numeric_limits<double>::max();
-  double max_y = std::numeric_limits<double>::min();
+  double max_y = -std::numeric_limits<double>::max();
   double min_y = std::numeric_limits<double>::max();
   double total_wy = 0.0;
   double total_w = 0.0;
@@ -92,7 +92,7 @@ NumericVector logistic_solve1(NumericVector x, NumericVector y,
       coef(0) = std::numeric_limits<double>::max();
       coef(1) = 0;
     } else {
-      coef(0) = std::numeric_limits<double>::min();
+      coef(0) = -std::numeric_limits<double>::max();
       coef(1) = 0;
     }
     return(coef);
@@ -112,7 +112,7 @@ NumericVector logistic_solve1(NumericVector x, NumericVector y,
   }
   if(min_x_neg>max_x_pos) {
     coef(0) = logit(total_wy/total_w);
-    coef(1) = std::numeric_limits<double>::min();
+    coef(1) = -std::numeric_limits<double>::max();
     return(coef);
   }
   // Set up structers for IRwLS
@@ -295,7 +295,7 @@ NumericVector logistic_fits(NumericVector x, NumericVector y,
       if(y(0)>0.5) {
         final_links(0) = std::numeric_limits<double>::max();
       } else {
-        final_links(0) = std::numeric_limits<double>::min();
+        final_links(0) = -std::numeric_limits<double>::max();
       }
     }
     return final_links;
