@@ -22,10 +22,11 @@ xcosts NumericMatix, for j>=i xcosts(i,j) is the cost of partition element [i,..
 }
 \description{
 Built matrix of interval deviance costs for held-out logistic models.
+Fits are in-sample.
 One indexed.
 }
 \examples{
 
-lin_costs_logistic(c(1, 2, 3, 4), c(0.1, 0.2, 0.2, 0.1), c(1, 1, 1, 1), 1, 1:4)
+lin_costs_logistic(c(1, 2, 3, 4, 5, 6, 7), c(0, 0, 1, 0, 1, 1, 0), c(1, 1, 1, 1, 1, 1, 1), 1, 1:7)
 
 }

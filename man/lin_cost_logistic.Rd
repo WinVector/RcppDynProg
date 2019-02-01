@@ -24,11 +24,12 @@ scalar, linear cost of [i,...,j] interval (inclusive).
 }
 \description{
 Calculate deviance cost of using logistic model fit on points to estimate other points in the interval.
+Fits are in-sample.
 Zero indexed.
 }
 \examples{
 
-lin_cost_logistic(c(1, 2, 3, 4), c(0.1, 0.2, 0.2, 0.1), c(1, 1, 1, 1), 1, 0, 3)
+lin_cost_logistic(c(1, 2, 3, 4, 5, 6, 7), c(0, 0, 1, 0, 1, 1, 0), c(1, 1, 1, 1, 1, 1, 1), 1, 0, 6)
 
 }
 \keyword{internal}
