@@ -105,7 +105,7 @@ double lin_cost_logistic(NumericVector x, NumericVector y, NumericVector w,
         loss = loss + y(k)*std::log(y_est);
       }
       if(y(k)<1.0) {
-        loss = loss = (1.0-y(k))*std::log(1.0-y_est);
+        loss = loss + (1.0-y(k))*std::log(1.0-y_est);
       }
       sum_loss = sum_loss + -w(k)*2.0*loss;
     }
