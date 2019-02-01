@@ -23,11 +23,8 @@ lin_cost_logistic(x, y, w, min_seg, i, j)
 scalar, linear cost of [i,...,j] interval (inclusive).
 }
 \description{
-Calculate deviance cost of using linear model fit on points to estimate other points in the interval.
+Calculate deviance cost of using logistic model fit on points to estimate other points in the interval.
 Zero indexed.
-}
-\details{
-Note: this is the deviance cost of a linear fit, not the deviance loss of a logistic fit.
 }
 \examples{
 

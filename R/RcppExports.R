@@ -136,10 +136,9 @@ lin_costs <- function(x, y, w, min_seg, indices) {
 
 #' lin_cost_logistic logistic deviance pricing
 #' 
-#' Calculate deviance cost of using linear model fit on points to estimate other points in the interval.
+#' Calculate deviance cost of using logistic model fit on points to estimate other points in the interval.
 #' Zero indexed.
 #' 
-#' Note: this is the deviance cost of a linear fit, not the deviance loss of a logistic fit.
 #' 
 #' @param x NumericVector, x-coords of values to group.
 #' @param y NumericVector, values to group in order (should be in interval [0,1]).
@@ -162,10 +161,9 @@ lin_cost_logistic <- function(x, y, w, min_seg, i, j) {
 
 #' lin_costs_logistic deviance costs.
 #' 
-#' Built matrix of interval deviance costs for held-out linear models.
+#' Built matrix of interval deviance costs for held-out logistic models.
 #' One indexed.
 #' 
-#' Note: this is the deviance cost of a linear fit, not the deviance loss of a logistic fit.
 #' 
 #' @param x NumericVector, x-coords of values to group.
 #' @param y NumericVector, values to group in order (should be in interval [0,1]).

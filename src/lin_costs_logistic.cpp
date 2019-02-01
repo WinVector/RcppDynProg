@@ -5,15 +5,19 @@ using Rcpp::NumericMatrix;
 using Rcpp::IntegerVector;
 
 
-NumericVector xlin_fits(NumericVector x, NumericVector y, NumericVector w,
-                        const int i, const int j);
+NumericVector xlogistic_fits(NumericVector x, NumericVector y, 
+                             NumericVector w,
+                             const int i, const int j);
+
+NumericVector logistic_fits(NumericVector x, NumericVector y, 
+                            NumericVector w,
+                            const int i, const int j);
 
 //' lin_cost_logistic logistic deviance pricing
 //' 
-//' Calculate deviance cost of using linear model fit on points to estimate other points in the interval.
+//' Calculate deviance cost of using logistic model fit on points to estimate other points in the interval.
 //' Zero indexed.
 //' 
-//' Note: this is the deviance cost of a linear fit, not the deviance loss of a logistic fit.
 //' 
 //' @param x NumericVector, x-coords of values to group.
 //' @param y NumericVector, values to group in order (should be in interval [0,1]).
@@ -37,11 +41,16 @@ double lin_cost_logistic(NumericVector x, NumericVector y, NumericVector w,
   if(j <= (i + (min_seg-1))) {
     return std::numeric_limits<double>::max();
   }
-  NumericVector fits = xlin_fits(x, y, w, i, j);
+  NumericVector fits;
+  if((j-i)<=100) {
+    fits = xlogistic_fits(x, y, w, i, j);
+  } else {
+    fits = logistic_fits(x, y, w, i, j);
+  }
   double sum_loss = 0.0;
   for(int k=i; k<=j; ++k) {
     if(w(k)>0.0) {
-      const double y_est = fits(k-i);
+      const double y_est = 1/(1+std::exp(-fits(k-i)));
       double loss = 0.0;
       if(y(k)>0.0) {
         loss = loss + y(k)*std::log(y_est);
@@ -57,10 +66,9 @@ double lin_cost_logistic(NumericVector x, NumericVector y, NumericVector w,
 
 //' lin_costs_logistic deviance costs.
 //' 
-//' Built matrix of interval deviance costs for held-out linear models.
+//' Built matrix of interval deviance costs for held-out logistic models.
 //' One indexed.
 //' 
-//' Note: this is the deviance cost of a linear fit, not the deviance loss of a logistic fit.
 //' 
 //' @param x NumericVector, x-coords of values to group.
 //' @param y NumericVector, values to group in order (should be in interval [0,1]).

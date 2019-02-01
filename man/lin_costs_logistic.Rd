@@ -21,11 +21,8 @@ lin_costs_logistic(x, y, w, min_seg, indices)
 xcosts NumericMatix, for j>=i xcosts(i,j) is the cost of partition element [i,...,j] (inclusive).
 }
 \description{
-Built matrix of interval deviance costs for held-out linear models.
+Built matrix of interval deviance costs for held-out logistic models.
 One indexed.
-}
-\details{
-Note: this is the deviance cost of a linear fit, not the deviance loss of a logistic fit.
 }
 \examples{
 
