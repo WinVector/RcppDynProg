@@ -16,7 +16,12 @@ test_logistic_cost <- function() {
       m <- glm(y~x, data=d, family = binomial)
       p <- as.numeric(predict(m, newdata = d, type = "link"))
       diff <- max(abs(lf-p))
-      RUnit::checkTrue(diff<=1.0e-5)
+      if(diff>1e-3) {
+        print(paste(k, diff))
+        print(lf)
+        print(p)
+        RUnit::checkTrue(FALSE)
+      }
     }
   }
 

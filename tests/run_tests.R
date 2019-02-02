@@ -19,7 +19,9 @@ if(requireNamespace("RUnit", quietly = TRUE) && requireNamespace(pkg, quietly = 
                                 testFileRegexp = "^test_.+\\.R$",
                                 testFuncRegexp = "^test_.+$")
   test_results <- runTestSuite(test_suite)
-  printTextProtocol(test_results)
+  printTextProtocol(test_results,
+                    separateFailureList = TRUE,
+                    showDetails = FALSE)
   # stop if errors for R CMD CHECK
   test_errors <- getErrors(test_results)
   if(test_errors$nDeactivated>0) {
