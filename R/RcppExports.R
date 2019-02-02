@@ -89,6 +89,29 @@ const_costs_logistic <- function(y, w, min_seg, indices) {
     .Call('_RcppDynProg_const_costs_logistic', PACKAGE = 'RcppDynProg', y, w, min_seg, indices)
 }
 
+#' Summarize data (for debugging).
+#' 
+#' @param x NumericVector, expanatory variable.
+#' @param y NumericVector, 0/1 values to fit.
+#' @param w NumericVector, weights (required, positive).
+#' @param i integer, first index (inclusive).
+#' @param j integer, last index (inclusive).
+#' @param skip integer, index to skip (-1 to not skip).
+#' @return summary list
+#' 
+#' @keywords internal
+#' 
+#' 
+#' @examples
+#' 
+#' costs <- matrix(c(1.5, NA ,NA ,1 ,0 , NA, 5, -1, 1), nrow = 3)
+#' solve_interval_partition(costs, nrow(costs))
+#'
+#' @export
+summarize_input <- function(x, y, w, i, j, skip) {
+    .Call('_RcppDynProg_summarize_input', PACKAGE = 'RcppDynProg', x, y, w, i, j, skip)
+}
+
 #' lin_cost
 #' 
 #' Calculate cost of using linear model fit on points to estimate other points in the interval.

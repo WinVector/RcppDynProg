@@ -5,6 +5,14 @@ test_logistic_cost <- function() {
   w <- c(1, 1, 1, 1, 1, 1, 1)
   il <- numeric(length(x))
   
+  sm3 <- summarize_input(x,y,w,0,3,-1)
+  expect3 <- list(max_x = 4, min_x = 1, saw_y_pos = TRUE, max_x_pos = 3, min_x_pos = 3, 
+                  saw_y_neg = TRUE, max_x_neg = 4, min_x_neg = 1, total_w = 4, 
+                  total_wy = 1, k_points = 4, saw_data = TRUE, x_varies = TRUE, 
+                  y_varies = TRUE, seperable = FALSE)
+  msg <- wrapr::map_to_char(sm3)
+  RUnit::checkEquals(sm3, expect3, msg = msg)
+  
   for(k in wrapr::seqi(0, 4)) {
     m1 <- logistic_solve1(x, y, w, il, 0, k, -1)
     msg <- paste("k", k, wrapr::map_to_char(m1))

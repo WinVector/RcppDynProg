@@ -64,6 +64,22 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// summarize_input
+List summarize_input(NumericVector x, NumericVector y, NumericVector w, const int i, const int j, const int skip);
+RcppExport SEXP _RcppDynProg_summarize_input(SEXP xSEXP, SEXP ySEXP, SEXP wSEXP, SEXP iSEXP, SEXP jSEXP, SEXP skipSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type w(wSEXP);
+    Rcpp::traits::input_parameter< const int >::type i(iSEXP);
+    Rcpp::traits::input_parameter< const int >::type j(jSEXP);
+    Rcpp::traits::input_parameter< const int >::type skip(skipSEXP);
+    rcpp_result_gen = Rcpp::wrap(summarize_input(x, y, w, i, j, skip));
+    return rcpp_result_gen;
+END_RCPP
+}
 // lin_cost
 double lin_cost(NumericVector x, NumericVector y, NumericVector w, const int min_seg, const int i, const int j);
 RcppExport SEXP _RcppDynProg_lin_cost(SEXP xSEXP, SEXP ySEXP, SEXP wSEXP, SEXP min_segSEXP, SEXP iSEXP, SEXP jSEXP) {
@@ -244,6 +260,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_RcppDynProg_const_costs", (DL_FUNC) &_RcppDynProg_const_costs, 4},
     {"_RcppDynProg_const_cost_logistic", (DL_FUNC) &_RcppDynProg_const_cost_logistic, 5},
     {"_RcppDynProg_const_costs_logistic", (DL_FUNC) &_RcppDynProg_const_costs_logistic, 4},
+    {"_RcppDynProg_summarize_input", (DL_FUNC) &_RcppDynProg_summarize_input, 6},
     {"_RcppDynProg_lin_cost", (DL_FUNC) &_RcppDynProg_lin_cost, 6},
     {"_RcppDynProg_lin_costs", (DL_FUNC) &_RcppDynProg_lin_costs, 5},
     {"_RcppDynProg_lin_cost_logistic", (DL_FUNC) &_RcppDynProg_lin_cost_logistic, 6},

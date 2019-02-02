@@ -4,6 +4,7 @@
 #include <math.h>
 
 using Rcpp::NumericVector;
+using Rcpp::List;
 
 #include "input_summary.h"
 
@@ -86,5 +87,49 @@ bool input_summary::seperable() const {
   }
   return false;
 }
-  
+
+
+//' Summarize data (for debugging).
+//' 
+//' @param x NumericVector, expanatory variable.
+//' @param y NumericVector, 0/1 values to fit.
+//' @param w NumericVector, weights (required, positive).
+//' @param i integer, first index (inclusive).
+//' @param j integer, last index (inclusive).
+//' @param skip integer, index to skip (-1 to not skip).
+//' @return summary list
+//' 
+//' @keywords internal
+//' 
+//' 
+//' @examples
+//' 
+//' costs <- matrix(c(1.5, NA ,NA ,1 ,0 , NA, 5, -1, 1), nrow = 3)
+//' solve_interval_partition(costs, nrow(costs))
+//'
+//' @export
+// [[Rcpp::export]]
+List summarize_input(NumericVector x, NumericVector y, 
+                     NumericVector w,
+                     const int i, const int j,
+                     const int skip) {
+  const input_summary isum = input_summary(x, y, w, i, j, skip);
+  List ret;
+  ret["max_x"] = isum.max_x;
+  ret["min_x"] = isum.min_x;
+  ret["saw_y_pos"] = isum.saw_y_pos;
+  ret["max_x_pos"] = isum.max_x_pos;
+  ret["min_x_pos"] = isum.min_x_pos;
+  ret["saw_y_neg"] = isum.saw_y_neg;
+  ret["max_x_neg"] = isum.max_x_neg;
+  ret["min_x_neg"] = isum.min_x_neg;
+  ret["total_w"] = isum.total_w;
+  ret["total_wy"] = isum.total_wy;
+  ret["k_points"] = isum.k_points;
+  ret["saw_data"] = isum.saw_data();
+  ret["x_varies"] = isum.x_varies();
+  ret["y_varies"] = isum.y_varies();
+  ret["seperable"] = isum.seperable();
+  return ret;
+}
   
