@@ -47,7 +47,7 @@ double const_cost_logistic(NumericVector y, NumericVector w,
         loss = loss + y(k)*std::log(mean_ijk);
       }
       if(y(k)<1.0) {
-        loss = loss = (1.0-y(k))*std::log(1.0-mean_ijk);
+        loss = loss + (1.0-y(k))*std::log(1.0-mean_ijk);
       }
       sum_loss = sum_loss + w(k)*loss;
     }
