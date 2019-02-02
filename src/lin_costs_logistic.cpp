@@ -7,13 +7,55 @@ using Rcpp::IntegerVector;
 
 #include "input_summary.h"
 
-NumericVector xlogistic_fits(NumericVector x, NumericVector y, 
-                             NumericVector w,
-                             const int i, const int j);
+NumericVector xlogistic_fits_worker(const NumericVector &x, const NumericVector &y, 
+                                    const NumericVector &w,
+                                    const int i, const int j);
 
-NumericVector logistic_fits(NumericVector x, NumericVector y, 
-                            NumericVector w,
-                            const int i, const int j);
+NumericVector logistic_fits_worker(const NumericVector &x, const NumericVector &y, 
+                                   const NumericVector &w,
+                                   const int i, const int j);
+
+
+double lin_cost_logistic_worker(const NumericVector &x, const NumericVector &y, 
+                                const NumericVector &w,
+                                const int min_seg,
+                                const int i, const int j) {
+  if(j <= (i + (min_seg-1))) {
+    return std::numeric_limits<double>::max();
+  }
+  // look for some corner cases
+  const input_summary isum = input_summary(x, y, w, i, j, -1);
+  if((isum.k_points<=1L)||(!isum.y_varies())) {
+    // no data or small enough for perfect fit
+    return 0.0;
+  }
+  if(isum.seperable()) {
+    return 0.0;
+  }
+  // // TODO: try to get out of sample calculation working.
+  // NumericVector fits;
+  // if((j-i)<=100) {
+  //   fits = xlogistic_fits_worker(x, y, w, i, j);
+  // } else {
+  //   fits = logistic_fits_worker(x, y, w, i, j);
+  // }
+  NumericVector fits = logistic_fits_worker(x, y, w, i, j);
+  double sum_loss = 0.0;
+  for(int k=i; k<=j; ++k) {
+    if(w(k)>0.0) {
+      const double y_est = 1/(1+std::exp(-fits(k-i)));
+      double loss = 0.0;
+      if(y(k)>0.0) {
+        loss = loss + y(k)*std::log(y_est);
+      }
+      if(y(k)<1.0) {
+        loss = loss + (1.0-y(k))*std::log(1.0-y_est);
+      }
+      sum_loss = sum_loss + -w(k)*2.0*loss;
+    }
+  }
+  return sum_loss;
+}
 
 //' lin_cost_logistic logistic deviance pricing
 //' 
@@ -39,43 +81,11 @@ NumericVector logistic_fits(NumericVector x, NumericVector y,
 //' @export
 // [[Rcpp::export]]
 double lin_cost_logistic(NumericVector x, NumericVector y, NumericVector w,
-                const int min_seg,
-                const int i, const int j) {
-  if(j <= (i + (min_seg-1))) {
-    return std::numeric_limits<double>::max();
-  }
-  // look for some corner cases
-  const input_summary isum = input_summary(x, y, w, i, j, -1);
-  if((isum.k_points<=1L)||(!isum.y_varies())) {
-    // no data or small enough for perfect fit
-    return 0.0;
-  }
-  if(isum.seperable()) {
-    return 0.0;
-  }
-  // // TODO: try to get out of sample calculation working.
-  // NumericVector fits;
-  // if((j-i)<=100) {
-  //   fits = xlogistic_fits(x, y, w, i, j);
-  // } else {
-  //   fits = logistic_fits(x, y, w, i, j);
-  // }
-  NumericVector fits = logistic_fits(x, y, w, i, j);
-  double sum_loss = 0.0;
-  for(int k=i; k<=j; ++k) {
-    if(w(k)>0.0) {
-      const double y_est = 1/(1+std::exp(-fits(k-i)));
-      double loss = 0.0;
-      if(y(k)>0.0) {
-        loss = loss + y(k)*std::log(y_est);
-      }
-      if(y(k)<1.0) {
-        loss = loss + (1.0-y(k))*std::log(1.0-y_est);
-      }
-      sum_loss = sum_loss + -w(k)*2.0*loss;
-    }
-  }
-  return sum_loss;
+                         const int min_seg,
+                         const int i, const int j) {
+  return lin_cost_logistic_worker(x, y, w,
+                                  min_seg,
+                                  i, j);
 }
 
 //' lin_costs_logistic deviance costs.
@@ -99,15 +109,15 @@ double lin_cost_logistic(NumericVector x, NumericVector y, NumericVector w,
 //' @export
 // [[Rcpp::export]]
 NumericMatrix lin_costs_logistic(NumericVector x, NumericVector y, NumericVector w,
-                        const int min_seg,
-                        IntegerVector indices) {
+                                 const int min_seg,
+                                 IntegerVector indices) {
   const int n = indices.size();
   NumericMatrix xcosts = NumericMatrix(n, n);
   const double single_value = std::numeric_limits<double>::max();
   for(int i=0; i<n; ++i) {
     xcosts(i,i) = single_value;
     for(int j=i+1; j<n; ++j) {
-      const double sum_loss = lin_cost_logistic(x, y, w, min_seg, indices(i)-1, indices(j)-1);
+      const double sum_loss = lin_cost_logistic_worker(x, y, w, min_seg, indices(i)-1, indices(j)-1);
       xcosts(i,j) = sum_loss;
       xcosts(j,i) = sum_loss;
     }

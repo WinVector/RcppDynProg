@@ -6,8 +6,28 @@ using Rcpp::NumericMatrix;
 using Rcpp::IntegerVector;
 
 
-NumericVector xlin_fits(NumericVector x, NumericVector y, NumericVector w,
-                        const int i, const int j);
+NumericVector xlin_fits_worker(const NumericVector &x, const NumericVector &y, 
+                               const NumericVector &w,
+                               const int i, const int j);
+
+
+double lin_cost_worker(const NumericVector &x, const NumericVector &y, 
+                       const NumericVector &w,
+                       const int min_seg,
+                       const int i, const int j) {
+  if(j <= (i + (min_seg-1))) {
+    return std::numeric_limits<double>::max();
+  }
+  NumericVector fits = xlin_fits_worker(x, y, w, i, j);
+  double sum_loss = 0.0;
+  for(int k=i; k<=j; ++k) {
+    const double y_est = fits(k-i);
+    const double diff = y(k) - y_est;
+    const double loss = diff*diff;
+    sum_loss = sum_loss + loss;
+  }
+  return sum_loss;
+}
 
 //' lin_cost
 //' 
@@ -33,18 +53,7 @@ NumericVector xlin_fits(NumericVector x, NumericVector y, NumericVector w,
 double lin_cost(NumericVector x, NumericVector y, NumericVector w,
                 const int min_seg,
                 const int i, const int j) {
-  if(j <= (i + (min_seg-1))) {
-    return std::numeric_limits<double>::max();
-  }
-  NumericVector fits = xlin_fits(x, y, w, i, j);
-  double sum_loss = 0.0;
-  for(int k=i; k<=j; ++k) {
-    const double y_est = fits(k-i);
-    const double diff = y(k) - y_est;
-    const double loss = diff*diff;
-    sum_loss = sum_loss + loss;
-  }
-  return sum_loss;
+  return lin_cost_worker(x, y, w, min_seg, i, j);
 }
 
 //' lin_costs
@@ -74,7 +83,7 @@ NumericMatrix lin_costs(NumericVector x, NumericVector y, NumericVector w,
   for(int i=0; i<n; ++i) {
     xcosts(i,i) = single_value;
     for(int j=i+1; j<n; ++j) {
-      const double sum_loss = lin_cost(x, y, w, min_seg, indices(i)-1, indices(j)-1);
+      const double sum_loss = lin_cost_worker(x, y, w, min_seg, indices(i)-1, indices(j)-1);
       xcosts(i,j) = sum_loss;
       xcosts(j,i) = sum_loss;
     }

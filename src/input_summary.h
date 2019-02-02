@@ -20,8 +20,8 @@ public:
   double total_wy;
   long k_points;
   
-  input_summary(NumericVector x, NumericVector y, 
-                NumericVector w,
+  input_summary(const NumericVector &x, const NumericVector &y, 
+                const NumericVector &w,
                 const int i, const int j,
                 const int skip);
   

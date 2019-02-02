@@ -8,10 +8,10 @@ using Rcpp::NumericVector;
 #include "input_summary.h"
 
 
-input_summary::input_summary(NumericVector x, NumericVector y, 
-              NumericVector w,
-              const int i, const int j,
-              const int skip) {
+input_summary::input_summary(const NumericVector &x, const NumericVector &y,
+                             const NumericVector &w,
+                             const int i, const int j,
+                             const int skip) {
   max_x = std::numeric_limits<double>::quiet_NaN();
   min_x = std::numeric_limits<double>::quiet_NaN();
   saw_y_pos = false;

@@ -8,25 +8,8 @@ using Rcpp::NumericMatrix;
 using Rcpp::IntegerVector;
 
 
-//' solve_interval_partition interval partition problem with a bound on number of steps.
-//' 
-//' Solve a for a minimal cost partition of the integers [1,...,nrow(x)] problem where for j>=i x(i,j).
-//' is the cost of choosing the partition element [i,...,j]. 
-//' Returned solution is an ordered vector v of length k<=kmax where: v[1]==1, v[k]==nrow(x)+1, and the 
-//' partition is of the form [v[i], v[i+1]) (intervals open on the right).
-//' 
-//' @param x NumericMatix, for j>=i x(i,j) is the cost of partition element [i,...,j] (inclusive).
-//' @param kmax int, maximum number of segments in solution. 
-//' @return dynamic program solution.
-//' 
-//' @examples
-//' 
-//' costs <- matrix(c(1.5, NA ,NA ,1 ,0 , NA, 5, -1, 1), nrow = 3)
-//' solve_interval_partition(costs, nrow(costs))
-//'
-//' @export
-// [[Rcpp::export]]
-IntegerVector solve_interval_partition_k(NumericMatrix x, int kmax) {
+
+IntegerVector solve_interval_partition_k_worker(const NumericMatrix &x, int kmax) {
   // for cleaner notation
   // solution and x will be indexed from 1 using
   // R_INDEX_DELTA
@@ -48,7 +31,7 @@ IntegerVector solve_interval_partition_k(NumericMatrix x, int kmax) {
     solution(2 + R_INDEX_DELTA) = n+1;
     return solution;
   }
-
+  
   // best path cost up to i (row) with exactly k-steps (column)
   arma::Mat<double> path_costs(n + R_SIZE_PAD, 2, arma::fill::none);
   // how many steps we actually took
@@ -109,16 +92,16 @@ IntegerVector solve_interval_partition_k(NumericMatrix x, int kmax) {
 }
 
 
-//' solve_interval_partition interval partition problem, no boun on the number of steps.
-//' 
-//' Not working yet.
+
+//' solve_interval_partition interval partition problem with a bound on number of steps.
 //' 
 //' Solve a for a minimal cost partition of the integers [1,...,nrow(x)] problem where for j>=i x(i,j).
 //' is the cost of choosing the partition element [i,...,j]. 
-//' Returned solution is an ordered vector v of length k where: v[1]==1, v[k]==nrow(x)+1, and the 
+//' Returned solution is an ordered vector v of length k<=kmax where: v[1]==1, v[k]==nrow(x)+1, and the 
 //' partition is of the form [v[i], v[i+1]) (intervals open on the right).
 //' 
 //' @param x NumericMatix, for j>=i x(i,j) is the cost of partition element [i,...,j] (inclusive).
+//' @param kmax int, maximum number of segments in solution. 
 //' @return dynamic program solution.
 //' 
 //' @examples
@@ -128,7 +111,18 @@ IntegerVector solve_interval_partition_k(NumericMatrix x, int kmax) {
 //'
 //' @export
 // [[Rcpp::export]]
-IntegerVector solve_interval_partition_no_k(NumericMatrix x) {
+IntegerVector solve_interval_partition_k(NumericMatrix x, int kmax) {
+  return solve_interval_partition_k_worker(x, kmax);
+}
+
+
+
+
+
+
+
+
+IntegerVector solve_interval_partition_no_k_worker(const NumericMatrix &x) {
   // for cleaner notation
   // solution and x will be indexed from 1 using
   // R_INDEX_DELTA
@@ -139,7 +133,7 @@ IntegerVector solve_interval_partition_no_k(NumericMatrix x) {
   
   // get shape of problem
   const int n = x.nrow();
-
+  
   // get some edge-cases
   if(n<=1) {
     IntegerVector solution(2);
@@ -192,9 +186,36 @@ IntegerVector solve_interval_partition_no_k(NumericMatrix x) {
     i_at = prev_i;
     k_at = k_at - 1;
   }
-
+  
   return solution;
 }
+
+//' solve_interval_partition interval partition problem, no boun on the number of steps.
+//' 
+//' Not working yet.
+//' 
+//' Solve a for a minimal cost partition of the integers [1,...,nrow(x)] problem where for j>=i x(i,j).
+//' is the cost of choosing the partition element [i,...,j]. 
+//' Returned solution is an ordered vector v of length k where: v[1]==1, v[k]==nrow(x)+1, and the 
+//' partition is of the form [v[i], v[i+1]) (intervals open on the right).
+//' 
+//' @param x NumericMatix, for j>=i x(i,j) is the cost of partition element [i,...,j] (inclusive).
+//' @return dynamic program solution.
+//' 
+//' @examples
+//' 
+//' costs <- matrix(c(1.5, NA ,NA ,1 ,0 , NA, 5, -1, 1), nrow = 3)
+//' solve_interval_partition(costs, nrow(costs))
+//'
+//' @export
+// [[Rcpp::export]]
+IntegerVector solve_interval_partition_no_k(NumericMatrix x) {
+  return solve_interval_partition_no_k_worker(x);
+}
+
+
+
+
 
 
 //' solve_interval_partition interval partition problem.
@@ -216,11 +237,11 @@ IntegerVector solve_interval_partition_no_k(NumericMatrix x) {
 //' @export
 // [[Rcpp::export]]
 IntegerVector solve_interval_partition(NumericMatrix x, const int kmax) {
-  // IntegerVector soln1 = solve_interval_partition_no_k(x);
-  // if(soln1.length()<=(kmax+1)) {
-  //   return(soln1);
-  // }
-  return(solve_interval_partition_k(x, kmax));
+  IntegerVector soln1 = solve_interval_partition_no_k_worker(x);
+  if(soln1.length()<=(kmax+1)) {
+    return(soln1);
+  }
+  return(solve_interval_partition_k_worker(x, kmax));
 }
 
 

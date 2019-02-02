@@ -8,29 +8,9 @@ using Rcpp::NumericMatrix;
 using Rcpp::IntegerVector;
 
 
-
-//' xlin_fits
-//' 
-//' Calculate out of sample linear fit predictions using regularization.
-//' Zero indexed.
-//' 
-//' @param x NumericVector, explanatory variable (length>=2).
-//' @param y NumericVector, values fit.
-//' @param w NumericVector, weights (positive).
-//' @param i integer, first index (inclusive).
-//' @param j integer, j>=i+2 last index (inclusive);
-//' @return  vector of predictions.
-//' 
-//' @keywords internal
-//' 
-//' @examples
-//' 
-//' xlin_fits(c(1, 2, 3, 4), c(1, 2, 2, 1), c(1, 1, 1, 1), 0, 3)
-//' 
-//' @export
-// [[Rcpp::export]]
-NumericVector xlin_fits(NumericVector x, NumericVector y, NumericVector w,
-                        const int i, const int j) {
+NumericVector xlin_fits_worker(const NumericVector &x, const NumericVector &y, 
+                               const NumericVector &w,
+                               const int i, const int j) {
   // build fitting data
   const double regularization = 1.0e-5;
   double xx_0_0 = 0;
@@ -74,4 +54,33 @@ NumericVector xlin_fits(NumericVector x, NumericVector y, NumericVector w,
     fits(k-i) = y_est;
   }
   return fits;
+}
+
+
+
+//' xlin_fits
+//' 
+//' Calculate out of sample linear fit predictions using regularization.
+//' Zero indexed.
+//' 
+//' @param x NumericVector, explanatory variable (length>=2).
+//' @param y NumericVector, values fit.
+//' @param w NumericVector, weights (positive).
+//' @param i integer, first index (inclusive).
+//' @param j integer, j>=i+2 last index (inclusive);
+//' @return  vector of predictions.
+//' 
+//' @keywords internal
+//' 
+//' @examples
+//' 
+//' xlin_fits(c(1, 2, 3, 4), c(1, 2, 2, 1), c(1, 1, 1, 1), 0, 3)
+//' 
+//' @export
+// [[Rcpp::export]]
+NumericVector xlin_fits(NumericVector x, NumericVector y, NumericVector w,
+                        const int i, const int j) {
+  return xlin_fits_worker(x, y, 
+                   w,
+                   i, j);
 }

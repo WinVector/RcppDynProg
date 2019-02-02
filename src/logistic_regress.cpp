@@ -18,41 +18,11 @@ double sigmoid(const double x) {
   return 1/(1+exp(-x));
 }
 
-//' logistic_fit
-//' 
-//' Calculate y ~ sigmoid(a + b x) using iteratively re-weighted least squares.
-//' Zero indexed.
-//' 
-//' @param x NumericVector, expanatory variable.
-//' @param y NumericVector, 0/1 values to fit.
-//' @param w NumericVector, weights (required, positive).
-//' @param initial_link, initial link estimates (required, all zeroes is a good start).
-//' @param i integer, first index (inclusive).
-//' @param j integer, last index (inclusive).
-//' @param skip integer, index to skip (-1 to not skip).
-//' @return vector of a and b.
-//' 
-//' @keywords internal
-//' 
-//' @examples
-//' 
-//' set.seed(5)
-//' d <- data.frame(
-//'   x =  rnorm(10),
-//'   y = sample(c(0,1), 10, replace = TRUE)
-//' )
-//' weights <- runif(nrow(d))
-//' m <- glm(y~x, data = d, family = binomial, weights = weights)
-//' coef(m)
-//' logistic_solve1(d$x, d$y, weights, rep(0.0, nrow(d)), 0, nrow(d)-1, -1)
-//' 
-//' @export
-// [[Rcpp::export]]
-NumericVector logistic_solve1(NumericVector x, NumericVector y, 
-                              NumericVector w,
-                              NumericVector initial_link,
-                              const int i, const int j,
-                              const int skip) {
+NumericVector logistic_solve1_worker(const NumericVector &x, const NumericVector &y, 
+                                     const NumericVector &w,
+                                     const NumericVector &initial_link,
+                                     const int i, const int j,
+                                     const int skip) {
   // init return structure
   NumericVector coef = NumericVector(2);
   // look for corner cases
@@ -169,37 +139,56 @@ NumericVector logistic_solve1(NumericVector x, NumericVector y,
 }
 
 
-//' Out of sample logistic predictions (in link space).
+//' logistic_fit
 //' 
-//' 1-hold out logistic regression predections.
+//' Calculate y ~ sigmoid(a + b x) using iteratively re-weighted least squares.
 //' Zero indexed.
 //' 
 //' @param x NumericVector, expanatory variable.
 //' @param y NumericVector, 0/1 values to fit.
 //' @param w NumericVector, weights (required, positive).
+//' @param initial_link, initial link estimates (required, all zeroes is a good start).
 //' @param i integer, first index (inclusive).
 //' @param j integer, last index (inclusive).
-//' @return vector of predictions for interval.
+//' @param skip integer, index to skip (-1 to not skip).
+//' @return vector of a and b.
 //' 
 //' @keywords internal
 //' 
 //' @examples
 //' 
 //' set.seed(5)
-//' d <- data.frame(x = rnorm(10))
-//' d$y <- d$x + rnorm(nrow(d))>0
+//' d <- data.frame(
+//'   x =  rnorm(10),
+//'   y = sample(c(0,1), 10, replace = TRUE)
+//' )
 //' weights <- runif(nrow(d))
 //' m <- glm(y~x, data = d, family = binomial, weights = weights)
-//' d$pred1 <- predict(m, newdata = d, type = "link")
-//' d$pred2 <- xlogistic_fits(d$x, d$y, weights, 0, nrow(d)-1)
-//' d <- d[order(d$x), , drop = FALSE]
-//' print(d)
+//' coef(m)
+//' logistic_solve1(d$x, d$y, weights, rep(0.0, nrow(d)), 0, nrow(d)-1, -1)
 //' 
 //' @export
 // [[Rcpp::export]]
-NumericVector xlogistic_fits(NumericVector x, NumericVector y, 
-                             NumericVector w,
-                             const int i, const int j) {
+NumericVector logistic_solve1(NumericVector x, NumericVector y, 
+                              NumericVector w,
+                              NumericVector initial_link,
+                              const int i, const int j,
+                              const int skip) {
+  return logistic_solve1_worker(x, y, 
+                                w,
+                                initial_link,
+                                i, j,
+                                skip);
+}
+
+
+
+
+
+
+NumericVector xlogistic_fits_worker(const NumericVector &x, const NumericVector &y, 
+                                    const NumericVector &w,
+                                    const int i, const int j) {
   const int n = j-i+1;
   Rcpp::NumericVector final_links(n);
   for(int k=0; k<n; ++k) {
@@ -256,29 +245,30 @@ NumericVector xlogistic_fits(NumericVector x, NumericVector y,
     initial_link(i) = 0.0;
   }
   // solve whole system to get a good start for hold-out systems.
-  Rcpp::NumericVector coefs = logistic_solve1(x, y, 
-                                              w,
-                                              initial_link,
-                                              i, j,
-                                              -1);
+  Rcpp::NumericVector coefs = logistic_solve1_worker(x, y, 
+                                                     w,
+                                                     initial_link,
+                                                     i, j,
+                                                     -1);
   for(int k=i; k<=j; ++k) {
     initial_link(k) = coefs(0) + coefs(1)*x(k);
   }
   // solve hold-out systems
   for(int k=i; k<=j; ++k) {
-    Rcpp::NumericVector coefsi = logistic_solve1(x, y, 
-                                                 w,
-                                                 initial_link,
-                                                 i, j,
-                                                 k);
+    Rcpp::NumericVector coefsi = logistic_solve1_worker(x, y, 
+                                                        w,
+                                                        initial_link,
+                                                        i, j,
+                                                        k);
     final_links(k-i) = coefsi(0) + coefsi(1)*x(k-i);
   }
   return final_links;
 }
 
-//' In sample logistic predictions (in link space).
+
+//' Out of sample logistic predictions (in link space).
 //' 
-//' logistic regression predections.
+//' 1-hold out logistic regression predections.
 //' Zero indexed.
 //' 
 //' @param x NumericVector, expanatory variable.
@@ -298,15 +288,28 @@ NumericVector xlogistic_fits(NumericVector x, NumericVector y,
 //' weights <- runif(nrow(d))
 //' m <- glm(y~x, data = d, family = binomial, weights = weights)
 //' d$pred1 <- predict(m, newdata = d, type = "link")
-//' d$pred2 <- logistic_fits(d$x, d$y, weights, 0, nrow(d)-1)
+//' d$pred2 <- xlogistic_fits(d$x, d$y, weights, 0, nrow(d)-1)
 //' d <- d[order(d$x), , drop = FALSE]
 //' print(d)
 //' 
 //' @export
 // [[Rcpp::export]]
-NumericVector logistic_fits(NumericVector x, NumericVector y, 
-                       NumericVector w,
-                       const int i, const int j) {
+NumericVector xlogistic_fits(NumericVector x, NumericVector y, 
+                             NumericVector w,
+                             const int i, const int j) {
+  return xlogistic_fits_worker(x, y, 
+                               w,
+                               i, j);
+}
+
+
+
+
+
+
+NumericVector logistic_fits_worker(const NumericVector &x, const NumericVector &y, 
+                                   const NumericVector &w,
+                                   const int i, const int j) {
   const int n = j-i+1;
   // initialize return structure
   Rcpp::NumericVector final_links(n);
@@ -369,14 +372,53 @@ NumericVector logistic_fits(NumericVector x, NumericVector y,
     initial_link(i) = 0.0;
   }
   // solve whole system 
-  Rcpp::NumericVector coefs = logistic_solve1(x, y, 
-                                              w,
-                                              initial_link,
-                                              i, j,
-                                              -1);
+  Rcpp::NumericVector coefs = logistic_solve1_worker(x, y, 
+                                                     w,
+                                                     initial_link,
+                                                     i, j,
+                                                     -1);
   for(int k=i; k<=j; ++k) {
-   final_links(k-i) = coefs(0) + coefs(1)*x(k-i);
+    final_links(k-i) = coefs(0) + coefs(1)*x(k-i);
   }
   return final_links;
+}
+
+
+
+
+//' In sample logistic predictions (in link space).
+//' 
+//' logistic regression predections.
+//' Zero indexed.
+//' 
+//' @param x NumericVector, expanatory variable.
+//' @param y NumericVector, 0/1 values to fit.
+//' @param w NumericVector, weights (required, positive).
+//' @param i integer, first index (inclusive).
+//' @param j integer, last index (inclusive).
+//' @return vector of predictions for interval.
+//' 
+//' @keywords internal
+//' 
+//' @examples
+//' 
+//' set.seed(5)
+//' d <- data.frame(x = rnorm(10))
+//' d$y <- d$x + rnorm(nrow(d))>0
+//' weights <- runif(nrow(d))
+//' m <- glm(y~x, data = d, family = binomial, weights = weights)
+//' d$pred1 <- predict(m, newdata = d, type = "link")
+//' d$pred2 <- logistic_fits(d$x, d$y, weights, 0, nrow(d)-1)
+//' d <- d[order(d$x), , drop = FALSE]
+//' print(d)
+//' 
+//' @export
+// [[Rcpp::export]]
+NumericVector logistic_fits(NumericVector x, NumericVector y, 
+                            NumericVector w,
+                            const int i, const int j) {
+  return logistic_fits_worker(x, y, 
+                              w,
+                              i, j);
 }
 
