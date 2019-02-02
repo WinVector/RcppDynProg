@@ -1,6 +1,8 @@
 
-#include <Rcpp.h>
+#include <RcppArmadillo.h>
+
 #include <math.h>
+
 using Rcpp::NumericVector;
 using Rcpp::NumericMatrix;
 using Rcpp::IntegerVector;

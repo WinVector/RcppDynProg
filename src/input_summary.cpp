@@ -1,7 +1,9 @@
-#include <Rcpp.h>
-using namespace Rcpp;
 
+#include <RcppArmadillo.h>
 
+#include <math.h>
+
+using Rcpp::NumericVector;
 
 #include "input_summary.h"
 

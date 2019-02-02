@@ -1,4 +1,11 @@
 
+#ifndef INPUT_SUMMARY_H
+#define INPUT_SUMMARY_H
+
+
+using Rcpp::NumericVector;
+
+
 class input_summary {
 public:
   double max_x;
@@ -26,3 +33,5 @@ public:
   
   bool seperable() const;
 };
+
+#endif
