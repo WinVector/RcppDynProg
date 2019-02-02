@@ -18,7 +18,9 @@ if(requireNamespace("RUnit", quietly = TRUE) && requireNamespace(pkg, quietly = 
                                 dirs = system.file("unit_tests", package = pkg, mustWork = TRUE),
                                 testFileRegexp = "^test_.+\\.R$",
                                 testFuncRegexp = "^test_.+$")
-  test_results <- runTestSuite(test_suite)
+  test_results <- runTestSuite(test_suite,
+                               verbose = TRUE,
+                               gcBeforeTest = FALSE)
   printTextProtocol(test_results,
                     separateFailureList = TRUE,
                     showDetails = FALSE)

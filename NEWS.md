@@ -5,6 +5,8 @@
  * No k-bound variation.
  * Add a logistic fitter.
  * Switch to RUnit testing.
+ * Stricter floating point.
+ * Introduce input_summary class.
 
 # RcppDynProg 0.1.0 2019/01/01
 

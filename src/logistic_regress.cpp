@@ -6,6 +6,7 @@
 
 using Rcpp::NumericVector;
 
+#include "input_summary.h"
 
 double logit(const double x) {
   return log(x/(1.0-x));
@@ -52,75 +53,45 @@ NumericVector logistic_solve1(NumericVector x, NumericVector y,
                               const int skip) {
   // init return structure
   NumericVector coef = NumericVector(2);
-  // no-data cases
-  if((j<i) || ((j==i)&&(skip==j))) {
-    coef(0) = 0;
-    coef(1) = 0;
-    return coef;
-  }
   // look for corner cases
-  double max_x = -std::numeric_limits<double>::max();
-  double min_x = std::numeric_limits<double>::max();
-  double max_x_pos = -std::numeric_limits<double>::max();
-  double min_x_pos = std::numeric_limits<double>::max();
-  double max_x_neg = -std::numeric_limits<double>::max();
-  double min_x_neg = std::numeric_limits<double>::max();
-  double max_y = -std::numeric_limits<double>::max();
-  double min_y = std::numeric_limits<double>::max();
-  double total_wy = 0.0;
-  double total_w = 0.0;
-  for(int k=i; k<=j; ++k) {
-    if(k!=skip) {
-      max_x = std::max(max_x, x(k));
-      min_x = std::min(min_x, x(k));
-      max_y = std::max(max_y, y(k));
-      min_y = std::min(min_y, y(k));
-      total_w = total_w + w(k);
-      total_wy = total_wy + w(k)*y(k);
-      if(y(k)>=0.5) {
-        max_x_pos = std::max(max_x_pos, x(k));
-        min_x_pos = std::min(min_x_pos, x(k));
-      } else {
-        max_x_neg = std::max(max_x_neg, x(k));
-        min_x_neg = std::min(min_x_neg, x(k));
-      }
-    }
-  }
-  if(total_w<=0.0) {
+  const input_summary isum = input_summary(x, y, w, i, j, skip);
+  // no-data cases
+  if(isum.k_points<=0L) {
     coef(0) = 0;
     coef(1) = 0;
     return coef;
   }
-  if(min_y>=max_y) {
+  if(!isum.y_varies()) {
     // y-pure
-    if(min_y>0.5) {
+    if(isum.saw_y_pos) {
       coef(0) = std::numeric_limits<double>::max();
       coef(1) = 0;
     } else {
-      coef(0) = -std::numeric_limits<double>::max();
+      coef(0) = std::numeric_limits<double>::lowest();
       coef(1) = 0;
     }
     return(coef);
   }
   // we now know y varies
-  if(min_x>=max_x) {
+  if(!isum.x_varies()) {
     // x not varying case
-    coef(0) = logit(total_wy/total_w);
+    coef(0) = logit(isum.total_wy/isum.total_w);
     coef(1) = 0;
     return(coef);
   }
-  // check for seperable data cases, x able to perfectly sort y
-  if(min_x_pos>max_x_neg) {
-    // Note: no solution possible in this case, just returning info
-    coef(0) = logit(total_wy/total_w);
-    coef(1) = std::numeric_limits<double>::max();
-    return(coef);
-  }
-  if(min_x_neg>max_x_pos) {
-    // Note: no solution possible in this case, just returning info
-    coef(0) = logit(total_wy/total_w);
-    coef(1) = -std::numeric_limits<double>::max();
-    return(coef);
+  if(isum.seperable()) {
+    // check for seperable data cases, x able to perfectly sort y
+    if(isum.min_x_pos>isum.max_x_neg) {
+      // Note: no solution possible in this case, just returning info
+      coef(0) = logit(isum.total_wy/isum.total_w);
+      coef(1) = std::numeric_limits<double>::max();
+      return(coef);
+    } else {
+      // Note: no solution possible in this case, just returning info
+      coef(0) = logit(isum.total_wy/isum.total_w);
+      coef(1) = std::numeric_limits<double>::lowest();
+      return(coef);
+    }
   }
   // Set up structers for IRwLS
   // https://www.cs.purdue.edu/homes/zhang923/notes/irwls.pdf
@@ -225,72 +196,58 @@ NumericVector logistic_solve1(NumericVector x, NumericVector y,
 //' @export
 // [[Rcpp::export]]
 NumericVector xlogistic_fits(NumericVector x, NumericVector y, 
-                        NumericVector w,
-                        const int i, const int j) {
+                             NumericVector w,
+                             const int i, const int j) {
   const int n = j-i+1;
   Rcpp::NumericVector final_links(n);
   for(int k=0; k<n; ++k) {
     final_links(k) = 0.0;
   }
   // look for corner cases
-  if(n<=1) {
+  if(n<=2) {
+    // for out of sample- force links to zero unless we have more than 2 points
     return final_links;
   }
   // look for corner cases
-  double max_x = -std::numeric_limits<double>::max();
-  double min_x = std::numeric_limits<double>::max();
-  double max_x_pos = -std::numeric_limits<double>::max();
-  double min_x_pos = std::numeric_limits<double>::max();
-  double max_x_neg = -std::numeric_limits<double>::max();
-  double min_x_neg = std::numeric_limits<double>::max();
-  double max_y = -std::numeric_limits<double>::max();
-  double min_y = std::numeric_limits<double>::max();
-  double total_w = 0.0;
-  for(int k=i; k<=j; ++k) {
-    max_x = std::max(max_x, x(k));
-    min_x = std::min(min_x, x(k));
-    max_y = std::max(max_y, y(k));
-    min_y = std::min(min_y, y(k));
-    total_w = total_w + w(k);
-    if(y(k)>=0.5) {
-      max_x_pos = std::max(max_x_pos, x(k));
-      min_x_pos = std::min(min_x_pos, x(k));
-    } else {
-      max_x_neg = std::max(max_x_neg, x(k));
-      min_x_neg = std::min(min_x_neg, x(k));
-    }
-  }
-  if(total_w<=0.0) {
+  const input_summary isum = input_summary(x, y, w, i, j, -1);
+  if(!isum.saw_data()) {
     return final_links;
   }
-  if(min_y>=max_y) {
+  if(!isum.y_varies()) {
     // y-pure constant
-    if(min_y>=0.5) {
+    if(isum.saw_y_pos) {
       for(int k=0; k<n; ++k) {
         final_links(k) = std::numeric_limits<double>::max();
       }
     } else {
       for(int k=0; k<n; ++k) {
-        final_links(k) = -std::numeric_limits<double>::max();
+        final_links(k) = std::numeric_limits<double>::lowest();
       }
     }
     return final_links;
   }
   // we now know y varies
-  // we now know y varies
-  if((min_x<max_x) && 
-     ((min_x_pos>max_x_neg)||(min_x_neg>max_x_pos))) {
+  if(!isum.x_varies()) {
+    const double lk = logit(isum.total_wy/isum.total_w);
+    for(int k=0; k<n; ++k) {
+      final_links(k) = lk;
+    }
+    return final_links;
+  }
+  // we now know x varies
+  if(isum.seperable()) {
     // check for seperable data cases, x able to perfectly sort y
     // NOTE: in this case this estimate is optimistic, as we guess the seperation point
     for(int k=0; k<n; ++k) {
-      if(y(i+k)>0.5) {
+      if(y(i+k)>=0.5) {
         final_links(k) = std::numeric_limits<double>::max();
       } else {
-        final_links(k) = -std::numeric_limits<double>::max();
+        final_links(k) = std::numeric_limits<double>::lowest();
       }
     }
     return final_links;
   }
+  // now on to general case
   const int nx = x.length();
   Rcpp::NumericVector initial_link(nx);
   for(int k = 0; k<nx; ++k) {
@@ -360,64 +317,50 @@ NumericVector logistic_fits(NumericVector x, NumericVector y,
       if(y(0)>0.5) {
         final_links(0) = std::numeric_limits<double>::max();
       } else {
-        final_links(0) = -std::numeric_limits<double>::max();
+        final_links(0) = std::numeric_limits<double>::lowest();
       }
     }
     return final_links;
   }
-  // look for corner cases
-  double max_x = -std::numeric_limits<double>::max();
-  double min_x = std::numeric_limits<double>::max();
-  double max_x_pos = -std::numeric_limits<double>::max();
-  double min_x_pos = std::numeric_limits<double>::max();
-  double max_x_neg = -std::numeric_limits<double>::max();
-  double min_x_neg = std::numeric_limits<double>::max();
-  double max_y = -std::numeric_limits<double>::max();
-  double min_y = std::numeric_limits<double>::max();
-  double total_w = 0.0;
-  for(int k=i; k<=j; ++k) {
-    max_x = std::max(max_x, x(k));
-    min_x = std::min(min_x, x(k));
-    max_y = std::max(max_y, y(k));
-    min_y = std::min(min_y, y(k));
-    total_w = total_w + w(k);
-    if(y(k)>=0.5) {
-      max_x_pos = std::max(max_x_pos, x(k));
-      min_x_pos = std::min(min_x_pos, x(k));
-    } else {
-      max_x_neg = std::max(max_x_neg, x(k));
-      min_x_neg = std::min(min_x_neg, x(k));
-    }
-  }
-  if(total_w<=0.0) {
+  // look for more corner cases
+  const input_summary isum = input_summary(x, y, w, i, j, -1);
+  if(!isum.saw_data()) {
     return final_links;
   }
-  if(min_y>=max_y) {
+  if(!isum.y_varies()) {
     // y-pure constant
-    if(min_y>=0.5) {
+    if(isum.saw_y_pos>=0.5) {
       for(int k=0; k<n; ++k) {
         final_links(k) = std::numeric_limits<double>::max();
       }
     } else {
       for(int k=0; k<n; ++k) {
-        final_links(k) = -std::numeric_limits<double>::max();
+        final_links(k) = std::numeric_limits<double>::lowest();
       }
     }
     return final_links;
   }
   // we now know y varies
-  if((min_x<max_x) && 
-     ((min_x_pos>max_x_neg)||(min_x_neg>max_x_pos))) {
+  if(!isum.x_varies()) {
+    const double lk = logit(isum.total_wy/isum.total_w);
+    for(int k=0; k<n; ++k) {
+      final_links(k) = lk;
+    }
+    return final_links;
+  }
+  // we now know x varies
+  if(isum.seperable()) {
     // check for seperable data cases, x able to perfectly sort y
     for(int k=0; k<n; ++k) {
       if(y(i+k)>0.5) {
         final_links(k) = std::numeric_limits<double>::max();
       } else {
-        final_links(k) = -std::numeric_limits<double>::max();
+        final_links(k) = std::numeric_limits<double>::lowest();
       }
     }
     return final_links;
   }
+  // on to general case
   const int nx = x.length();
   Rcpp::NumericVector initial_link(nx);
   for(int k = 0; k<nx; ++k) {
