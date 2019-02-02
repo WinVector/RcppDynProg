@@ -18,16 +18,16 @@ test_logistic_cost <- function() {
       m <- glm(y~x, data=d, family = binomial)
       cm <- as.numeric(coef(m))
       diff1 <- max(abs(m1-cm))
-      msg1 <- print(paste("coef problem", k, diff, wrapr::map_to_char(m1), wrapr::map_to_char(cm)))
-      RUnit::checkTrue(diff<=1e-3, msg = msg1)
+      msg1 <- paste("coef problem", k, diff1, 
+                    "RccpDynProg", wrapr::map_to_char(m1), 
+                    "glm", wrapr::map_to_char(cm))
+      RUnit::checkTrue(diff1<=1e-3, msg = msg1)
       p <- as.numeric(predict(m, newdata = d, type = "link"))
-      diff <- max(abs(lf-p))
-      if(diff>1e-3) {
-        print(paste("link problem", k, diff))
-        print(lf)
-        print(p)
-        RUnit::checkTrue(FALSE)
-      }
+      diff2 <- max(abs(lf-p))
+      msg2 <- paste("link problem", k, diff2, 
+                    "RccpDynProg", wrapr::map_to_char(lf), 
+                    "glm", wrapr::map_to_char(p))
+      RUnit::checkTrue(diff2<=1e-3, msg = msg2)
     }
   }
 
