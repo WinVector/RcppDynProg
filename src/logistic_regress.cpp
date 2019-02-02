@@ -69,7 +69,7 @@ NumericVector logistic_solve1(NumericVector x, NumericVector y,
       coef(0) = std::numeric_limits<double>::max();
       coef(1) = 0;
     } else {
-      coef(0) = std::numeric_limits<double>::lowest();
+      coef(0) = -std::numeric_limits<double>::max();
       coef(1) = 0;
     }
     return(coef);
@@ -91,7 +91,7 @@ NumericVector logistic_solve1(NumericVector x, NumericVector y,
     } else {
       // Note: no solution possible in this case, just returning info
       coef(0) = logit(isum.total_wy/isum.total_w);
-      coef(1) = std::numeric_limits<double>::lowest();
+      coef(1) = -std::numeric_limits<double>::max();
       return(coef);
     }
   }
@@ -223,7 +223,7 @@ NumericVector xlogistic_fits(NumericVector x, NumericVector y,
       }
     } else {
       for(int k=0; k<n; ++k) {
-        final_links(k) = std::numeric_limits<double>::lowest();
+        final_links(k) = -std::numeric_limits<double>::max();
       }
     }
     return final_links;
@@ -244,7 +244,7 @@ NumericVector xlogistic_fits(NumericVector x, NumericVector y,
       if(y(i+k)>=0.5) {
         final_links(k) = std::numeric_limits<double>::max();
       } else {
-        final_links(k) = std::numeric_limits<double>::lowest();
+        final_links(k) = -std::numeric_limits<double>::max();
       }
     }
     return final_links;
@@ -319,7 +319,7 @@ NumericVector logistic_fits(NumericVector x, NumericVector y,
       if(y(0)>0.5) {
         final_links(0) = std::numeric_limits<double>::max();
       } else {
-        final_links(0) = std::numeric_limits<double>::lowest();
+        final_links(0) = -std::numeric_limits<double>::max();
       }
     }
     return final_links;
@@ -337,7 +337,7 @@ NumericVector logistic_fits(NumericVector x, NumericVector y,
       }
     } else {
       for(int k=0; k<n; ++k) {
-        final_links(k) = std::numeric_limits<double>::lowest();
+        final_links(k) = -std::numeric_limits<double>::max();
       }
     }
     return final_links;
@@ -357,7 +357,7 @@ NumericVector logistic_fits(NumericVector x, NumericVector y,
       if(y(i+k)>0.5) {
         final_links(k) = std::numeric_limits<double>::max();
       } else {
-        final_links(k) = std::numeric_limits<double>::lowest();
+        final_links(k) = -std::numeric_limits<double>::max();
       }
     }
     return final_links;
