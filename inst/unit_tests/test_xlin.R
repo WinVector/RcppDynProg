@@ -1,10 +1,5 @@
-library('RcppDynProg')
 
-context("xlin")
-
-
-test_that("test_xlin: test scoring", {
-  
+test_xlin <- function() {
   d <- data.frame(
     x = c(1, 2, 3, 4, 5, 6),
     y = c(1, 1, 2, 2, 3, 3),
@@ -20,6 +15,7 @@ test_that("test_xlin: test scoring", {
   
   mxdiff = max(abs(fits-fe))
   
-  testthat::expect_true(mxdiff<=1.0e-3)
-  
-})
+  RUnit::checkTrue(mxdiff<=1.0e-3)
+
+  invisible(NULL)
+}

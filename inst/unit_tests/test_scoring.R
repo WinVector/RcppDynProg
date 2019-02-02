@@ -1,10 +1,5 @@
-library('RcppDynProg')
 
-context("scoring")
-
-
-test_that("test_scoring: test scoring", {
-  
+test_scoring <- function() {
   set.seed(2018)
   g <- 50
   d <- data.frame(
@@ -26,7 +21,7 @@ test_that("test_scoring: test scoring", {
   
   c1 <- inflated_var(d$y_observed, 0)
   c2 <- const_cost(d$y_observed, d$w, 1, 0, length(d$y_observed-1)-1)
-  testthat::expect_true(abs(c1-c2)<1.e-6)
+  RUnit::checkTrue(abs(c1-c2)<1.e-6)
   
   y_permuted <- d$y_ideal[sample.int(nrow(d), nrow(d), replace = FALSE)]
   
@@ -55,6 +50,8 @@ test_that("test_scoring: test scoring", {
   }
   mx <- max(d)
   
-  testthat::expect_true(mx<=1.e-6)
-})
+  RUnit::checkTrue(mx<=1.e-6)
+
+  invisible(NULL)
+}
 
