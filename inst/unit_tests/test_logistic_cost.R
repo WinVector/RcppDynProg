@@ -5,6 +5,7 @@ test_logistic_cost <- function() {
   w <- c(1, 1, 1, 1, 1, 1, 1)
   il <- numeric(length(x))
   
+  # Think this is the issue we are seeing in Windows.
   sm3 <- summarize_input(x,y,w,0,3,-1)
   expect3 <- list(max_x = 4, min_x = 1, saw_y_pos = TRUE, max_x_pos = 3, min_x_pos = 3, 
                   saw_y_neg = TRUE, max_x_neg = 4, min_x_neg = 1, total_w = 4, 
