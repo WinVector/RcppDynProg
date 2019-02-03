@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Changelog • RcppDynProg</title>
+<title>Summarize data (for debugging). — summarize_input • RcppDynProg</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,7 +30,10 @@
 
 
 
-<meta property="og:title" content="Changelog" />
+<meta property="og:title" content="Summarize data (for debugging). — summarize_input" />
+
+<meta property="og:description" content="Summarize data (for debugging)." />
+<meta name="twitter:card" content="summary" />
 
 
 
@@ -46,7 +49,7 @@
   </head>
 
   <body>
-    <div class="container template-news">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -115,43 +118,70 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Changelog <small></small></h1>
-      <small>Source: <a href='https://github.com/WinVector/RcppDynProg//blob/master/NEWS.md'><code>NEWS.md</code></a></small>
+    <h1>Summarize data (for debugging).</h1>
+    <small class="dont-index">Source: <a href='https://github.com/WinVector/RcppDynProg//blob/master/R/RcppExports.R'><code>R/RcppExports.R</code></a></small>
+    <div class="hidden name"><code>summarize_input.Rd</code></div>
     </div>
 
-    <div id="rcppdynprog-0-1-1-20190202" class="section level1">
-<h1 class="page-header">
-<a href="#rcppdynprog-0-1-1-20190202" class="anchor"></a>RcppDynProg 0.1.1 2019/02/02<small> Unreleased </small>
-</h1>
-<ul>
-<li>Add logistic scoring.</li>
-<li>No k-bound variation.</li>
-<li>Add a logistic fitter.</li>
-<li>Switch to RUnit testing.</li>
-<li>Stricter floating point.</li>
-<li>Introduce input_summary class.</li>
-</ul>
-</div>
-    <div id="rcppdynprog-0-1-0-20190101" class="section level1">
-<h1 class="page-header">
-<a href="#rcppdynprog-0-1-0-20190101" class="anchor"></a>RcppDynProg 0.1.0 2019/01/01<small> 2019-01-04 </small>
-</h1>
-<ul>
-<li>Initial version.</li>
-</ul>
-</div>
-  </div>
+    <div class="ref-description">
+    
+    <p>Summarize data (for debugging).</p>
+    
+    </div>
 
+    <pre class="usage"><span class='fu'>summarize_input</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>w</span>, <span class='no'>i</span>, <span class='no'>j</span>, <span class='no'>skip</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>NumericVector, expanatory variable.</p></td>
+    </tr>
+    <tr>
+      <th>y</th>
+      <td><p>NumericVector, 0/1 values to fit.</p></td>
+    </tr>
+    <tr>
+      <th>w</th>
+      <td><p>NumericVector, weights (required, positive).</p></td>
+    </tr>
+    <tr>
+      <th>i</th>
+      <td><p>integer, first index (inclusive).</p></td>
+    </tr>
+    <tr>
+      <th>j</th>
+      <td><p>integer, last index (inclusive).</p></td>
+    </tr>
+    <tr>
+      <th>skip</th>
+      <td><p>integer, index to skip (-1 to not skip).</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>summary list</p>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class='no'>costs</span> <span class='kw'>&lt;-</span> <span class='fu'>matrix</span>(<span class='fu'>c</span>(<span class='fl'>1.5</span>, <span class='fl'>NA</span> ,<span class='fl'>NA</span> ,<span class='fl'>1</span> ,<span class='fl'>0</span> , <span class='fl'>NA</span>, <span class='fl'>5</span>, -<span class='fl'>1</span>, <span class='fl'>1</span>), <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>3</span>)
+<span class='fu'><a href='solve_interval_partition.html'>solve_interval_partition</a></span>(<span class='no'>costs</span>, <span class='fu'>nrow</span>(<span class='no'>costs</span>))</div><div class='output co'>#&gt; [1] 1 2 4</div><div class='input'>
+</div></pre>
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <div id="tocnav">
-      <h2>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-        <li><a href="#rcppdynprog-0-1-1-20190202">0.1.1</a></li>
-        <li><a href="#rcppdynprog-0-1-0-20190101">0.1.0</a></li>
-      </ul>
-    </div>
-  </div>
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
+  </div>
 </div>
 
       <footer>

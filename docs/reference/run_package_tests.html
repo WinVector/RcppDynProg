@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Changelog • RcppDynProg</title>
+<title>Run package tests. — run_package_tests • RcppDynProg</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,7 +30,13 @@
 
 
 
-<meta property="og:title" content="Changelog" />
+<meta property="og:title" content="Run package tests. — run_package_tests" />
+
+<meta property="og:description" content="For all files with names of the form &quot;^test_.+\.R$&quot; in the package directory unit_tests
+run all functions with names of the form &quot;^test_.+$&quot; as RUnit tests.
+Attaches RUnit and pkg, requires RUnit.
+Stops on error." />
+<meta name="twitter:card" content="summary" />
 
 
 
@@ -46,7 +52,7 @@
   </head>
 
   <body>
-    <div class="container template-news">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -115,43 +121,73 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Changelog <small></small></h1>
-      <small>Source: <a href='https://github.com/WinVector/RcppDynProg//blob/master/NEWS.md'><code>NEWS.md</code></a></small>
+    <h1>Run package tests.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/WinVector/RcppDynProg//blob/master/R/run_package_tests.R'><code>R/run_package_tests.R</code></a></small>
+    <div class="hidden name"><code>run_package_tests.Rd</code></div>
     </div>
 
-    <div id="rcppdynprog-0-1-1-20190202" class="section level1">
-<h1 class="page-header">
-<a href="#rcppdynprog-0-1-1-20190202" class="anchor"></a>RcppDynProg 0.1.1 2019/02/02<small> Unreleased </small>
-</h1>
-<ul>
-<li>Add logistic scoring.</li>
-<li>No k-bound variation.</li>
-<li>Add a logistic fitter.</li>
-<li>Switch to RUnit testing.</li>
-<li>Stricter floating point.</li>
-<li>Introduce input_summary class.</li>
-</ul>
-</div>
-    <div id="rcppdynprog-0-1-0-20190101" class="section level1">
-<h1 class="page-header">
-<a href="#rcppdynprog-0-1-0-20190101" class="anchor"></a>RcppDynProg 0.1.0 2019/01/01<small> 2019-01-04 </small>
-</h1>
-<ul>
-<li>Initial version.</li>
-</ul>
-</div>
-  </div>
+    <div class="ref-description">
+    
+    <p>For all files with names of the form "^test_.+\.R$" in the package directory unit_tests
+run all functions with names of the form "^test_.+$" as RUnit tests.
+Attaches RUnit and pkg, requires RUnit.
+Stops on error.</p>
+    
+    </div>
 
+    <pre class="usage"><span class='fu'>run_package_tests</span>(<span class='no'>pkg</span>, <span class='no'>...</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>test_dir</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>stop_on_issue</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>stop_if_no_tests</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>pkg</th>
+      <td><p>character, name of package to test.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>not used, force later arguments to bind by name.</p></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>logical, if TRUE print more.</p></td>
+    </tr>
+    <tr>
+      <th>test_dir</th>
+      <td><p>directory to look for tests in, if not set looks in pacakge unit_tests.</p></td>
+    </tr>
+    <tr>
+      <th>stop_on_issue</th>
+      <td><p>logical, if TRUE stop after errors or failures.</p></td>
+    </tr>
+    <tr>
+      <th>stop_if_no_tests</th>
+      <td><p>logical, if TRUE stop if no tests were found.</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>nothing</p>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Based on <a href='https://github.com/RcppCore/Rcpp/blob/master/tests/doRUnit.R'>https://github.com/RcppCore/Rcpp/blob/master/tests/doRUnit.R</a>.</p>
+    
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <div id="tocnav">
-      <h2>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-        <li><a href="#rcppdynprog-0-1-1-20190202">0.1.1</a></li>
-        <li><a href="#rcppdynprog-0-1-0-20190101">0.1.0</a></li>
-      </ul>
-    </div>
-  </div>
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
 
+      <li><a href="#details">Details</a></li>
+          </ul>
+
+  </div>
 </div>
 
       <footer>

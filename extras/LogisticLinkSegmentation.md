@@ -1,7 +1,7 @@
 Logistic Link Segmentation
 ================
 John Mount
-2019-02-01
+2019-02-02
 
 In this example we fit a piecewise logistic-linear (linear in link-space) function to example data.
 Please see [here](https://github.com/WinVector/RcppDynProg) for a discussion of the methodology.
@@ -11,7 +11,16 @@ Logistic link segmentation does not seem to be a good idea. The small segments j
 ``` r
 library("RcppDynProg")
 library("wrapr")
+```
 
+    ## 
+    ## Attaching package: 'wrapr'
+
+    ## The following object is masked from 'package:RcppDynProg':
+    ## 
+    ##     run_package_tests
+
+``` r
 plot <- requireNamespace("ggplot2", quietly = TRUE)
 if(plot) {
   library("ggplot2")
