@@ -19,9 +19,7 @@
     Compilation used the following non-portable flag(s):
       ‘-Wdate-time’ ‘-Werror=format-security’ ‘-Wformat’
     Status: 1 WARNING
-    Non-portalbe compliation flag part of local check, not part of package.
-
-    rhub::check_for_cran()
+    Non-portable compliation flag part of local check, not part of package.
 
 ### OSX
 
@@ -40,8 +38,16 @@
 ### Windows
 
     devtools::build_win()
-    
-    rhub::check_for_cran()
+    * using R Under development (unstable) (2019-01-31 r76038)
+    * using platform: x86_64-w64-mingw32 (64-bit)
+    * using session charset: ISO8859-1
+    * checking for file 'RcppDynProg/DESCRIPTION' ... OK
+    * checking extension type ... Package
+    * this is package 'RcppDynProg' version '0.1.1'
+    * checking CRAN incoming feasibility ... Note_to_CRAN_maintainers
+    Maintainer: 'John Mount <jmount@win-vector.com>'
+    Status: OK
+
 
 ## Downstream dependencies
 
