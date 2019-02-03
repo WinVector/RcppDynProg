@@ -2,7 +2,7 @@
 
 #include <RcppArmadillo.h>
 
-#include <math.h>
+#include <math.h> 
 
 // [[Rcpp::depends(RcppArmadillo)]]
 
@@ -113,7 +113,7 @@ NumericVector logistic_solve1_worker(const NumericVector &x, const NumericVector
     c1 = 0.0;
     if(sum_w>0.0) {
       const double det = xx_0_0*xx_1_1 - xx_0_1*xx_1_0;
-      if(abs(det)>0) {
+      if(det!=0) {
         // solve linear system and form estimate
         c0 = (xx_1_1*sy_0 - xx_0_1*xy_1)/det;
         c1 = (-xx_1_0*sy_0 + xx_0_0*xy_1)/det;

@@ -42,7 +42,7 @@ NumericVector xlin_fits_worker(const NumericVector &x, const NumericVector &y,
     double y_est = 0.0;
     if(xx_0_0>0.0) {
       const double det = xxk_0_0*xxk_1_1 - xxk_0_1*xxk_1_0;
-      if(abs(det)>0) {
+      if(det!=0.0) {
         const double c0 = (xxk_1_1*xyk_0 - xxk_0_1*xyk_1)/det;
         const double c1 = (-xxk_1_0*xyk_0 + xxk_0_0*xyk_1)/det;
         // form estimate
