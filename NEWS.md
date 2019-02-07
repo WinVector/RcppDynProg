@@ -1,4 +1,8 @@
 
+# RcppDynProg 0.1.2 2019/02/07
+
+ * Clean up testing pattern a bit.
+
 # RcppDynProg 0.1.1 2019/02/02
 
  * Add logistic scoring.

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>xlin_fits_R — xlin_fits_R • RcppDynProg</title>
+<title>Run package tests. — run_RcppDynProg_tests • RcppDynProg</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,12 @@
 
 
 
-<meta property="og:title" content="xlin_fits_R — xlin_fits_R" />
+<meta property="og:title" content="Run package tests. — run_RcppDynProg_tests" />
 
-<meta property="og:description" content="Calculate out of sample linear fit predictions." />
+<meta property="og:description" content="For all files with names of the form &quot;^test_.+\.R$&quot; in the package directory unit_tests
+run all functions with names of the form &quot;^test_.+$&quot; as RUnit tests.
+Attaches RUnit and pkg, requires RUnit.
+Stops on error." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -120,45 +123,71 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>xlin_fits_R</h1>
-    <small class="dont-index">Source: <a href='https://github.com/WinVector/RcppDynProg/blob/master/R/xlin_fits_R.R'><code>R/xlin_fits_R.R</code></a></small>
-    <div class="hidden name"><code>xlin_fits_R.Rd</code></div>
+    <h1>Run package tests.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/WinVector/RcppDynProg/blob/master/R/run_package_tests.R'><code>R/run_package_tests.R</code></a></small>
+    <div class="hidden name"><code>run_RcppDynProg_tests.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Calculate out of sample linear fit predictions.</p>
+    <p>For all files with names of the form "^test_.+\.R$" in the package directory unit_tests
+run all functions with names of the form "^test_.+$" as RUnit tests.
+Attaches RUnit and pkg, requires RUnit.
+Stops on error.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>xlin_fits_R</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>w</span>)</pre>
+    <pre class="usage"><span class='fu'>run_RcppDynProg_tests</span>(<span class='no'>...</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>package_test_dirs</span> <span class='kw'>=</span> <span class='st'>"unit_tests"</span>, <span class='kw'>test_dirs</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>(<span class='fl'>0</span>),
+  <span class='kw'>stop_on_issue</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>stop_if_no_tests</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>require_RUnit_attached</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>require_pkg_attached</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>NumericVector, x-coords of values to group (length&gt;=2).</p></td>
+      <th>...</th>
+      <td><p>not used, force later arguments to bind by name.</p></td>
     </tr>
     <tr>
-      <th>y</th>
-      <td><p>NumericVector, values to group in order.</p></td>
+      <th>verbose</th>
+      <td><p>logical, if TRUE print more.</p></td>
     </tr>
     <tr>
-      <th>w</th>
-      <td><p>NumericVector, weights (positive).</p></td>
+      <th>package_test_dirs</th>
+      <td><p>directory names to look for in the installed package.</p></td>
+    </tr>
+    <tr>
+      <th>test_dirs</th>
+      <td><p>paths to look for tests in.</p></td>
+    </tr>
+    <tr>
+      <th>stop_on_issue</th>
+      <td><p>logical, if TRUE stop after errors or failures.</p></td>
+    </tr>
+    <tr>
+      <th>stop_if_no_tests</th>
+      <td><p>logical, if TRUE stop if no tests were found.</p></td>
+    </tr>
+    <tr>
+      <th>require_RUnit_attached</th>
+      <td><p>logical, if TRUE require RUnit be attached before testing.</p></td>
+    </tr>
+    <tr>
+      <th>require_pkg_attached</th>
+      <td><p>logical, if TRUE require pkg be attached before testing.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>vector of predictions.</p>
+    <p>RUnit test results (invisible).</p>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Based on <a href='https://github.com/RcppCore/Rcpp/blob/master/tests/doRUnit.R'>https://github.com/RcppCore/Rcpp/blob/master/tests/doRUnit.R</a>.</p>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'>xlin_fits_R</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span>), <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>1</span>), <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>))</div><div class='output co'>#&gt; [1] 2.666715 1.285715 1.285712 2.666668</div><div class='input'>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -166,9 +195,9 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+
+      <li><a href="#details">Details</a></li>
+          </ul>
 
   </div>
 </div>
