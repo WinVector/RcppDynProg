@@ -2,12 +2,13 @@
 % Please edit documentation in R/run_package_tests.R
 \name{run_RcppDynProg_tests}
 \alias{run_RcppDynProg_tests}
-\title{Run package tests.}
+\title{Run RcppDynProg package tests.}
 \usage{
 run_RcppDynProg_tests(..., verbose = TRUE,
   package_test_dirs = "unit_tests", test_dirs = character(0),
   stop_on_issue = TRUE, stop_if_no_tests = TRUE,
-  require_RUnit_attached = FALSE, require_pkg_attached = TRUE)
+  require_RUnit_attached = FALSE, require_pkg_attached = TRUE,
+  rngKind = "Mersenne-Twister", rngNormalKind = "Inversion")
 }
 \arguments{
 \item{...}{not used, force later arguments to bind by name.}
@@ -25,6 +26,10 @@ run_RcppDynProg_tests(..., verbose = TRUE,
 \item{require_RUnit_attached}{logical, if TRUE require RUnit be attached before testing.}
 
 \item{require_pkg_attached}{logical, if TRUE require pkg be attached before testing.}
+
+\item{rngKind}{pseudo-random number generator method name.}
+
+\item{rngNormalKind}{pseudo-random normal generator method name.}
 }
 \value{
 RUnit test results (invisible).
@@ -36,5 +41,6 @@ Attaches RUnit and pkg, requires RUnit.
 Stops on error.
 }
 \details{
-Based on \url{https://github.com/RcppCore/Rcpp/blob/master/tests/doRUnit.R}.
+Based on \url{https://github.com/RcppCore/Rcpp/blob/master/tests/doRUnit.R}.  This
+version is GPL-3, works derived from it must be distributed GPL-3.
 }

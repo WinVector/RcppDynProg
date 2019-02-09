@@ -1,5 +1,5 @@
 
-# RcppDynProg 0.1.2 2019/02/07
+# RcppDynProg 0.1.2 2019/02/09
 
  * Clean up testing pattern a bit.
 
