@@ -36,7 +36,6 @@ run_RcppDynProg_tests <- function(...,
                                   rngNormalKind = "Inversion") {
   wrapr::stop_if_dot_args(substitute(list(...)), "RcppDynProg::run_RcppDynProg_tests")
   wrapr::run_package_tests(pkg = "RcppDynProg",
-                           ...,
                            verbose = verbose,
                            package_test_dirs = package_test_dirs,
                            test_dirs = test_dirs,
