@@ -27,6 +27,5 @@ RoxygenNote: 6.1.1
 Suggests:
     RUnit,
     knitr,
-    rmarkdown,
-    ggplot2
+    rmarkdown
 VignetteBuilder: knitr

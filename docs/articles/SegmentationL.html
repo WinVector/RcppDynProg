@@ -112,12 +112,12 @@ d<span class="op">$</span>y_observed &lt;-<span class="st"> </span>d<span class=
 
 
 <span class="co"># plot</span>
-<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(d<span class="op">$</span>x, d<span class="op">$</span>y_ideal,
-     <span class="dt">type =</span> <span class="st">"l"</span>,
-     <span class="dt">lty =</span> <span class="st">"dashed"</span>,
+<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(d<span class="op">$</span>x, d<span class="op">$</span>y_observed,
      <span class="dt">xlab =</span> <span class="st">"x"</span>, <span class="dt">ylab =</span> <span class="st">"y"</span>,
      <span class="dt">main =</span> <span class="st">"raw data</span><span class="ch">\n</span><span class="st">circles: observed values, dashed line: unobserved true values"</span>)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/points">points</a></span>(d<span class="op">$</span>x, d<span class="op">$</span>y_observed)</code></pre></div>
+<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/lines">lines</a></span>(d<span class="op">$</span>x, d<span class="op">$</span>y_ideal,
+     <span class="dt">type =</span> <span class="st">"l"</span>,
+     <span class="dt">lty =</span> <span class="st">"dashed"</span>)</code></pre></div>
 <p><img src="SegmentationL_files/figure-html/r1-1.png" width="768" style="display: block; margin: auto;"></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x_cuts &lt;-<span class="st"> </span><span class="kw"><a href="../reference/solve_for_partition.html">solve_for_partition</a></span>(d<span class="op">$</span>x, d<span class="op">$</span>y_observed, <span class="dt">penalty =</span> <span class="dv">1</span>)
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(x_cuts)</code></pre></div>
@@ -145,11 +145,12 @@ d<span class="op">$</span>group &lt;-<span class="st"> </span><span class="kw"><
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sum">sum</a></span>((d<span class="op">$</span>estimate <span class="op">-</span><span class="st"> </span>d<span class="op">$</span>y_observed)<span class="op">^</span><span class="dv">2</span>))</code></pre></div>
 <pre><code>## [1] 20.53796</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># plot</span>
-<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(d<span class="op">$</span>x, d<span class="op">$</span>y_ideal,
-     <span class="dt">type =</span> <span class="st">"l"</span>,
-     <span class="dt">lty =</span> <span class="st">"dashed"</span>,
+<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(d<span class="op">$</span>x, d<span class="op">$</span>y_observed,
      <span class="dt">xlab =</span> <span class="st">"x"</span>, <span class="dt">ylab =</span> <span class="st">"y"</span>,
      <span class="dt">main =</span> <span class="st">"RcppDynProg piecewise linear estimate</span><span class="ch">\n</span><span class="st">dots: observed values, segments: estimated shape"</span>)
+<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/points">points</a></span>(d<span class="op">$</span>x, d<span class="op">$</span>y_ideal,
+     <span class="dt">type =</span> <span class="st">"l"</span>,
+     <span class="dt">lty =</span> <span class="st">"dashed"</span>)
 cmap &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"#a6cee3"</span>,
           <span class="st">"#1f78b4"</span>,
           <span class="st">"#b2df8a"</span>,
