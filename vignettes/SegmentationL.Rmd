@@ -15,10 +15,6 @@ Please see [here](https://github.com/WinVector/RcppDynProg) for a discussion of 
 ```{r r1, fig.height = 6, fig.width = 8, fig.align = "center"}
 library("RcppDynProg")
 
-plot <- requireNamespace("ggplot2", quietly = TRUE)
-if(plot) {
-  library("ggplot2")
-}
 
 set.seed(2018)
 g <- 100
@@ -28,16 +24,14 @@ d$y_ideal <- sin((0.3*d$x)^2)
 d$y_observed <- d$y_ideal + 0.25*rnorm(length(d$y_ideal))
 
 
+# plot
+plot(d$x, d$y_ideal,
+     type = "l",
+     lty = "dashed",
+     xlab = "x", ylab = "y",
+     main = "raw data\ncircles: observed values, dashed line: unobserved true values")
+points(d$x, d$y_observed)
 
-if(plot) {
-  plt1 <- ggplot(data= d, aes(x = x)) + 
-    geom_line(aes(y = y_ideal), linetype=2) +
-    geom_point(aes(y = y_observed)) +
-    ylab("y") +
-    ggtitle("raw data", 
-            subtitle = "dots: observed values, dashed line: unobserved true values")
-  print(plt1)
-}
 
 x_cuts <- solve_for_partition(d$x, d$y_observed, penalty = 1)
 print(x_cuts)
@@ -59,16 +53,31 @@ print(sum((d$estimate - d$y_observed)^2))
 ```
 
 ```{r r5, fig.height = 6, fig.width = 8, fig.align = "center"}
-if(plot) {
-  plt2 <- ggplot(data= d, aes(x = x)) + 
-    geom_line(aes(y = y_ideal), linetype=2) +
-    geom_point(aes(y = y_observed, color = group)) +
-    geom_line(aes(y = estimate, color = group)) +
-    ylab("y") +
-    ggtitle("RcppDynProg piecewise linear estimate",
-            subtitle = "dots: observed values, segments: observed group means, dashed line: unobserved true values") + 
-    theme(legend.position = "none")
-  print(plt2)
+
+# plot
+plot(d$x, d$y_ideal,
+     type = "l",
+     lty = "dashed",
+     xlab = "x", ylab = "y",
+     main = "RcppDynProg piecewise linear estimate\ndots: observed values, segments: estimated shape")
+cmap <- c("#a6cee3",
+          "#1f78b4",
+          "#b2df8a",
+          "#33a02c",
+          "#fb9a99",
+          "#e31a1c",
+          "#fdbf6f",
+          "#ff7f00",
+          "#cab2d6",
+          "#6a3d9a",
+          "#ffff99",
+          "#b15928")
+names(cmap) <- as.character(seq_len(length(cmap)))
+points(d$x, d$y_observed, col = cmap[d$group], pch=19)
+groups <- sort(unique(d$group))
+for(gi in groups) {
+  di <- d[d$group==gi, , drop = FALSE]
+  lines(di$x, di$estimate, col = cmap[di$group[[1]]], lwd=2)
 }
 ```
 
