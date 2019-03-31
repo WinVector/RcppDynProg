@@ -15,10 +15,6 @@ Please see [here](https://github.com/WinVector/RcppDynProg) for a discussion of 
 ```{r r1, fig.height = 6, fig.width = 8, fig.align = "center"}
 library("RcppDynProg")
 
-plot <- requireNamespace("ggplot2", quietly = TRUE)
-if(plot) {
-  library("ggplot2")
-}
 
 set.seed(2018)
 g <- 50
@@ -29,15 +25,13 @@ d$y_observed <- d$y_ideal + rnorm(length(d$y_ideal))
 
 
 
-if(plot) {
-  plt1 <- ggplot(data= d, aes(x = x)) + 
-    geom_line(aes(y = y_ideal), linetype=2) +
-    geom_point(aes(y = y_observed)) +
-    ylab("y") +
-    ggtitle("raw data", 
-            subtitle = "dots: observed values, dashed line: unobserved true values")
-  print(plt1)
-}
+# plot
+plot(d$x, d$y_observed,
+     xlab = "x", ylab = "y",
+     main = "raw data\ncircles: observed values, dashed line: unobserved true values")
+lines(d$x, d$y_ideal,
+     type = "l",
+     lty = "dashed")
 ```
 
 As a heuristic, we set our regularization penalty to a value that treats permuted data (no relation between x and y) 
@@ -85,21 +79,38 @@ print(soln)
 d$group <- as.character(findInterval(d$x, soln))
 group_means <- tapply(d$y_observed, d$group, mean)
 d$group_mean <- group_means[d$group]
+d$estimate <- d$group_mean
 
 print(sum((d$y_observed - d$y_ideal)^2))
   
 print(sum((d$group_mean - d$y_ideal)^2))
 
-if(plot) {
-  plt2 <- ggplot(data= d, aes(x = x)) + 
-    geom_line(aes(y = y_ideal), linetype=2) +
-    geom_point(aes(y = y_observed, color = group)) +
-    geom_line(aes(y = group_mean, color = group)) +
-    ylab("y") +
-    ggtitle("RcppDynProg piecewise constant estimate",
-            subtitle = "dots: observed values, segments: observed group means, dashed line: unobserved true values") + 
-    theme(legend.position = "none")
-  print(plt2)
+# plot
+d$group <- as.character(d$group)
+plot(d$x, d$y_observed,
+     xlab = "x", ylab = "y",
+     main = "RcppDynProg piecewise linear estimate\ndots: observed values, segments: estimated shape")
+points(d$x, d$y_ideal,
+     type = "l",
+     lty = "dashed")
+cmap <- c("#a6cee3",
+          "#1f78b4",
+          "#b2df8a",
+          "#33a02c",
+          "#fb9a99",
+          "#e31a1c",
+          "#fdbf6f",
+          "#ff7f00",
+          "#cab2d6",
+          "#6a3d9a",
+          "#ffff99",
+          "#b15928")
+names(cmap) <- as.character(seq_len(length(cmap)))
+points(d$x, d$y_observed, col = cmap[d$group], pch=19)
+groups <- sort(unique(d$group))
+for(gi in groups) {
+  di <- d[d$group==gi, , drop = FALSE]
+  lines(di$x, di$estimate, col = cmap[di$group[[1]]], lwd=2)
 }
 ```
 
@@ -120,16 +131,32 @@ print(sum((d$estimate - d$y_ideal)^2))
 
 print(sum((d$estimate - d$y_observed)^2))
 
-if(plot) {
-  plt3 <- ggplot(data= d, aes(x = x)) + 
-    geom_line(aes(y = y_ideal), linetype=2) +
-    geom_point(aes(y = y_observed, color = group)) +
-    geom_line(aes(y = estimate, color = group)) +
-    ylab("y") +
-    ggtitle("RcppDynProg piecewise constant estimate",
-            subtitle = "dots: observed values, segments: observed group means, dashed line: unobserved true values") + 
-    theme(legend.position = "none")
-  print(plt3)
+# plot
+d$group <- as.character(d$group)
+plot(d$x, d$y_observed,
+     xlab = "x", ylab = "y",
+     main = "RcppDynProg piecewise constant estimate\ndots: observed values, segments: estimated shape")
+points(d$x, d$y_ideal,
+     type = "l",
+     lty = "dashed")
+cmap <- c("#a6cee3",
+          "#1f78b4",
+          "#b2df8a",
+          "#33a02c",
+          "#fb9a99",
+          "#e31a1c",
+          "#fdbf6f",
+          "#ff7f00",
+          "#cab2d6",
+          "#6a3d9a",
+          "#ffff99",
+          "#b15928")
+names(cmap) <- as.character(seq_len(length(cmap)))
+points(d$x, d$y_observed, col = cmap[d$group], pch=19)
+groups <- sort(unique(d$group))
+for(gi in groups) {
+  di <- d[d$group==gi, , drop = FALSE]
+  lines(di$x, di$estimate, col = cmap[di$group[[1]]], lwd=2)
 }
 ```
 

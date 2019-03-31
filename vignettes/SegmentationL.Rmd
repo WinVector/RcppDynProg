@@ -25,12 +25,12 @@ d$y_observed <- d$y_ideal + 0.25*rnorm(length(d$y_ideal))
 
 
 # plot
-plot(d$x, d$y_ideal,
-     type = "l",
-     lty = "dashed",
+plot(d$x, d$y_observed,
      xlab = "x", ylab = "y",
      main = "raw data\ncircles: observed values, dashed line: unobserved true values")
-points(d$x, d$y_observed)
+lines(d$x, d$y_ideal,
+     type = "l",
+     lty = "dashed")
 
 
 x_cuts <- solve_for_partition(d$x, d$y_observed, penalty = 1)
@@ -55,11 +55,12 @@ print(sum((d$estimate - d$y_observed)^2))
 ```{r r5, fig.height = 6, fig.width = 8, fig.align = "center"}
 
 # plot
-plot(d$x, d$y_ideal,
-     type = "l",
-     lty = "dashed",
+plot(d$x, d$y_observed,
      xlab = "x", ylab = "y",
      main = "RcppDynProg piecewise linear estimate\ndots: observed values, segments: estimated shape")
+points(d$x, d$y_ideal,
+     type = "l",
+     lty = "dashed")
 cmap <- c("#a6cee3",
           "#1f78b4",
           "#b2df8a",
