@@ -3,57 +3,25 @@
 
 ## Test Results
 
-### Linux
-
-    R CMD check --as-cran RcppDynProg_0.1.2.tar.gz 
-    * using R version 3.5.3 (2019-03-11)
-    * using platform: x86_64-pc-linux-gnu (64-bit)
-    * using session charset: UTF-8
-    * using option ‘--as-cran’
-    * checking for file ‘RcppDynProg/DESCRIPTION’ ... OK
-    * checking extension type ... Package
-    * this is package ‘RcppDynProg’ version ‘0.1.2’
-    * checking CRAN incoming feasibility ... Note_to_CRAN_maintainers
-    Maintainer: ‘John Mount <jmount@win-vector.com>’
-    Status: 1 WARNING
-    Non-portable compliation flag part of local check, not part of package.
 
 ### OSX
 
-    R CMD check --as-cran RcppDynProg_0.1.2.tar.gz 
-    * using R version 3.5.0 (2018-04-23)
+    R CMD check --as-cran RcppDynProg_0.1.3.tar.gz 
+    * using R version 3.6.0 (2019-04-26)
     * using platform: x86_64-apple-darwin15.6.0 (64-bit)
     * using session charset: UTF-8
     * using option ‘--as-cran’
     * checking for file ‘RcppDynProg/DESCRIPTION’ ... OK
     * checking extension type ... Package
-    * this is package ‘RcppDynProg’ version ‘0.1.2’
+    * this is package ‘RcppDynProg’ version ‘0.1.3’
     * checking CRAN incoming feasibility ... Note_to_CRAN_maintainers
     Maintainer: ‘John Mount <jmount@win-vector.com>’
-    Status: OK
 
 ### Windows
 
-    devtools::build_win()
-    * using R version 3.6.0 alpha (2019-03-29 r76300)
+    devtools::check_win_devel()
+    * using R Under development (unstable) (2019-07-05 r76784)
     * using platform: x86_64-w64-mingw32 (64-bit)
-    * using session charset: ISO8859-1
-    * checking for file 'RcppDynProg/DESCRIPTION' ... OK
-    * checking extension type ... Package
-    * this is package 'RcppDynProg' version '0.1.2'
-    * checking CRAN incoming feasibility ... Note_to_CRAN_maintainers
-    Maintainer: 'John Mount <jmount@win-vector.com>'
-    Status: OK
-
-    devtools::build_win()
-    * using R version 3.5.3 (2019-03-11)
-    * using platform: x86_64-w64-mingw32 (64-bit)
-    * using session charset: ISO8859-1
-    * checking for file 'RcppDynProg/DESCRIPTION' ... OK
-    * checking extension type ... Package
-    * this is package 'RcppDynProg' version '0.1.2'
-    * checking CRAN incoming feasibility ... Note_to_CRAN_maintainers
-    Maintainer: 'John Mount <jmount@win-vector.com>'
     Status: OK
 
 ## Downstream dependencies

@@ -1,5 +1,5 @@
 
-# RcppDynProg 0.1.3 2019/07/23
+# RcppDynProg 0.1.3 2019/07/24
 
  * Adjust license.
 
