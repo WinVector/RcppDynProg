@@ -1,4 +1,7 @@
 
+[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/RcppDynProg)](https://cran.r-project.org/package=RcppDynProg)
+[![status](https://tinyverse.netlify.com/badge/RcppDynProg)](https://CRAN.R-project.org/package=RcppDynProg)
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ## The package

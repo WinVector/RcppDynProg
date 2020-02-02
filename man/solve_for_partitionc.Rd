@@ -4,8 +4,16 @@
 \alias{solve_for_partitionc}
 \title{Solve for a piecewise constant partiton.}
 \usage{
-solve_for_partitionc(x, y, ..., w = NULL, penalty = 0,
-  min_n_to_chunk = 1000, min_seg = 1, max_k = length(x))
+solve_for_partitionc(
+  x,
+  y,
+  ...,
+  w = NULL,
+  penalty = 0,
+  min_n_to_chunk = 1000,
+  min_seg = 1,
+  max_k = length(x)
+)
 }
 \arguments{
 \item{x}{numeric, input variable (no NAs).}

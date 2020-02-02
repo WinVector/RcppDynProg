@@ -4,8 +4,12 @@
 \alias{piecewise_constant_coder}
 \title{Piecewise constant fit coder factory.}
 \usage{
-piecewise_constant_coder(penalty = 1, min_n_to_chunk = 1000,
-  min_seg = 10, max_k = 1000)
+piecewise_constant_coder(
+  penalty = 1,
+  min_n_to_chunk = 1000,
+  min_seg = 10,
+  max_k = 1000
+)
 }
 \arguments{
 \item{penalty}{per-segment cost penalty.}

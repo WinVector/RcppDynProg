@@ -1,4 +1,8 @@
 
+# RcppDynProg 0.1.4 2020/02/02
+
+ * Badges.
+
 # RcppDynProg 0.1.3 2019/07/24
 
  * Adjust license.

@@ -4,8 +4,12 @@
 \alias{piecewise_linear_coder}
 \title{Piecewise linear fit coder factory.}
 \usage{
-piecewise_linear_coder(penalty = 1, min_n_to_chunk = 1000,
-  min_seg = 10, max_k = 1000)
+piecewise_linear_coder(
+  penalty = 1,
+  min_n_to_chunk = 1000,
+  min_seg = 10,
+  max_k = 1000
+)
 }
 \arguments{
 \item{penalty}{per-segment cost penalty.}

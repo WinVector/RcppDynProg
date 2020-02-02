@@ -3,7 +3,6 @@
 \docType{package}
 \name{RcppDynProg}
 \alias{RcppDynProg}
-\alias{RcppDynProg-package}
 \title{RcppDynProg}
 \description{
 Rcpp dynamic programming solutions for partitioning and machine learning problems.
