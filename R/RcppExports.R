@@ -391,7 +391,7 @@ xlin_fits <- function(x, y, w, i, j) {
 #' xlin_pfits
 #' 
 #' Calculate out of sample linear fit predictions using pseudo-inverse.
-#' Please see: \url{http://www.win-vector.com/blog/2019/01/a-beautiful-2-by-2-matrix-identity/}.
+#' Please see: \url{https://win-vector.com/2019/01/08/a-beautiful-2-by-2-matrix-identity/}.
 #' Zero indexed.
 #' 
 #' @param x NumericVector, explanatory variable (length>=2).
