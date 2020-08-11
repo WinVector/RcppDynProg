@@ -1,5 +1,5 @@
 
-# RcppDynProg 0.1.4 2020/02/02
+# RcppDynProg 0.1.4 2020/08/11
 
  * Badges.
 
