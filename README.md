@@ -94,8 +94,7 @@ even if it requires odd-looking local choices.
 
 The intended application of `RcppDynProg` is to find optimal piecewise
 solutions to single-variable modeling problems. For example consider the
-following
-data.
+following data.
 
 <img src="tools/README-r1-1.png" style="display: block; margin: auto;" />
 
@@ -112,15 +111,14 @@ To encode this as a dynamic programming problem we need to build a cost
 matrix that for every consecutive interval of `x`-values we have
 estimated the out-of sample quality of fit. This is supplied by the
 function `RcppDynProg::lin_costs()` (using the [PRESS
-statistic](http://www.win-vector.com/blog/2014/09/estimating-generalization-error-with-the-press-statistic/)),
+statistic](https://win-vector.com/2014/09/25/estimating-generalization-error-with-the-press-statistic/)),
 but lets take a quick look at the idea.
 
 The following interval is a good interval, as all the chosen points
 (shown in dark blue) are in a nearly linear arrangement. The in-sample
 price of the interval would be the total sum of residuals of a linear
 model fit on the selected region (and the out of sample price would be
-given by the PRESS
-statistic).
+given by the PRESS statistic).
 
 <img src="tools/README-rg1-1.png" style="display: block; margin: auto;" />
 
@@ -138,8 +136,7 @@ sum(fit$residuals^2) # cost for interval
 ```
 
 The following interval is a bad interval, as all the chosen points
-(shown in dark blue) are not in a nearly linear
-arrangement.
+(shown in dark blue) are not in a nearly linear arrangement.
 
 <img src="tools/README-rb1-1.png" style="display: block; margin: auto;" />
 
@@ -204,14 +201,14 @@ print(plt2)
 [`RcppDynProg::solve_for_partition()`](https://winvector.github.io/RcppDynProg/reference/solve_for_partition.html)
 finds a partition of a relation into a number of linear estimates. Each
 interval is priced using out-of sample cost via the [PRESS
-statistic](http://www.win-vector.com/blog/2014/09/estimating-generalization-error-with-the-press-statistic/)
+statistic](https://win-vector.com/2014/09/25/estimating-generalization-error-with-the-press-statistic/)
 plus the specified penalty (to discourage small intervals). Notice,
 however, the user did not have to specify a *k* (or number of intervals)
 to a get good result.
 
 The entire modeling procedure is wrapped as a
 [`vtreat`](https://github.com/WinVector/vtreat)
-[custom-coder](http://www.win-vector.com/blog/2017/09/custom-level-coding-in-vtreat/)
+[custom-coder](https://win-vector.com/2017/09/25/custom-level-coding-in-vtreat/)
 in the function
 [`RcppDynProg::piecewise_linear()`](https://winvector.github.io/RcppDynProg/reference/piecewise_linear.html).
 This allows such variable treatments to be easily incorporated into

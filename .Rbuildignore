@@ -10,3 +10,4 @@
 ^docs$
 ^README.Rmd$
 ^LICENSE$
+^_pkgdown\.yml$

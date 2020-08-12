@@ -8,13 +8,13 @@ package = "RcppDynProg"
 packageVersion(package)
 ```
 
-    ## [1] '0.1.3'
+    ## [1] '0.1.4'
 
 ``` r
 date()
 ```
 
-    ## [1] "Wed Jul 24 09:52:26 2019"
+    ## [1] "Tue Aug 11 19:37:39 2020"
 
 ``` r
 parallelCluster <- NULL
@@ -33,7 +33,7 @@ setwd(td)
 print(td)
 ```
 
-    ## [1] "/var/folders/7q/h_jp2vj131g5799gfnpzhdp80000gn/T//RtmprIRfmt"
+    ## [1] "/var/folders/7f/sdjycp_d08n8wwytsbgwqgsw0000gn/T//RtmpBBuV44"
 
 ``` r
 options(repos = c(CRAN="https://cloud.r-project.org"))
@@ -62,20 +62,13 @@ if(!is.null(parallelCluster)) {
 }
 ```
 
-    ## [1] id     title  status
-    ## <0 rows> (or 0-length row.names)
+    ## Error: no such table: metadata
 
 ``` r
 summariseQueue(package=package, directory=td)
 ```
 
-    ## Test of RcppDynProg had 0 successes, 0 failures, and 0 skipped packages.
-
-    ## Warning in min(starttime): no non-missing arguments to min; returning Inf
-
-    ## Warning in max(endtime): no non-missing arguments to max; returning -Inf
-
-    ## Error in as.POSIXct.numeric(time1): 'origin' must be supplied
+    ## Error: no such table: metadata
 
 ``` r
 setwd(orig_dir)
