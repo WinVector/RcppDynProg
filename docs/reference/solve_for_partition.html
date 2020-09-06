@@ -139,19 +139,19 @@ with base::findInterval() and stats::approx()
     <p>Solve for a good set of right-exclusive x-cuts such that the 
 overall graph of y~x is well-approximated by a piecewise linear
 function.  Solution is a ready for use with
-with <code><a href='https://rdrr.io/r/base/findInterval.html'>base::findInterval()</a></code> and <code><a href='https://rdrr.io/r/stats/approxfun.html'>stats::approx()</a></code>
+with <code><a href='#base/findInterval.html'>base::findInterval()</a></code> and <code><a href='#stats/approxfun.html'>stats::approx()</a></code>
 (demonstrated in the examples).</p>
     </div>
 
     <pre class="usage"><span class='fu'>solve_for_partition</span>(
-  <span class='no'>x</span>,
-  <span class='no'>y</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>w</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>penalty</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>min_n_to_chunk</span> <span class='kw'>=</span> <span class='fl'>1000</span>,
-  <span class='kw'>min_seg</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>max_k</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>x</span>)
+  <span class='kw'>x</span>,
+  <span class='kw'>y</span>,
+  <span class='kw'>...</span>,
+  w = <span class='kw'>NULL</span>,
+  penalty = <span class='fl'>0</span>,
+  min_n_to_chunk = <span class='fl'>1000</span>,
+  min_seg = <span class='fl'>1</span>,
+  max_k = <span class='fu'><a href='#base/length.html'>length</a></span>(<span class='kw'>x</span>)
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -198,31 +198,33 @@ with <code><a href='https://rdrr.io/r/base/findInterval.html'>base::findInterval
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># example data</span>
-<span class='no'>d</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(
-  <span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>8</span>,
-  <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span>, <span class='fl'>4</span>, <span class='fl'>3</span>, <span class='fl'>2</span>, <span class='fl'>1</span>))
+<span class='kw'>d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='#base/data.frame.html'>data.frame</a></span>(
+  x = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>8</span>,
+  y = <span class='fu'><a href='#base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span>, <span class='fl'>4</span>, <span class='fl'>3</span>, <span class='fl'>2</span>, <span class='fl'>1</span>))
 
 <span class='co'># solve for break points</span>
-<span class='no'>soln</span> <span class='kw'>&lt;-</span> <span class='fu'>solve_for_partition</span>(<span class='no'>d</span>$<span class='no'>x</span>, <span class='no'>d</span>$<span class='no'>y</span>)
+<span class='kw'>soln</span> <span class='op'>&lt;-</span> <span class='fu'>solve_for_partition</span>(<span class='kw'>d</span><span class='op'>$</span><span class='kw'>x</span>, <span class='kw'>d</span><span class='op'>$</span><span class='kw'>y</span>)
 <span class='co'># show solution</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>soln</span>)</div><div class='output co'>#&gt;   x pred group  what
+<span class='fu'><a href='#base/print.html'>print</a></span>(<span class='kw'>soln</span>)
+</div><div class='output co'>#&gt;   x pred group  what
 #&gt; 1 1    1     1  left
 #&gt; 2 4    4     1 right
 #&gt; 3 5    4     2  left
 #&gt; 4 8    1     2 right</div><div class='input'>
 <span class='co'># label each point </span>
-<span class='no'>d</span>$<span class='no'>group</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>base</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/r/base/findInterval.html'>findInterval</a></span>(
-  <span class='no'>d</span>$<span class='no'>x</span>,
-  <span class='no'>soln</span>$<span class='no'>x</span>[<span class='no'>soln</span>$<span class='no'>what</span><span class='kw'>==</span><span class='st'>'left'</span>])
+<span class='kw'>d</span><span class='op'>$</span><span class='kw'>group</span> <span class='op'>&lt;-</span> <span class='kw'>base</span>::<span class='fu'><a href='#base/findInterval.html'>findInterval</a></span>(
+  <span class='kw'>d</span><span class='op'>$</span><span class='kw'>x</span>,
+  <span class='kw'>soln</span><span class='op'>$</span><span class='kw'>x</span>[<span class='kw'>soln</span><span class='op'>$</span><span class='kw'>what</span><span class='op'>==</span><span class='st'>'left'</span>])
 <span class='co'># apply piecewise approximation</span>
-<span class='no'>d</span>$<span class='no'>estimate</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>stats</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/r/stats/approxfun.html'>approx</a></span>(
-  <span class='no'>soln</span>$<span class='no'>x</span>,
-  <span class='no'>soln</span>$<span class='no'>pred</span>,
-  <span class='kw'>xout</span> <span class='kw'>=</span> <span class='no'>d</span>$<span class='no'>x</span>,
-  <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>'linear'</span>,
-  <span class='kw'>rule</span> <span class='kw'>=</span> <span class='fl'>2</span>)$<span class='no'>y</span>
+<span class='kw'>d</span><span class='op'>$</span><span class='kw'>estimate</span> <span class='op'>&lt;-</span> <span class='kw'>stats</span>::<span class='fu'><a href='#stats/approxfun.html'>approx</a></span>(
+  <span class='kw'>soln</span><span class='op'>$</span><span class='kw'>x</span>,
+  <span class='kw'>soln</span><span class='op'>$</span><span class='kw'>pred</span>,
+  xout = <span class='kw'>d</span><span class='op'>$</span><span class='kw'>x</span>,
+  method = <span class='st'>'linear'</span>,
+  rule = <span class='fl'>2</span>)<span class='op'>$</span><span class='kw'>y</span>
 <span class='co'># show result</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>d</span>)</div><div class='output co'>#&gt;   x y group estimate
+<span class='fu'><a href='#base/print.html'>print</a></span>(<span class='kw'>d</span>)
+</div><div class='output co'>#&gt;   x y group estimate
 #&gt; 1 1 1     1        1
 #&gt; 2 2 2     1        2
 #&gt; 3 3 3     1        3
@@ -247,7 +249,7 @@ with <code><a href='https://rdrr.io/r/base/findInterval.html'>base::findInterval
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>
