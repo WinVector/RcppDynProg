@@ -8,13 +8,13 @@ package = "RcppDynProg"
 packageVersion(package)
 ```
 
-    ## [1] '0.1.4'
+    ## [1] '0.1.5'
 
 ``` r
 date()
 ```
 
-    ## [1] "Tue Aug 11 19:37:39 2020"
+    ## [1] "Sat Oct 17 07:00:27 2020"
 
 ``` r
 parallelCluster <- NULL
@@ -33,7 +33,7 @@ setwd(td)
 print(td)
 ```
 
-    ## [1] "/var/folders/7f/sdjycp_d08n8wwytsbgwqgsw0000gn/T//RtmpBBuV44"
+    ## [1] "/var/folders/7f/sdjycp_d08n8wwytsbgwqgsw0000gn/T//RtmpOQKlWJ"
 
 ``` r
 options(repos = c(CRAN="https://cloud.r-project.org"))
