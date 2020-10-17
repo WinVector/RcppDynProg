@@ -12,23 +12,23 @@ test_logistic_cost <- function() {
                   total_wy = 1, k_points = 4, saw_data = TRUE, x_varies = TRUE, 
                   y_varies = TRUE, seperable = FALSE)
   msg <- wrapr::map_to_char(sm3)
-  RUnit::checkEquals(sm3, expect3, msg = msg)
+  expect_equal(sm3, expect3, info = msg)
   
   for(k in wrapr::seqi(0, 4)) {
     m1 <- logistic_solve1(x, y, w, il, 0, k, -1)
     msg <- paste("k", k, wrapr::map_to_char(m1))
-    RUnit::checkTrue(is.numeric(m1), msg = msg)
-    RUnit::checkEquals(2, length(m1), msg = msg)
-    RUnit::checkTrue(!any(is.na(m1)), msg = msg)
-    RUnit::checkTrue(!any(is.nan(m1)), msg = msg)
-    RUnit::checkTrue(!any(is.infinite(m1)), msg = msg)
+    expect_true(is.numeric(m1), info = msg)
+    expect_equal(2, length(m1), info = msg)
+    expect_true(!any(is.na(m1)), info = msg)
+    expect_true(!any(is.nan(m1)), info = msg)
+    expect_true(!any(is.infinite(m1)), info = msg)
     lf <- logistic_fits(x, y, w, 0, k)
     msg <- paste("k", k, wrapr::map_to_char(m1), wrapr::map_to_char(lf))
-    RUnit::checkTrue(is.numeric(lf), msg = msg)
-    RUnit::checkEquals(k+1, length(lf), msg = msg)
-    RUnit::checkTrue(!any(is.na(lf)), msg = msg)
-    RUnit::checkTrue(!any(is.nan(lf)), msg = msg)
-    RUnit::checkTrue(!any(is.infinite(lf)), msg = msg)
+    expect_true(is.numeric(lf), info = msg)
+    expect_equal(k+1, length(lf), info = msg)
+    expect_true(!any(is.na(lf)), info = msg)
+    expect_true(!any(is.nan(lf)), info = msg)
+    expect_true(!any(is.infinite(lf)), info = msg)
     if(k>=3) {
       d <- data.frame(x = x[1:(k+1)], y  = y[1:(k+1)])
       m <- glm(y~x, data=d, family = binomial)
@@ -37,15 +37,18 @@ test_logistic_cost <- function() {
       msg1 <- paste("coef problem", k, diff1, 
                     "RccpDynProg", wrapr::map_to_char(m1), 
                     "glm", wrapr::map_to_char(cm))
-      RUnit::checkTrue(diff1<=1e-3, msg = msg1)
+      expect_true(diff1<=1e-3, info = msg1)
       p <- as.numeric(predict(m, newdata = d, type = "link"))
       diff2 <- max(abs(lf-p))
       msg2 <- paste("link problem", k, diff2, 
                     "RccpDynProg", wrapr::map_to_char(lf), 
                     "glm", wrapr::map_to_char(p))
-      RUnit::checkTrue(diff2<=1e-3, msg = msg2)
+      expect_true(diff2<=1e-3, info = msg2)
     }
   }
 
   invisible(NULL)
 }
+
+test_logistic_cost()
+

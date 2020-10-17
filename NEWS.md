@@ -1,4 +1,8 @@
 
+# RcppDynProg 0.1.5 2020/10/17
+
+ * Move to tinytest.
+
 # RcppDynProg 0.1.4 2020/08/11
 
  * Badges.

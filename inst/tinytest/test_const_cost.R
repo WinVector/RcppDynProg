@@ -7,8 +7,9 @@ test_const_cost <- function() {
   out_est <- (sum(y*w) - y*w)/(sum(w) - w)
   c2 <- sum(w*(y-out_est)^2)
   
-  RUnit::checkTrue(abs(c1-c2)<=1e-5)
+  expect_true(abs(c1-c2)<=1e-5)
 
   invisible(NULL)
 }
   
+test_const_cost()

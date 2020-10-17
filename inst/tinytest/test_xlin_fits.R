@@ -6,11 +6,14 @@ test_xlin_fits <- function() {
   
   f <- xlin_fits(x, y, w, 0, length(y)-1)
   f_lm <- xlin_fits_lm(x, y, w)
-  RUnit::checkTrue(max(abs(f - f_lm))<=1e-3)
+  expect_true(max(abs(f - f_lm))<=1e-3)
   f_R <- xlin_fits_R(x, y, w)
-  RUnit::checkEqualsNumeric(f, f_R)
+  expect_equal(f, f_R)
   f_V <- xlin_fits_V(x, y, w)
-  RUnit::checkEqualsNumeric(f, f_V)
+  expect_equal(f, f_V)
 
   invisible(NULL)
 }
+
+test_xlin_fits()
+

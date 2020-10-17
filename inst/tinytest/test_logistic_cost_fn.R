@@ -10,7 +10,9 @@ test_logistic_cost <- function() {
   m <- glm(y~x, data=d, family = binomial)
   dev <- summary(m)$deviance
   
-  RUnit::checkTrue(abs(cost-dev)<=1e-3)
+  expect_true(abs(cost-dev)<=1e-3)
 
   invisible(NULL)
 }
+
+test_logistic_cost()

@@ -1,27 +1,27 @@
 
 test_dynprog1 <- function() {
   x <- matrix(c(1,1,5,1,1,0,5,0,1), nrow=3)
-  RUnit::checkTrue(RcppDynProg:::test_solvers(x, 3))
+  expect_true(RcppDynProg:::test_solvers(x, 3))
   
   x2 <- matrix(c(0.165439415490255, 0.982703358167782, 0.507731057703495, 
                     0.423818744486198, 0.866322142072022, 0.807251449674368, 0.0862272190861404, 
                     0.823423527413979, 0.907007380854338), nrow=3)
-  RUnit::checkTrue(RcppDynProg:::test_solvers(x2, 3))
+  expect_true(RcppDynProg:::test_solvers(x2, 3))
   
   x3 <- matrix(c(0.15401595, 0.04822183, 0.19091068, 0.45166874, 0.91731301, 0.65618810,
                  0.35495444, 0.12153691, 0.56267106), nrow=3)
-  RUnit::checkTrue(RcppDynProg:::test_solvers(x3, 3))
+  expect_true(RcppDynProg:::test_solvers(x3, 3))
   
   set.seed(1515)
   for(i in 1:10) {
     x3 <- matrix(runif(9), nrow=3)
-    RUnit::checkTrue(RcppDynProg:::test_solvers(x3, 3))
+    expect_true(RcppDynProg:::test_solvers(x3, 3))
   }
   
   set.seed(16515)
   for(i in 1:10) {
     x3 <- matrix(runif(16), nrow=4)
-    RUnit::checkTrue(RcppDynProg:::test_solvers(x3, 4))
+    expect_true(RcppDynProg:::test_solvers(x3, 4))
   }
   
   
@@ -75,4 +75,5 @@ test_dynprog1 <- function() {
   invisible(NULL)
 }
 
-  
+test_dynprog1()
+

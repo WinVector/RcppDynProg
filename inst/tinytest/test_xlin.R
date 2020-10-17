@@ -15,7 +15,9 @@ test_xlin <- function() {
   
   mxdiff = max(abs(fits-fe))
   
-  RUnit::checkTrue(mxdiff<=1.0e-3)
+  expect_true(mxdiff<=1.0e-3)
 
   invisible(NULL)
 }
+
+test_xlin()

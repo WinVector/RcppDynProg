@@ -8,8 +8,10 @@ test_lin_cost <- function() {
   out_est <- xlin_fits_lm(x, y, w)
   c2 <- sum(w*(y-out_est)^2)
   
-  RUnit::checkTrue(abs(c1-c2)<=1e-3)
+  expect_true(abs(c1-c2)<=1e-3)
 
   invisible(NULL)
 }
+
+test_lin_cost()
 

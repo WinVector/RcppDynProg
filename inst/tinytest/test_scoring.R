@@ -21,7 +21,7 @@ test_scoring <- function() {
   
   c1 <- inflated_var(d$y_observed, 0)
   c2 <- const_cost(d$y_observed, d$w, 1, 0, length(d$y_observed-1)-1)
-  RUnit::checkTrue(abs(c1-c2)<1.e-6)
+  expect_true(abs(c1-c2)<1.e-6)
   
   y_permuted <- d$y_ideal[sample.int(nrow(d), nrow(d), replace = FALSE)]
   
@@ -50,8 +50,10 @@ test_scoring <- function() {
   }
   mx <- max(d)
   
-  RUnit::checkTrue(mx<=1.e-6)
+  expect_true(mx<=1.e-6)
 
   invisible(NULL)
 }
+
+test_scoring()
 

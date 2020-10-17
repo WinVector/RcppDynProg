@@ -1,8 +1,8 @@
 Package: RcppDynProg
 Type: Package
 Title: 'Rcpp' Dynamic Programming
-Version: 0.1.4
-Date: 2020-08-11
+Version: 0.1.5
+Date: 2020-10-17
 Authors@R: c(
     person("John", "Mount", email = "jmount@win-vector.com", role = c("aut", "cre")),
     person("Nina", "Zumel", email = "nzumel@win-vector.com", role = c("aut")),
@@ -16,7 +16,7 @@ License: GPL-2 | GPL-3
 Depends:
   R (>= 3.4.0)
 Imports:
-  wrapr (>= 2.0.0),
+  wrapr (>= 2.0.2),
   Rcpp (>= 1.0.0),
   utils,
   stats
@@ -25,7 +25,7 @@ LinkingTo:
   RcppArmadillo
 RoxygenNote: 7.1.1
 Suggests:
-    RUnit,
+    tinytest,
     knitr,
     rmarkdown
 VignetteBuilder: knitr
