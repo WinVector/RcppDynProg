@@ -1,8 +1,8 @@
 Package: RcppDynProg
 Type: Package
 Title: 'Rcpp' Dynamic Programming
-Version: 0.1.5
-Date: 2020-10-17
+Version: 0.1.6
+Date: 2020-11-13
 Authors@R: c(
     person("John", "Mount", email = "jmount@win-vector.com", role = c("aut", "cre")),
     person("Nina", "Zumel", email = "nzumel@win-vector.com", role = c("aut")),
@@ -16,7 +16,7 @@ License: GPL-2 | GPL-3
 Depends:
   R (>= 3.4.0)
 Imports:
-  wrapr (>= 2.0.2),
+  wrapr (>= 2.0.4),
   Rcpp (>= 1.0.0),
   utils,
   stats

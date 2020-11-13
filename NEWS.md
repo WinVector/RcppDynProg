@@ -1,4 +1,8 @@
 
+# RcppDynProg 0.1.6 2020/11/13
+
+ * Remove old test fn.
+
 # RcppDynProg 0.1.5 2020/10/17
 
  * Move to tinytest.
