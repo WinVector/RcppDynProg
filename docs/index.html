@@ -136,11 +136,11 @@
 <h2 class="hasAnchor">
 <a href="#an-application" class="anchor"></a>An application</h2>
 <p>The intended application of <code>RcppDynProg</code> is to find optimal piecewise solutions to single-variable modeling problems. For example consider the following data.</p>
-<p><img src="tools/README-r1-1.png" style="display: block; margin: auto;"></p>
+<p><img src="https://raw.githubusercontent.com/WinVector/RcppDynProg/main/tools/README-r1-1.png" style="display: block; margin: auto;"></p>
 <p>In the above we have an input (or independent variable) <code>x</code> and an observed outcome (or dependent variable) <code>y_observed</code> (portrayed as points). <code>y_observed</code> is the unobserved idea value <code>y_ideal</code> (portrayed by the dashed curve) plus independent noise. The modeling goal is to get close the <code>y_ideal</code> curve using the <code>y_observed</code> observations. Obviously this <a href="https://github.com/WinVector/RcppDynProg/blob/master/extras/SegmentationL.md">can be done with a smoothing spline</a>, but let’s use <code>RcppDynProg</code> to find a piecewise linear fit.</p>
 <p>To encode this as a dynamic programming problem we need to build a cost matrix that for every consecutive interval of <code>x</code>-values we have estimated the out-of sample quality of fit. This is supplied by the function <code><a href="reference/lin_costs.html">RcppDynProg::lin_costs()</a></code> (using the <a href="https://win-vector.com/2014/09/25/estimating-generalization-error-with-the-press-statistic/">PRESS statistic</a>), but lets take a quick look at the idea.</p>
 <p>The following interval is a good interval, as all the chosen points (shown in dark blue) are in a nearly linear arrangement. The in-sample price of the interval would be the total sum of residuals of a linear model fit on the selected region (and the out of sample price would be given by the PRESS statistic).</p>
-<p><img src="tools/README-rg1-1.png" style="display: block; margin: auto;"></p>
+<p><img src="https://raw.githubusercontent.com/WinVector/RcppDynProg/main/tools/README-rg1-1.png" style="display: block; margin: auto;"></p>
 <p>The “cost” (or loss) of this interval can be estimated as shown.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">good_interval_indexes</span><span class="op">)</span> <span class="co"># interval </span>
@@ -152,7 +152,7 @@
 <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">residuals</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span> <span class="co"># cost for interval</span>
  <span class="co">#  [1] 2.807998</span></pre></div>
 <p>The following interval is a bad interval, as all the chosen points (shown in dark blue) are not in a nearly linear arrangement.</p>
-<p><img src="tools/README-rb1-1.png" style="display: block; margin: auto;"></p>
+<p><img src="https://raw.githubusercontent.com/WinVector/RcppDynProg/main/tools/README-rb1-1.png" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb5"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">bad_interval_indexes</span><span class="op">)</span> <span class="co"># interval</span>
  <span class="co">#  [1] 116 161</span>
@@ -199,7 +199,7 @@
   <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">scale_color_brewer</span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Dark2"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">plt2</span><span class="op">)</span></pre></div>
-<p><img src="tools/README-r2-1.png" style="display: block; margin: auto;"></p>
+<p><img src="https://raw.githubusercontent.com/WinVector/RcppDynProg/main/tools/README-r2-1.png" style="display: block; margin: auto;"></p>
 <p><a href="https://winvector.github.io/RcppDynProg/reference/solve_for_partition.html"><code>RcppDynProg::solve_for_partition()</code></a> finds a partition of a relation into a number of linear estimates. Each interval is priced using out-of sample cost via the <a href="https://win-vector.com/2014/09/25/estimating-generalization-error-with-the-press-statistic/">PRESS statistic</a> plus the specified penalty (to discourage small intervals). Notice, however, the user did not have to specify a <em>k</em> (or number of intervals) to a get good result.</p>
 <p>The entire modeling procedure is wrapped as a <a href="https://github.com/WinVector/vtreat"><code>vtreat</code></a> <a href="https://win-vector.com/2017/09/25/custom-level-coding-in-vtreat/">custom-coder</a> in the function <a href="https://winvector.github.io/RcppDynProg/reference/piecewise_linear.html"><code>RcppDynProg::piecewise_linear()</code></a>. This allows such variable treatments to be easily incorporated into modeling pipelines (example <a href="https://github.com/WinVector/zmPDSwR/blob/master/KDD2009/KDD2009vtreat.md">here</a>).</p>
 <p>In addition to a piecewise linear solver we include a piecewise constant solver, which is demonstrated <a href="https://winvector.github.io/RcppDynProg/articles/Segmentation.html">here</a>. Other applications can include peak detection, or any other application where the per-segment metrics are independent.</p>
