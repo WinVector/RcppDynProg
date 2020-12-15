@@ -7,7 +7,7 @@
 solve_interval_partition_k(x, kmax)
 }
 \arguments{
-\item{x}{NumericMatix, for j>=i x(i,j) is the cost of partition element [i,...,j] (inclusive).}
+\item{x}{square NumericMatix, for j>=i x(i,j) is the cost of partition element [i,...,j] (inclusive).}
 
 \item{kmax}{int, maximum number of segments in solution.}
 }

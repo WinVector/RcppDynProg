@@ -21,7 +21,7 @@ logistic_fits(x, y, w, i, j)
 vector of predictions for interval.
 }
 \description{
-logistic regression predections.
+logistic regression predictions.
 Zero indexed.
 }
 \examples{

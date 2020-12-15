@@ -7,7 +7,7 @@
 solve_interval_partition_no_k(x)
 }
 \arguments{
-\item{x}{NumericMatix, for j>=i x(i,j) is the cost of partition element [i,...,j] (inclusive).}
+\item{x}{square NumericMatix, for j>=i x(i,j) is the cost of partition element [i,...,j] (inclusive).}
 }
 \value{
 dynamic program solution.

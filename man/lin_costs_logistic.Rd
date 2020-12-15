@@ -13,7 +13,7 @@ lin_costs_logistic(x, y, w, min_seg, indices)
 
 \item{w}{NumericVector, weights (should be positive).}
 
-\item{min_seg}{positive integer, minimum segment size.}
+\item{min_seg}{positive integer, minimum segment size (>=1).}
 
 \item{indices}{IntegerVector, ordered list of indices to pair.}
 }

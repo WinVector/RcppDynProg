@@ -1,7 +1,7 @@
 
 # RcppDynProg 0.2.0 2020/12/15
 
- * Check API invarients.
+ * Check API invarients, inspired by Akila Chowdary Kolla's fuzz testing.
 
 # RcppDynProg 0.1.6 2020/11/13
 

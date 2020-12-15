@@ -13,7 +13,7 @@ lin_cost(x, y, w, min_seg, i, j)
 
 \item{w}{NumericVector, weights.}
 
-\item{min_seg}{positive integer, minimum segment size.}
+\item{min_seg}{positive integer, minimum segment size (>=1).}
 
 \item{i}{integer, first index (inclusive).}
 

@@ -11,7 +11,7 @@ const_costs_logistic(y, w, min_seg, indices)
 
 \item{w}{NumericVector, weights (should be positive).}
 
-\item{min_seg}{positive integer, minimum segment size.}
+\item{min_seg}{positive integer, minimum segment size (>=1).}
 
 \item{indices}{IntegerVector, order list of indices to pair.}
 }
