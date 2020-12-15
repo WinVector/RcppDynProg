@@ -13,6 +13,10 @@ input_summary::input_summary(const NumericVector &x, const NumericVector &y,
                              const NumericVector &w,
                              const int i, const int j,
                              const int skip) {
+  const int vlen = x.length();
+  if((i<0) || (j>=vlen) || (vlen!=y.length()) || (vlen!=w.length())) {
+    throw std::range_error("Inadmissible value");
+  }
   max_x = std::numeric_limits<double>::quiet_NaN();
   min_x = std::numeric_limits<double>::quiet_NaN();
   saw_y_pos = false;

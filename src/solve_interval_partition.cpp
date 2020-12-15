@@ -32,6 +32,10 @@ IntegerVector solve_interval_partition_k_worker(const NumericMatrix &x, int kmax
     return solution;
   }
   
+  if(n != x.ncol()) {
+    throw std::range_error("Inadmissible value");
+  }
+  
   // best path cost up to i (row) with exactly k-steps (column)
   arma::Mat<double> path_costs(n + R_SIZE_PAD, 2, arma::fill::none);
   // how many steps we actually took
@@ -100,7 +104,7 @@ IntegerVector solve_interval_partition_k_worker(const NumericMatrix &x, int kmax
 //' Returned solution is an ordered vector v of length k<=kmax where: v[1]==1, v[k]==nrow(x)+1, and the 
 //' partition is of the form [v[i], v[i+1]) (intervals open on the right).
 //' 
-//' @param x NumericMatix, for j>=i x(i,j) is the cost of partition element [i,...,j] (inclusive).
+//' @param x square NumericMatix, for j>=i x(i,j) is the cost of partition element [i,...,j] (inclusive).
 //' @param kmax int, maximum number of segments in solution. 
 //' @return dynamic program solution.
 //' 
@@ -140,6 +144,10 @@ IntegerVector solve_interval_partition_no_k_worker(const NumericMatrix &x) {
     solution(1 + R_INDEX_DELTA) = 1;
     solution(2 + R_INDEX_DELTA) = n+1;
     return solution;
+  }
+  
+  if(n != x.ncol()) {
+    throw std::range_error("Inadmissible value");
   }
   
   // best path cost up to i (row) with exactly k-steps (column)
@@ -199,7 +207,7 @@ IntegerVector solve_interval_partition_no_k_worker(const NumericMatrix &x) {
 //' Returned solution is an ordered vector v of length k where: v[1]==1, v[k]==nrow(x)+1, and the 
 //' partition is of the form [v[i], v[i+1]) (intervals open on the right).
 //' 
-//' @param x NumericMatix, for j>=i x(i,j) is the cost of partition element [i,...,j] (inclusive).
+//' @param x square NumericMatix, for j>=i x(i,j) is the cost of partition element [i,...,j] (inclusive).
 //' @return dynamic program solution.
 //' 
 //' @examples
@@ -225,7 +233,7 @@ IntegerVector solve_interval_partition_no_k(NumericMatrix x) {
 //' Returned solution is an ordered vector v of length k<=kmax where: v[1]==1, v[k]==nrow(x)+1, and the 
 //' partition is of the form [v[i], v[i+1]) (intervals open on the right).
 //' 
-//' @param x NumericMatix, for j>=i x(i,j) is the cost of partition element [i,...,j] (inclusive).
+//' @param x square NumericMatix, for j>=i x(i,j) is the cost of partition element [i,...,j] (inclusive).
 //' @param kmax int, maximum number of segments in solution. 
 //' @return dynamic program solution.
 //' 

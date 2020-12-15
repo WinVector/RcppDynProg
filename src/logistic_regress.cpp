@@ -23,6 +23,10 @@ NumericVector logistic_solve1_worker(const NumericVector &x, const NumericVector
                                      const NumericVector &initial_link,
                                      const int i, const int j,
                                      const int skip) {
+  const int vlen = x.length();
+  if((i<0) || (j>=vlen) || (vlen!=y.length()) || (vlen!=w.length()) || (vlen!=initial_link.length())) {
+    throw std::range_error("Inadmissible value");
+  }
   // init return structure
   NumericVector coef = NumericVector(2);
   // look for corner cases
@@ -189,7 +193,10 @@ NumericVector logistic_solve1(NumericVector x, NumericVector y,
 NumericVector xlogistic_fits_worker(const NumericVector &x, const NumericVector &y, 
                                     const NumericVector &w,
                                     const int i, const int j) {
-  const int n = j-i+1;
+  const int vlen = x.length();
+  if((i<0) || (j>=vlen) || (vlen!=y.length()) || (vlen!=w.length())) {
+    throw std::range_error("Inadmissible value");
+  }  const int n = j-i+1;
   Rcpp::NumericVector final_links(n);
   for(int k=0; k<n; ++k) {
     final_links(k) = 0.0;
@@ -310,6 +317,10 @@ NumericVector xlogistic_fits(NumericVector x, NumericVector y,
 NumericVector logistic_fits_worker(const NumericVector &x, const NumericVector &y, 
                                    const NumericVector &w,
                                    const int i, const int j) {
+  const int vlen = x.length();
+  if((i<0) || (j>=vlen) || (vlen!=y.length()) || (vlen!=w.length())) {
+    throw std::range_error("Inadmissible value");
+  }
   const int n = j-i+1;
   // initialize return structure
   Rcpp::NumericVector final_links(n);
@@ -388,7 +399,7 @@ NumericVector logistic_fits_worker(const NumericVector &x, const NumericVector &
 
 //' In sample logistic predictions (in link space).
 //' 
-//' logistic regression predections.
+//' logistic regression predictions.
 //' Zero indexed.
 //' 
 //' @param x NumericVector, expanatory variable.

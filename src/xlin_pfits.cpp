@@ -32,6 +32,10 @@ using Rcpp::IntegerVector;
 // [[Rcpp::export]]
 NumericVector xlin_pfits(NumericVector x, NumericVector y, NumericVector w,
                         const int i, const int j) {
+  const int vlen = x.length();
+  if((i<0) || (j>=vlen) || (vlen!=y.length()) || (vlen!=w.length())) {
+    throw std::range_error("Inadmissible value");
+  }
   // build fitting data
   double xx_0_0 = 0;
   double xx_1_0 = 0;

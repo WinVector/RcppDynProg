@@ -11,6 +11,10 @@ using Rcpp::IntegerVector;
 NumericVector xlin_fits_worker(const NumericVector &x, const NumericVector &y, 
                                const NumericVector &w,
                                const int i, const int j) {
+  const int vlen = x.length();
+  if((i<0) || (j>=vlen) || (vlen!=y.length()) || (vlen!=w.length())) {
+    throw std::range_error("Inadmissible value");
+  }
   // build fitting data
   const double regularization = 1.0e-5;
   double xx_0_0 = 0;

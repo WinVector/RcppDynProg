@@ -8,7 +8,7 @@
 #' 
 #' @param y NumericVector, values to group in order.
 #' @param w NumericVector, weights.
-#' @param min_seg positive integer, minimum segment size.
+#' @param min_seg positive integer, minimum segment size (>=1).
 #' @param i integer, first index (inclusive).
 #' @param j integer, j>=i last index (inclusive);
 #' @return scalar, const cost of [i,...,j] interval (inclusive).
@@ -31,7 +31,7 @@ const_cost <- function(y, w, min_seg, i, j) {
 #' 
 #' @param y NumericVector, values to group in order.
 #' @param w NumericVector, weights.
-#' @param min_seg positive integer, minimum segment size.
+#' @param min_seg positive integer, minimum segment size (>=1).
 #' @param indices IntegerVector, order list of indices to pair.
 #' @return xcosts NumericMatix, for j>=i xcosts(i,j) is the cost of partition element [i,...,j] (inclusive).
 #' 
@@ -52,7 +52,7 @@ const_costs <- function(y, w, min_seg, indices) {
 #' 
 #' @param y NumericVector, 0/1 values to group in order (should be in interval [0,1]).
 #' @param w NumericVector, weights (should be positive).
-#' @param min_seg positive integer, minimum segment size.
+#' @param min_seg positive integer, minimum segment size (>=1).
 #' @param i integer, first index (inclusive).
 #' @param j integer, j>=i last index (inclusive);
 #' @return scalar, const cost of [i,...,j] interval (inclusive).
@@ -75,7 +75,7 @@ const_cost_logistic <- function(y, w, min_seg, i, j) {
 #' 
 #' @param y NumericVector, 0/1 values to group in order (should be in interval [0,1]).
 #' @param w NumericVector, weights (should be positive).
-#' @param min_seg positive integer, minimum segment size.
+#' @param min_seg positive integer, minimum segment size (>=1).
 #' @param indices IntegerVector, order list of indices to pair.
 #' @return xcosts NumericMatix, for j>=i xcosts(i,j) is the cost of partition element [i,...,j] (inclusive).
 #' 
@@ -120,7 +120,7 @@ summarize_input <- function(x, y, w, i, j, skip) {
 #' @param x NumericVector, x-coords of values to group.
 #' @param y NumericVector, values to group in order.
 #' @param w NumericVector, weights.
-#' @param min_seg positive integer, minimum segment size.
+#' @param min_seg positive integer, minimum segment size (>=1).
 #' @param i integer, first index (inclusive).
 #' @param j integer, j>=i last index (inclusive);
 #' @return scalar, linear cost of [i,...,j] interval (inclusive).
@@ -144,7 +144,7 @@ lin_cost <- function(x, y, w, min_seg, i, j) {
 #' @param x NumericVector, x-coords of values to group.
 #' @param y NumericVector, values to group in order.
 #' @param w NumericVector, weights.
-#' @param min_seg positive integer, minimum segment size.
+#' @param min_seg positive integer, minimum segment size (>=1).
 #' @param indices IntegerVector, ordered list of indices to pair.
 #' @return xcosts NumericMatix, for j>=i xcosts(i,j) is the cost of partition element [i,...,j] (inclusive).
 #' 
@@ -167,7 +167,7 @@ lin_costs <- function(x, y, w, min_seg, indices) {
 #' @param x NumericVector, x-coords of values to group.
 #' @param y NumericVector, values to group in order (should be in interval [0,1]).
 #' @param w NumericVector, weights (positive).
-#' @param min_seg positive integer, minimum segment size.
+#' @param min_seg positive integer, minimum segment size (>=1).
 #' @param i integer, first index (inclusive).
 #' @param j integer, j>=i last index (inclusive);
 #' @return scalar, linear cost of [i,...,j] interval (inclusive).
@@ -193,7 +193,7 @@ lin_cost_logistic <- function(x, y, w, min_seg, i, j) {
 #' @param x NumericVector, x-coords of values to group.
 #' @param y NumericVector, values to group in order (should be in interval [0,1]).
 #' @param w NumericVector, weights (should be positive).
-#' @param min_seg positive integer, minimum segment size.
+#' @param min_seg positive integer, minimum segment size (>=1).
 #' @param indices IntegerVector, ordered list of indices to pair.
 #' @return xcosts NumericMatix, for j>=i xcosts(i,j) is the cost of partition element [i,...,j] (inclusive).
 #' 
@@ -272,7 +272,7 @@ xlogistic_fits <- function(x, y, w, i, j) {
 
 #' In sample logistic predictions (in link space).
 #' 
-#' logistic regression predections.
+#' logistic regression predictions.
 #' Zero indexed.
 #' 
 #' @param x NumericVector, expanatory variable.
@@ -308,7 +308,7 @@ logistic_fits <- function(x, y, w, i, j) {
 #' Returned solution is an ordered vector v of length k<=kmax where: v[1]==1, v[k]==nrow(x)+1, and the 
 #' partition is of the form [v[i], v[i+1]) (intervals open on the right).
 #' 
-#' @param x NumericMatix, for j>=i x(i,j) is the cost of partition element [i,...,j] (inclusive).
+#' @param x square NumericMatix, for j>=i x(i,j) is the cost of partition element [i,...,j] (inclusive).
 #' @param kmax int, maximum number of segments in solution. 
 #' @return dynamic program solution.
 #' 
@@ -331,7 +331,7 @@ solve_interval_partition_k <- function(x, kmax) {
 #' Returned solution is an ordered vector v of length k where: v[1]==1, v[k]==nrow(x)+1, and the 
 #' partition is of the form [v[i], v[i+1]) (intervals open on the right).
 #' 
-#' @param x NumericMatix, for j>=i x(i,j) is the cost of partition element [i,...,j] (inclusive).
+#' @param x square NumericMatix, for j>=i x(i,j) is the cost of partition element [i,...,j] (inclusive).
 #' @return dynamic program solution.
 #' 
 #' @examples
@@ -351,7 +351,7 @@ solve_interval_partition_no_k <- function(x) {
 #' Returned solution is an ordered vector v of length k<=kmax where: v[1]==1, v[k]==nrow(x)+1, and the 
 #' partition is of the form [v[i], v[i+1]) (intervals open on the right).
 #' 
-#' @param x NumericMatix, for j>=i x(i,j) is the cost of partition element [i,...,j] (inclusive).
+#' @param x square NumericMatix, for j>=i x(i,j) is the cost of partition element [i,...,j] (inclusive).
 #' @param kmax int, maximum number of segments in solution. 
 #' @return dynamic program solution.
 #' 

@@ -23,6 +23,10 @@ double lin_cost_logistic_worker(const NumericVector &x, const NumericVector &y,
   if(j <= (i + (min_seg-1))) {
     return std::numeric_limits<double>::max();
   }
+  const int vlen = x.length();
+  if((i<0) || (j>=vlen) || (vlen!=y.length()) || (vlen!=w.length()) || (min_seg<1)) {
+    throw std::range_error("Inadmissible value");
+  }
   // look for some corner cases
   const input_summary isum = input_summary(x, y, w, i, j, -1);
   if((isum.k_points<=1L)||(!isum.y_varies())) {
@@ -67,7 +71,7 @@ double lin_cost_logistic_worker(const NumericVector &x, const NumericVector &y,
 //' @param x NumericVector, x-coords of values to group.
 //' @param y NumericVector, values to group in order (should be in interval [0,1]).
 //' @param w NumericVector, weights (positive).
-//' @param min_seg positive integer, minimum segment size.
+//' @param min_seg positive integer, minimum segment size (>=1).
 //' @param i integer, first index (inclusive).
 //' @param j integer, j>=i last index (inclusive);
 //' @return scalar, linear cost of [i,...,j] interval (inclusive).
@@ -98,7 +102,7 @@ double lin_cost_logistic(NumericVector x, NumericVector y, NumericVector w,
 //' @param x NumericVector, x-coords of values to group.
 //' @param y NumericVector, values to group in order (should be in interval [0,1]).
 //' @param w NumericVector, weights (should be positive).
-//' @param min_seg positive integer, minimum segment size.
+//' @param min_seg positive integer, minimum segment size (>=1).
 //' @param indices IntegerVector, ordered list of indices to pair.
 //' @return xcosts NumericMatix, for j>=i xcosts(i,j) is the cost of partition element [i,...,j] (inclusive).
 //' 
@@ -111,6 +115,10 @@ double lin_cost_logistic(NumericVector x, NumericVector y, NumericVector w,
 NumericMatrix lin_costs_logistic(NumericVector x, NumericVector y, NumericVector w,
                                  const int min_seg,
                                  IntegerVector indices) {
+  const int vlen = x.length();
+  if((vlen!=y.length()) || (vlen!=w.length()) || (min_seg<1)) {
+    throw std::range_error("Inadmissible value");
+  }
   const int n = indices.size();
   NumericMatrix xcosts = NumericMatrix(n, n);
   const double single_value = std::numeric_limits<double>::max();

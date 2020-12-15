@@ -1,4 +1,8 @@
 
+# RcppDynProg 0.2.0 2020/12/15
+
+ * Check API invarients.
+
 # RcppDynProg 0.1.6 2020/11/13
 
  * Remove old test fn.
