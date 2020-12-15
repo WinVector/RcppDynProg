@@ -220,6 +220,7 @@ Some other relevant segmentation and dynamic programming methods include:
   * The [`segmented` package](https://CRAN.R-project.org/package=segmented) break-point/change-point regression package (worked example [here](https://github.com/WinVector/RcppDynProg/blob/master/extras/sp500/segmented_Example.md)).
   * $l_1$ Trend Filtering, which we discuss [here](https://github.com/WinVector/RcppDynProg/blob/master/extras/sp500/sp500_example.pdf).
   * The [`dynprog` package](https://CRAN.R-project.org/package=dynprog), which is a general DSL based memoizer.
+  * [`dpseg`](https://CRAN.R-project.org/package=dpseg)
 
 
 

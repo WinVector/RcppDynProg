@@ -293,3 +293,4 @@ include:
     [here](https://github.com/WinVector/RcppDynProg/blob/master/extras/sp500/sp500_example.pdf).
 -   The [`dynprog` package](https://CRAN.R-project.org/package=dynprog),
     which is a general DSL based memoizer.
+-   [`dpseg`](https://CRAN.R-project.org/package=dpseg)
