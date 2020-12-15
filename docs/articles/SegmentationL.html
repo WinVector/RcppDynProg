@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RcppDynProg</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -82,13 +82,13 @@
 
       
 
-      </header><script src="SegmentationL_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="SegmentationL_files/header-attrs-2.4/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Linear Segmentation</h1>
                         <h4 class="author">John Mount</h4>
             
-            <h4 class="date">2020-09-06</h4>
+            <h4 class="date">2020-12-15</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/WinVector/RcppDynProg/blob/master/vignettes/SegmentationL.Rmd"><code>vignettes/SegmentationL.Rmd</code></a></small>
       <div class="hidden name"><code>SegmentationL.Rmd</code></div>
@@ -100,28 +100,28 @@
 <p>In this example we fit a piecewise linear function to example data.<br>
 Please see <a href="https://github.com/WinVector/RcppDynProg">here</a> for a discussion of the methodology.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="fu"><a href="#base/library.html">library</a></span>(<span class="st"><a href="https://github.com/WinVector/RcppDynProg/">"RcppDynProg"</a></span>)
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/WinVector/RcppDynProg/">"RcppDynProg"</a></span><span class="op">)</span>
 
 
-<span class="fu"><a href="#base/Random.html">set.seed</a></span>(<span class="fl">2018</span>)
-<span class="kw">g</span> <span class="op">&lt;-</span> <span class="fl">100</span>
-<span class="kw">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="#base/data.frame.html">data.frame</a></span>(
-  x = <span class="fl">0.05</span><span class="op">*</span>(<span class="fl">1</span><span class="op">:</span>(<span class="fl">3</span><span class="op">*</span><span class="kw">g</span>))) <span class="co"># ordered in x</span>
-<span class="kw">d</span><span class="op">$</span><span class="kw">y_ideal</span> <span class="op">&lt;-</span> <span class="fu"><a href="#base/Trig.html">sin</a></span>((<span class="fl">0.3</span><span class="op">*</span><span class="kw">d</span><span class="op">$</span><span class="kw">x</span>)<span class="op">^</span><span class="fl">2</span>)
-<span class="kw">d</span><span class="op">$</span><span class="kw">y_observed</span> <span class="op">&lt;-</span> <span class="kw">d</span><span class="op">$</span><span class="kw">y_ideal</span> <span class="op">+</span> <span class="fl">0.25</span><span class="op">*</span><span class="fu"><a href="#stats/Normal.html">rnorm</a></span>(<span class="fu"><a href="#base/length.html">length</a></span>(<span class="kw">d</span><span class="op">$</span><span class="kw">y_ideal</span>))
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2018</span><span class="op">)</span>
+<span class="va">g</span> <span class="op">&lt;-</span> <span class="fl">100</span>
+<span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
+  x <span class="op">=</span> <span class="fl">0.05</span><span class="op">*</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="fl">3</span><span class="op">*</span><span class="va">g</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="co"># ordered in x</span>
+<span class="va">d</span><span class="op">$</span><span class="va">y_ideal</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html">sin</a></span><span class="op">(</span><span class="op">(</span><span class="fl">0.3</span><span class="op">*</span><span class="va">d</span><span class="op">$</span><span class="va">x</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>
+<span class="va">d</span><span class="op">$</span><span class="va">y_observed</span> <span class="op">&lt;-</span> <span class="va">d</span><span class="op">$</span><span class="va">y_ideal</span> <span class="op">+</span> <span class="fl">0.25</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">y_ideal</span><span class="op">)</span><span class="op">)</span>
 
 
 <span class="co"># plot</span>
-<span class="fu"><a href="#graphics/plot.default.html">plot</a></span>(<span class="kw">d</span><span class="op">$</span><span class="kw">x</span>, <span class="kw">d</span><span class="op">$</span><span class="kw">y_observed</span>,
-     xlab = <span class="st">"x"</span>, ylab = <span class="st">"y"</span>,
-     main = <span class="st">"raw data\ncircles: observed values, dashed line: unobserved true values"</span>)
-<span class="fu"><a href="#graphics/lines.html">lines</a></span>(<span class="kw">d</span><span class="op">$</span><span class="kw">x</span>, <span class="kw">d</span><span class="op">$</span><span class="kw">y_ideal</span>,
-     type = <span class="st">"l"</span>,
-     lty = <span class="st">"dashed"</span>)</pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">x</span>, <span class="va">d</span><span class="op">$</span><span class="va">y_observed</span>,
+     xlab <span class="op">=</span> <span class="st">"x"</span>, ylab <span class="op">=</span> <span class="st">"y"</span>,
+     main <span class="op">=</span> <span class="st">"raw data\ncircles: observed values, dashed line: unobserved true values"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">x</span>, <span class="va">d</span><span class="op">$</span><span class="va">y_ideal</span>,
+     type <span class="op">=</span> <span class="st">"l"</span>,
+     lty <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span></pre></div>
 <p><img src="SegmentationL_files/figure-html/r1-1.png" width="768" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="kw">x_cuts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/solve_for_partition.html">solve_for_partition</a></span>(<span class="kw">d</span><span class="op">$</span><span class="kw">x</span>, <span class="kw">d</span><span class="op">$</span><span class="kw">y_observed</span>, penalty = <span class="fl">1</span>)
-<span class="fu"><a href="#base/print.html">print</a></span>(<span class="kw">x_cuts</span>)</pre></div>
+<span class="va">x_cuts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/solve_for_partition.html">solve_for_partition</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">x</span>, <span class="va">d</span><span class="op">$</span><span class="va">y_observed</span>, penalty <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">x_cuts</span><span class="op">)</span></pre></div>
 <pre><code>##        x       pred group  what
 ## 1   0.05 -0.1570880     1  left
 ## 2   4.65  1.1593754     1 right
@@ -138,26 +138,26 @@ Please see <a href="https://github.com/WinVector/RcppDynProg">here</a> for a dis
 ## 13 13.80 -1.3791405     7  left
 ## 14 15.00  1.0195679     7 right</code></pre>
 <div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="kw">d</span><span class="op">$</span><span class="kw">estimate</span> <span class="op">&lt;-</span> <span class="fu"><a href="#stats/approxfun.html">approx</a></span>(<span class="kw">x_cuts</span><span class="op">$</span><span class="kw">x</span>, <span class="kw">x_cuts</span><span class="op">$</span><span class="kw">pred</span>, xout = <span class="kw">d</span><span class="op">$</span><span class="kw">x</span>, method = <span class="st">"linear"</span>, rule = <span class="fl">2</span>)<span class="op">$</span><span class="kw">y</span>
-<span class="kw">d</span><span class="op">$</span><span class="kw">group</span> <span class="op">&lt;-</span> <span class="fu"><a href="#base/character.html">as.character</a></span>(<span class="fu"><a href="#base/findInterval.html">findInterval</a></span>(<span class="kw">d</span><span class="op">$</span><span class="kw">x</span>, <span class="kw">x_cuts</span>[<span class="kw">x_cuts</span><span class="op">$</span><span class="kw">what</span><span class="op">==</span><span class="st">"left"</span>, <span class="st">"x"</span>]))</pre></div>
+<span class="va">d</span><span class="op">$</span><span class="va">estimate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/approxfun.html">approx</a></span><span class="op">(</span><span class="va">x_cuts</span><span class="op">$</span><span class="va">x</span>, <span class="va">x_cuts</span><span class="op">$</span><span class="va">pred</span>, xout <span class="op">=</span> <span class="va">d</span><span class="op">$</span><span class="va">x</span>, method <span class="op">=</span> <span class="st">"linear"</span>, rule <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">$</span><span class="va">y</span>
+<span class="va">d</span><span class="op">$</span><span class="va">group</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/findInterval.html">findInterval</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">x</span>, <span class="va">x_cuts</span><span class="op">[</span><span class="va">x_cuts</span><span class="op">$</span><span class="va">what</span><span class="op">==</span><span class="st">"left"</span>, <span class="st">"x"</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></pre></div>
 <div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="fu"><a href="#base/print.html">print</a></span>(<span class="fu"><a href="#base/sum.html">sum</a></span>((<span class="kw">d</span><span class="op">$</span><span class="kw">y_observed</span> <span class="op">-</span> <span class="kw">d</span><span class="op">$</span><span class="kw">y_ideal</span>)<span class="op">^</span><span class="fl">2</span>))</pre></div>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">y_observed</span> <span class="op">-</span> <span class="va">d</span><span class="op">$</span><span class="va">y_ideal</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></pre></div>
 <pre><code>## [1] 20.42462</code></pre>
 <div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="fu"><a href="#base/print.html">print</a></span>(<span class="fu"><a href="#base/sum.html">sum</a></span>((<span class="kw">d</span><span class="op">$</span><span class="kw">estimate</span> <span class="op">-</span> <span class="kw">d</span><span class="op">$</span><span class="kw">y_ideal</span>)<span class="op">^</span><span class="fl">2</span>))</pre></div>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">estimate</span> <span class="op">-</span> <span class="va">d</span><span class="op">$</span><span class="va">y_ideal</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></pre></div>
 <pre><code>## [1] 3.536541</code></pre>
 <div class="sourceCode" id="cb9"><pre class="downlit">
-<span class="fu"><a href="#base/print.html">print</a></span>(<span class="fu"><a href="#base/sum.html">sum</a></span>((<span class="kw">d</span><span class="op">$</span><span class="kw">estimate</span> <span class="op">-</span> <span class="kw">d</span><span class="op">$</span><span class="kw">y_observed</span>)<span class="op">^</span><span class="fl">2</span>))</pre></div>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">estimate</span> <span class="op">-</span> <span class="va">d</span><span class="op">$</span><span class="va">y_observed</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></pre></div>
 <pre><code>## [1] 20.53796</code></pre>
 <div class="sourceCode" id="cb11"><pre class="downlit">
 <span class="co"># plot</span>
-<span class="fu"><a href="#graphics/plot.default.html">plot</a></span>(<span class="kw">d</span><span class="op">$</span><span class="kw">x</span>, <span class="kw">d</span><span class="op">$</span><span class="kw">y_observed</span>,
-     xlab = <span class="st">"x"</span>, ylab = <span class="st">"y"</span>,
-     main = <span class="st">"RcppDynProg piecewise linear estimate\ndots: observed values, segments: estimated shape"</span>)
-<span class="fu"><a href="#graphics/points.html">points</a></span>(<span class="kw">d</span><span class="op">$</span><span class="kw">x</span>, <span class="kw">d</span><span class="op">$</span><span class="kw">y_ideal</span>,
-     type = <span class="st">"l"</span>,
-     lty = <span class="st">"dashed"</span>)
-<span class="kw">cmap</span> <span class="op">&lt;-</span> <span class="fu"><a href="#base/c.html">c</a></span>(<span class="st">"#a6cee3"</span>,
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">x</span>, <span class="va">d</span><span class="op">$</span><span class="va">y_observed</span>,
+     xlab <span class="op">=</span> <span class="st">"x"</span>, ylab <span class="op">=</span> <span class="st">"y"</span>,
+     main <span class="op">=</span> <span class="st">"RcppDynProg piecewise linear estimate\ndots: observed values, segments: estimated shape"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">x</span>, <span class="va">d</span><span class="op">$</span><span class="va">y_ideal</span>,
+     type <span class="op">=</span> <span class="st">"l"</span>,
+     lty <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span>
+<span class="va">cmap</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"#a6cee3"</span>,
           <span class="st">"#1f78b4"</span>,
           <span class="st">"#b2df8a"</span>,
           <span class="st">"#33a02c"</span>,
@@ -168,14 +168,14 @@ Please see <a href="https://github.com/WinVector/RcppDynProg">here</a> for a dis
           <span class="st">"#cab2d6"</span>,
           <span class="st">"#6a3d9a"</span>,
           <span class="st">"#ffff99"</span>,
-          <span class="st">"#b15928"</span>)
-<span class="fu"><a href="#base/names.html">names</a></span>(<span class="kw">cmap</span>) <span class="op">&lt;-</span> <span class="fu"><a href="#base/character.html">as.character</a></span>(<span class="fu"><a href="#base/seq.html">seq_len</a></span>(<span class="fu"><a href="#base/length.html">length</a></span>(<span class="kw">cmap</span>)))
-<span class="fu"><a href="#graphics/points.html">points</a></span>(<span class="kw">d</span><span class="op">$</span><span class="kw">x</span>, <span class="kw">d</span><span class="op">$</span><span class="kw">y_observed</span>, col = <span class="kw">cmap</span>[<span class="kw">d</span><span class="op">$</span><span class="kw">group</span>], pch=<span class="fl">19</span>)
-<span class="kw">groups</span> <span class="op">&lt;-</span> <span class="fu"><a href="#base/sort.html">sort</a></span>(<span class="fu"><a href="#base/unique.html">unique</a></span>(<span class="kw">d</span><span class="op">$</span><span class="kw">group</span>))
-<span class="co">for</span>(<span class="kw">gi</span> <span class="co">in</span> <span class="kw">groups</span>) {
-  <span class="kw">di</span> <span class="op">&lt;-</span> <span class="kw">d</span>[<span class="kw">d</span><span class="op">$</span><span class="kw">group</span><span class="op">==</span><span class="kw">gi</span>, , drop = <span class="fl">FALSE</span>]
-  <span class="fu"><a href="#graphics/lines.html">lines</a></span>(<span class="kw">di</span><span class="op">$</span><span class="kw">x</span>, <span class="kw">di</span><span class="op">$</span><span class="kw">estimate</span>, col = <span class="kw">cmap</span>[<span class="kw">di</span><span class="op">$</span><span class="kw">group</span>[[<span class="fl">1</span>]]], lwd=<span class="fl">2</span>)
-}</pre></div>
+          <span class="st">"#b15928"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">cmap</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">cmap</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">x</span>, <span class="va">d</span><span class="op">$</span><span class="va">y_observed</span>, col <span class="op">=</span> <span class="va">cmap</span><span class="op">[</span><span class="va">d</span><span class="op">$</span><span class="va">group</span><span class="op">]</span>, pch<span class="op">=</span><span class="fl">19</span><span class="op">)</span>
+<span class="va">groups</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">group</span><span class="op">)</span><span class="op">)</span>
+<span class="kw">for</span><span class="op">(</span><span class="va">gi</span> <span class="kw">in</span> <span class="va">groups</span><span class="op">)</span> <span class="op">{</span>
+  <span class="va">di</span> <span class="op">&lt;-</span> <span class="va">d</span><span class="op">[</span><span class="va">d</span><span class="op">$</span><span class="va">group</span><span class="op">==</span><span class="va">gi</span>, , drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span>
+  <span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span><span class="va">di</span><span class="op">$</span><span class="va">x</span>, <span class="va">di</span><span class="op">$</span><span class="va">estimate</span>, col <span class="op">=</span> <span class="va">cmap</span><span class="op">[</span><span class="va">di</span><span class="op">$</span><span class="va">group</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">]</span>, lwd<span class="op">=</span><span class="fl">2</span><span class="op">)</span>
+<span class="op">}</span></pre></div>
 <p><img src="SegmentationL_files/figure-html/r5-1.png" width="768" style="display: block; margin: auto;"></p>
   </div>
 
@@ -192,7 +192,7 @@ Please see <a href="https://github.com/WinVector/RcppDynProg">here</a> for a dis
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
