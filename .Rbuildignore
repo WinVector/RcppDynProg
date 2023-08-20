@@ -11,3 +11,4 @@
 ^README.Rmd$
 ^LICENSE$
 ^_pkgdown\.yml$
+^CRAN-SUBMISSION$
