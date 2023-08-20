@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">RcppDynProg</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="articles/RcppDynProg.html">Get started</a>
 </li>
@@ -50,7 +46,7 @@
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -70,7 +66,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://win-vector.com/">Sponsor: Win-Vector LLC</a>
+  <a href="https://win-vector.com/" class="external-link">Sponsor: Win-Vector LLC</a>
 </li>
       </ul>
 </div>
@@ -87,150 +83,151 @@
 
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-<div id="the-package" class="section level2">
-<h2 class="hasAnchor">
-<a href="#the-package" class="anchor"></a>The package</h2>
-<p><a href="https://github.com/WinVector/RcppDynProg"><code>RcppDynProg</code></a> is an <a href="https://CRAN.R-project.org/package=Rcpp"><code>Rcpp</code></a> based <a href="https://www.r-project.org"><code>R</code></a> package that implements simple, but powerful, table-based <a href="https://en.wikipedia.org/wiki/Dynamic_programming">dynamic programming</a>. This package can be used to optimally solve the minimum cost partition into intervals problem (described below) and is useful in building piecewise estimates of functions (shown in this note).</p>
+<div class="section level2">
+<h2 id="the-package">The package<a class="anchor" aria-label="anchor" href="#the-package"></a>
+</h2>
+<p><a href="https://github.com/WinVector/RcppDynProg" class="external-link"><code>RcppDynProg</code></a> is an <a href="https://CRAN.R-project.org/package=Rcpp" class="external-link"><code>Rcpp</code></a> based <a href="https://www.r-project.org" class="external-link"><code>R</code></a> package that implements simple, but powerful, table-based <a href="https://en.wikipedia.org/wiki/Dynamic_programming" class="external-link">dynamic programming</a>. This package can be used to optimally solve the minimum cost partition into intervals problem (described below) and is useful in building piecewise estimates of functions (shown in this note).</p>
 </div>
-<div id="the-abstract-problem" class="section level2">
-<h2 class="hasAnchor">
-<a href="#the-abstract-problem" class="anchor"></a>The abstract problem</h2>
-<p>The primary problem <a href="https://winvector.github.io/RcppDynProg/reference/solve_interval_partition.html"><code>RcppDynProg::solve_interval_partition()</code></a> is designed to solve is formally given as follows.</p>
+<div class="section level2">
+<h2 id="the-abstract-problem">The abstract problem<a class="anchor" aria-label="anchor" href="#the-abstract-problem"></a>
+</h2>
+<p>The primary problem <a href="https://winvector.github.io/RcppDynProg/reference/solve_interval_partition.html" class="external-link"><code>RcppDynProg::solve_interval_partition()</code></a> is designed to solve is formally given as follows.</p>
 <blockquote>
 <p>Minimum cost partition into intervals.</p>
-<p>Given: a positive integer <code>n</code> and an a <em>n</em> by <code>n</code> matrix called <code>costs</code>.</p>
+<p>Given: a positive integer <code>n</code> and an a <span class="math inline"><em>n</em></span> by <code>n</code> matrix called <code>costs</code>.</p>
 <p>Find: an increasing sequence of integers <code>soln</code> with <code>length(soln)==k (&gt;=2)</code>, <code>soln[1] == 1</code>, and <code>soln[k] == n+1</code> such that <code>sum[i=1,...,k-1] costs[soln[i], soln[i+1]-1]</code> is minimized.</p>
 </blockquote>
-<p>To rephrase: <code>costs[i,j]</code> is specifying the cost of taking the interval of integers <code>{i,...,j}</code> (inclusive) as a single element of our solution. The problem is to find the minimum cost <a href="https://en.wikipedia.org/wiki/Partition_of_a_set">partition</a> of the set of integers <code>{1,...,n}</code> as a sequence of intervals. A user supplies a matrix of costs of <em>every</em> possible interval of integers, and the solver then finds what disjoint <em>set</em> of intervals that cover <code>{1,...,n}</code> have the lowest sum of costs. The user encodes their optimization problem a family of interval costs (<code>n(n-1)/2</code> of them, which is a lot- but is tractable) and the algorithm quickly finds the best simultaneous set of intervals (there are <code>2^(n-1)</code> partitions into intervals, so exhaustive search would not be practical).</p>
+<p>To rephrase: <code>costs[i,j]</code> is specifying the cost of taking the interval of integers <code>{i,...,j}</code> (inclusive) as a single element of our solution. The problem is to find the minimum cost <a href="https://en.wikipedia.org/wiki/Partition_of_a_set" class="external-link">partition</a> of the set of integers <code>{1,...,n}</code> as a sequence of intervals. A user supplies a matrix of costs of <em>every</em> possible interval of integers, and the solver then finds what disjoint <em>set</em> of intervals that cover <code>{1,...,n}</code> have the lowest sum of costs. The user encodes their optimization problem a family of interval costs (<code>n(n-1)/2</code> of them, which is a lot- but is tractable) and the algorithm quickly finds the best simultaneous set of intervals (there are <code>2^(n-1)</code> partitions into intervals, so exhaustive search would not be practical).</p>
 <p>We can illustrate this abstract problem as follows (if this is too abstract, please skip forward to the concrete application).</p>
 <p>Suppose we have the following cost matrix.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="va">costs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1.5</span>, <span class="cn">NA</span> ,<span class="cn">NA</span> ,<span class="fl">1</span> ,<span class="fl">0</span> , <span class="cn">NA</span>, <span class="fl">5</span>, <span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, 
-                nrow <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">costs</span><span class="op">)</span>
- <span class="co">#       [,1] [,2] [,3]</span>
- <span class="co">#  [1,]  1.5    1    5</span>
- <span class="co">#  [2,]   NA    0   -1</span>
- <span class="co">#  [3,]   NA   NA    1</span></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">costs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.5</span>, <span class="cn">NA</span> ,<span class="cn">NA</span> ,<span class="fl">1</span> ,<span class="fl">0</span> , <span class="cn">NA</span>, <span class="fl">5</span>, <span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, </span>
+<span>                nrow <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">costs</span><span class="op">)</span></span>
+<span> <span class="co">#       [,1] [,2] [,3]</span></span>
+<span> <span class="co">#  [1,]  1.5    1    5</span></span>
+<span> <span class="co">#  [2,]   NA    0   -1</span></span>
+<span> <span class="co">#  [3,]   NA   NA    1</span></span></code></pre></div>
 <p>Then the optimal partition is found as follows.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/WinVector/RcppDynProg/">"RcppDynProg"</a></span><span class="op">)</span>
-<span class="va">soln</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/solve_interval_partition.html">solve_interval_partition</a></span><span class="op">(</span><span class="va">costs</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">costs</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">soln</span><span class="op">)</span>
- <span class="co">#  [1] 1 2 4</span></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/WinVector/RcppDynProg/" class="external-link">"RcppDynProg"</a></span><span class="op">)</span></span>
+<span><span class="va">soln</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/solve_interval_partition.html">solve_interval_partition</a></span><span class="op">(</span><span class="va">costs</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">costs</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">soln</span><span class="op">)</span></span>
+<span> <span class="co">#  [1] 1 2 4</span></span></code></pre></div>
 <p>The sequence <code>[1, 2, 4]</code> is a just compact representation for the following sequence of intervals.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">soln</span><span class="op">)</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span>,
-  <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">soln</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">:</span><span class="op">(</span><span class="va">soln</span><span class="op">[</span><span class="va">i</span><span class="op">+</span><span class="fl">1</span><span class="op">]</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span>
-  <span class="op">}</span><span class="op">)</span>
- <span class="co">#  [[1]]</span>
- <span class="co">#  [1] 1</span>
- <span class="co">#  </span>
- <span class="co">#  [[2]]</span>
- <span class="co">#  [1] 2 3</span></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">soln</span><span class="op">)</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span>,</span>
+<span>  <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">soln</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">:</span><span class="op">(</span><span class="va">soln</span><span class="op">[</span><span class="va">i</span><span class="op">+</span><span class="fl">1</span><span class="op">]</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span> <span class="co">#  [[1]]</span></span>
+<span> <span class="co">#  [1] 1</span></span>
+<span> <span class="co">#  </span></span>
+<span> <span class="co">#  [[2]]</span></span>
+<span> <span class="co">#  [1] 2 3</span></span></code></pre></div>
 <p>Which is saying the optimal partition into intervals is to the sequence of sets <code>[{1}, {2, 3}]</code> which has total cost <code>costs[1,1] + costs[2,3]</code>. The dynamic programming solver knew to take the expensive set <code>{1}</code> to allow the cheap set <code>{2, 3}</code> to be in its chosen partition. This is the essence of dynamic programming: finding an optimal <em>global</em> solution, even if it requires odd-looking local choices.</p>
 </div>
-<div id="an-application" class="section level2">
-<h2 class="hasAnchor">
-<a href="#an-application" class="anchor"></a>An application</h2>
+<div class="section level2">
+<h2 id="an-application">An application<a class="anchor" aria-label="anchor" href="#an-application"></a>
+</h2>
 <p>The intended application of <code>RcppDynProg</code> is to find optimal piecewise solutions to single-variable modeling problems. For example consider the following data.</p>
-<p><img src="https://github.com/WinVector/RcppDynProg/raw/main/tools/README-r1-1.png" style="display: block; margin: auto;"></p>
-<p>In the above we have an input (or independent variable) <code>x</code> and an observed outcome (or dependent variable) <code>y_observed</code> (portrayed as points). <code>y_observed</code> is the unobserved idea value <code>y_ideal</code> (portrayed by the dashed curve) plus independent noise. The modeling goal is to get close the <code>y_ideal</code> curve using the <code>y_observed</code> observations. Obviously this <a href="https://github.com/WinVector/RcppDynProg/blob/master/extras/SegmentationL.md">can be done with a smoothing spline</a>, but let’s use <code>RcppDynProg</code> to find a piecewise linear fit.</p>
-<p>To encode this as a dynamic programming problem we need to build a cost matrix that for every consecutive interval of <code>x</code>-values we have estimated the out-of sample quality of fit. This is supplied by the function <code><a href="reference/lin_costs.html">RcppDynProg::lin_costs()</a></code> (using the <a href="https://win-vector.com/2014/09/25/estimating-generalization-error-with-the-press-statistic/">PRESS statistic</a>), but lets take a quick look at the idea.</p>
+<p><img src="tools/README-r1-1.png" style="display: block; margin: auto;"></p>
+<p>In the above we have an input (or independent variable) <code>x</code> and an observed outcome (or dependent variable) <code>y_observed</code> (portrayed as points). <code>y_observed</code> is the unobserved idea value <code>y_ideal</code> (portrayed by the dashed curve) plus independent noise. The modeling goal is to get close the <code>y_ideal</code> curve using the <code>y_observed</code> observations. Obviously this <a href="https://github.com/WinVector/RcppDynProg/blob/master/extras/SegmentationL.md" class="external-link">can be done with a smoothing spline</a>, but let’s use <code>RcppDynProg</code> to find a piecewise linear fit.</p>
+<p>To encode this as a dynamic programming problem we need to build a cost matrix that for every consecutive interval of <code>x</code>-values we have estimated the out-of sample quality of fit. This is supplied by the function <code><a href="reference/lin_costs.html">RcppDynProg::lin_costs()</a></code> (using the <a href="https://win-vector.com/2014/09/25/estimating-generalization-error-with-the-press-statistic/" class="external-link">PRESS statistic</a>), but lets take a quick look at the idea.</p>
 <p>The following interval is a good interval, as all the chosen points (shown in dark blue) are in a nearly linear arrangement. The in-sample price of the interval would be the total sum of residuals of a linear model fit on the selected region (and the out of sample price would be given by the PRESS statistic).</p>
-<p><img src="https://github.com/WinVector/RcppDynProg/raw/main/tools/README-rg1-1.png" style="display: block; margin: auto;"></p>
+<p><img src="tools/README-rg1-1.png" style="display: block; margin: auto;"></p>
 <p>The “cost” (or loss) of this interval can be estimated as shown.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">good_interval_indexes</span><span class="op">)</span> <span class="co"># interval </span>
- <span class="co">#  [1]  94 139</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">good_interval_indexes</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">-</span> <span class="va">good_interval_indexes</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="co"># width</span>
- <span class="co">#  [1] 46</span>
-<span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">y_observed</span> <span class="op">~</span> <span class="va">x</span>, 
-          data <span class="op">=</span> <span class="va">d</span><span class="op">[</span><span class="va">good_interval_indexes</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">:</span><span class="va">good_interval_indexes</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="op">]</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">residuals</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span> <span class="co"># cost for interval</span>
- <span class="co">#  [1] 2.807998</span></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">good_interval_indexes</span><span class="op">)</span> <span class="co"># interval </span></span>
+<span> <span class="co">#  [1]  94 139</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">good_interval_indexes</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">-</span> <span class="va">good_interval_indexes</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="co"># width</span></span>
+<span> <span class="co">#  [1] 46</span></span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">y_observed</span> <span class="op">~</span> <span class="va">x</span>, </span>
+<span>          data <span class="op">=</span> <span class="va">d</span><span class="op">[</span><span class="va">good_interval_indexes</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">:</span><span class="va">good_interval_indexes</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="op">]</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">residuals</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span> <span class="co"># cost for interval</span></span>
+<span> <span class="co">#  [1] 2.807998</span></span></code></pre></div>
 <p>The following interval is a bad interval, as all the chosen points (shown in dark blue) are not in a nearly linear arrangement.</p>
-<p><img src="https://github.com/WinVector/RcppDynProg/raw/main/tools/README-rb1-1.png" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">bad_interval_indexes</span><span class="op">)</span> <span class="co"># interval</span>
- <span class="co">#  [1] 116 161</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">bad_interval_indexes</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">-</span> <span class="va">bad_interval_indexes</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="co"># width</span>
- <span class="co">#  [1] 46</span>
-<span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">y_observed</span> <span class="op">~</span> <span class="va">x</span>, 
-          data <span class="op">=</span> <span class="va">d</span><span class="op">[</span><span class="va">bad_interval_indexes</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">:</span><span class="va">bad_interval_indexes</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="op">]</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">residuals</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span> <span class="co"># cost for interval</span>
- <span class="co">#  [1] 5.242647</span></pre></div>
+<p><img src="tools/README-rb1-1.png" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">bad_interval_indexes</span><span class="op">)</span> <span class="co"># interval</span></span>
+<span> <span class="co">#  [1] 116 161</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">bad_interval_indexes</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">-</span> <span class="va">bad_interval_indexes</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="co"># width</span></span>
+<span> <span class="co">#  [1] 46</span></span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">y_observed</span> <span class="op">~</span> <span class="va">x</span>, </span>
+<span>          data <span class="op">=</span> <span class="va">d</span><span class="op">[</span><span class="va">bad_interval_indexes</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">:</span><span class="va">bad_interval_indexes</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="op">]</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">residuals</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span> <span class="co"># cost for interval</span></span>
+<span> <span class="co">#  [1] 5.242647</span></span></code></pre></div>
 <p>The user would price all of the intervals individually, and then ask the solver to find the best simultaneous set of intervals.</p>
-<p>The complete solution is worked as follows (using the <a href="https://winvector.github.io/RcppDynProg/reference/solve_for_partition.html"><code>RcppDynProg::solve_for_partition()</code></a> function which wraps all the steps together, converting from indices to <code>x</code>-coordinates).</p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="va">x_cuts</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/solve_for_partition.html">solve_for_partition</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">x</span>, <span class="va">d</span><span class="op">$</span><span class="va">y_observed</span>, penalty <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">x_cuts</span><span class="op">)</span>
- <span class="co">#         x       pred group  what</span>
- <span class="co">#  1   0.05 -0.1570880     1  left</span>
- <span class="co">#  2   4.65  1.1593754     1 right</span>
- <span class="co">#  3   4.70  1.0653666     2  left</span>
- <span class="co">#  4   6.95 -0.9770792     2 right</span>
- <span class="co">#  5   7.00 -1.2254925     3  left</span>
- <span class="co">#  6   9.20  0.8971391     3 right</span>
- <span class="co">#  7   9.25  1.3792437     4  left</span>
- <span class="co">#  8  11.10 -1.1542021     4 right</span>
- <span class="co">#  9  11.15 -1.0418353     5  left</span>
- <span class="co">#  10 12.50  1.1519490     5 right</span>
- <span class="co">#  11 12.55  1.3964906     6  left</span>
- <span class="co">#  12 13.75 -1.2045219     6 right</span>
- <span class="co">#  13 13.80 -1.3791405     7  left</span>
- <span class="co">#  14 15.00  1.0195679     7 right</span>
-
-<span class="va">d</span><span class="op">$</span><span class="va">estimate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/approxfun.html">approx</a></span><span class="op">(</span><span class="va">x_cuts</span><span class="op">$</span><span class="va">x</span>, <span class="va">x_cuts</span><span class="op">$</span><span class="va">pred</span>, 
-                     xout <span class="op">=</span> <span class="va">d</span><span class="op">$</span><span class="va">x</span>, 
-                     method <span class="op">=</span> <span class="st">"linear"</span>, rule <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">$</span><span class="va">y</span>
-<span class="va">d</span><span class="op">$</span><span class="va">group</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/findInterval.html">findInterval</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">x</span>, <span class="va">x_cuts</span><span class="op">[</span><span class="va">x_cuts</span><span class="op">$</span><span class="va">what</span><span class="op">==</span><span class="st">"left"</span>, <span class="st">"x"</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
-
-<span class="va">plt2</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span>data<span class="op">=</span> <span class="va">d</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">y_ideal</span><span class="op">)</span>, linetype<span class="op">=</span><span class="fl">2</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">y_observed</span>, color <span class="op">=</span> <span class="va">group</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">estimate</span>, color <span class="op">=</span> <span class="va">group</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">ylab</span><span class="op">(</span><span class="st">"y"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"RcppDynProg piecewise linear estimate"</span>,
-          subtitle <span class="op">=</span> <span class="st">"dots: observed values, segments: observed group means, dashed line: unobserved true values"</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">scale_color_brewer</span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Dark2"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">plt2</span><span class="op">)</span></pre></div>
-<p><img src="https://github.com/WinVector/RcppDynProg/raw/main/tools/README-r2-1.png" style="display: block; margin: auto;"></p>
-<p><a href="https://winvector.github.io/RcppDynProg/reference/solve_for_partition.html"><code>RcppDynProg::solve_for_partition()</code></a> finds a partition of a relation into a number of linear estimates. Each interval is priced using out-of sample cost via the <a href="https://win-vector.com/2014/09/25/estimating-generalization-error-with-the-press-statistic/">PRESS statistic</a> plus the specified penalty (to discourage small intervals). Notice, however, the user did not have to specify a <em>k</em> (or number of intervals) to a get good result.</p>
-<p>The entire modeling procedure is wrapped as a <a href="https://github.com/WinVector/vtreat"><code>vtreat</code></a> <a href="https://win-vector.com/2017/09/25/custom-level-coding-in-vtreat/">custom-coder</a> in the function <a href="https://winvector.github.io/RcppDynProg/reference/piecewise_linear.html"><code>RcppDynProg::piecewise_linear()</code></a>. This allows such variable treatments to be easily incorporated into modeling pipelines (example <a href="https://github.com/WinVector/zmPDSwR/blob/master/KDD2009/KDD2009vtreat.md">here</a>).</p>
-<p>In addition to a piecewise linear solver we include a piecewise constant solver, which is demonstrated <a href="https://winvector.github.io/RcppDynProg/articles/Segmentation.html">here</a>. Other applications can include peak detection, or any other application where the per-segment metrics are independent.</p>
+<p>The complete solution is worked as follows (using the <a href="https://winvector.github.io/RcppDynProg/reference/solve_for_partition.html" class="external-link"><code>RcppDynProg::solve_for_partition()</code></a> function which wraps all the steps together, converting from indices to <code>x</code>-coordinates).</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x_cuts</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/solve_for_partition.html">solve_for_partition</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">x</span>, <span class="va">d</span><span class="op">$</span><span class="va">y_observed</span>, penalty <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">x_cuts</span><span class="op">)</span></span>
+<span> <span class="co">#         x       pred group  what</span></span>
+<span> <span class="co">#  1   0.05 -0.1570880     1  left</span></span>
+<span> <span class="co">#  2   4.65  1.1593754     1 right</span></span>
+<span> <span class="co">#  3   4.70  1.0653666     2  left</span></span>
+<span> <span class="co">#  4   6.95 -0.9770792     2 right</span></span>
+<span> <span class="co">#  5   7.00 -1.2254925     3  left</span></span>
+<span> <span class="co">#  6   9.20  0.8971391     3 right</span></span>
+<span> <span class="co">#  7   9.25  1.3792437     4  left</span></span>
+<span> <span class="co">#  8  11.10 -1.1542021     4 right</span></span>
+<span> <span class="co">#  9  11.15 -1.0418353     5  left</span></span>
+<span> <span class="co">#  10 12.50  1.1519490     5 right</span></span>
+<span> <span class="co">#  11 12.55  1.3964906     6  left</span></span>
+<span> <span class="co">#  12 13.75 -1.2045219     6 right</span></span>
+<span> <span class="co">#  13 13.80 -1.3791405     7  left</span></span>
+<span> <span class="co">#  14 15.00  1.0195679     7 right</span></span>
+<span></span>
+<span><span class="va">d</span><span class="op">$</span><span class="va">estimate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/approxfun.html" class="external-link">approx</a></span><span class="op">(</span><span class="va">x_cuts</span><span class="op">$</span><span class="va">x</span>, <span class="va">x_cuts</span><span class="op">$</span><span class="va">pred</span>, </span>
+<span>                     xout <span class="op">=</span> <span class="va">d</span><span class="op">$</span><span class="va">x</span>, </span>
+<span>                     method <span class="op">=</span> <span class="st">"linear"</span>, rule <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">$</span><span class="va">y</span></span>
+<span><span class="va">d</span><span class="op">$</span><span class="va">group</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/findInterval.html" class="external-link">findInterval</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">x</span>, <span class="va">x_cuts</span><span class="op">[</span><span class="va">x_cuts</span><span class="op">$</span><span class="va">what</span><span class="op">==</span><span class="st">"left"</span>, <span class="st">"x"</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">plt2</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span>data<span class="op">=</span> <span class="va">d</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">y_ideal</span><span class="op">)</span>, linetype<span class="op">=</span><span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">y_observed</span>, color <span class="op">=</span> <span class="va">group</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">estimate</span>, color <span class="op">=</span> <span class="va">group</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ylab</span><span class="op">(</span><span class="st">"y"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"RcppDynProg piecewise linear estimate"</span>,</span>
+<span>          subtitle <span class="op">=</span> <span class="st">"dots: observed values, segments: observed group means, dashed line: unobserved true values"</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">scale_color_brewer</span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Dark2"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">plt2</span><span class="op">)</span></span></code></pre></div>
+<p><img src="tools/README-r2-1.png" style="display: block; margin: auto;"></p>
+<p><a href="https://winvector.github.io/RcppDynProg/reference/solve_for_partition.html" class="external-link"><code>RcppDynProg::solve_for_partition()</code></a> finds a partition of a relation into a number of linear estimates. Each interval is priced using out-of sample cost via the <a href="https://win-vector.com/2014/09/25/estimating-generalization-error-with-the-press-statistic/" class="external-link">PRESS statistic</a> plus the specified penalty (to discourage small intervals). Notice, however, the user did not have to specify a <em>k</em> (or number of intervals) to a get good result.</p>
+<p>The entire modeling procedure is wrapped as a <a href="https://github.com/WinVector/vtreat" class="external-link"><code>vtreat</code></a> <a href="https://win-vector.com/2017/09/25/custom-level-coding-in-vtreat/" class="external-link">custom-coder</a> in the function <a href="https://winvector.github.io/RcppDynProg/reference/piecewise_linear.html" class="external-link"><code>RcppDynProg::piecewise_linear()</code></a>. This allows such variable treatments to be easily incorporated into modeling pipelines (example <a href="https://github.com/WinVector/zmPDSwR/blob/master/KDD2009/KDD2009vtreat.md" class="external-link">here</a>).</p>
+<p>In addition to a piecewise linear solver we include a piecewise constant solver, which is demonstrated <a href="https://winvector.github.io/RcppDynProg/articles/Segmentation.html" class="external-link">here</a>. Other applications can include peak detection, or any other application where the per-segment metrics are independent.</p>
 </div>
-<div id="the-methodology" class="section level2">
-<h2 class="hasAnchor">
-<a href="#the-methodology" class="anchor"></a>The methodology</h2>
+<div class="section level2">
+<h2 id="the-methodology">The methodology<a class="anchor" aria-label="anchor" href="#the-methodology"></a>
+</h2>
 <p>The solver is fast through to the use of 3 techniques:</p>
-<ol>
+<ol style="list-style-type: decimal">
 <li>
-<code><a href="reference/solve_for_partition.html">RcppDynProg::solve_for_partition()</a></code> includes a problem reduction heuristic in the spirit of the <a href="https://www.springer.com/us/book/9780387948836">parameterized complexity</a> methodology.</li>
+<code><a href="reference/solve_for_partition.html">RcppDynProg::solve_for_partition()</a></code> includes a problem reduction heuristic in the spirit of the parameterized complexity methodology.</li>
 <li>Ordered (or interval) partition problems are amenable to dynamic programming because initial segments of an interval partition have succinct summaries (just the right-most index and how many segments were used to get to this point).</li>
 <li>
 <code>RcppDynProg</code> is a fast <code>C++</code> implementation using <code>Rcpp</code>.</li>
 </ol>
-<p>Some <a href="https://github.com/WinVector/RcppDynProg/blob/master/extras/Timings.md">basic timings</a> show <a href="https://github.com/WinVector/RcppDynProg/blob/master/src/solve_interval_partition.cpp">the <code>C++</code> implementation</a> can be over 200 times faster than <a href="https://github.com/WinVector/RcppDynProg/blob/master/R/solve_dyn_R.R">a direct transliteration <code>R</code></a> of the same code (so not vectorized, not fully R idiomatic, some time lost to <a href="https://winvector.github.io/wrapr/reference/seqi.html"><code>seqi()</code></a> abstraction), and <a href="https://github.com/WinVector/RcppDynProg/blob/master/extras/time_python.ipynb">over 400 times faster</a> than a <a href="https://github.com/WinVector/RcppDynProg/blob/master/extras/DynProg.py"><code>Python</code> direct transliteration</a> of the same code (so not optimized, and not “Pythonic”). The non-optimized and non-adapted nature of the code translations unfortunately exaggerates the speedup, however the <code>Rcpp</code> is likely buying as a solid factor of over 100- as <code>C++</code> is going to be much more efficient at all of the index-chasing this dynamic programming solution is based on.</p>
+<p>Some <a href="https://github.com/WinVector/RcppDynProg/blob/master/extras/Timings.md" class="external-link">basic timings</a> show <a href="https://github.com/WinVector/RcppDynProg/blob/master/src/solve_interval_partition.cpp" class="external-link">the <code>C++</code> implementation</a> can be over 200 times faster than <a href="https://github.com/WinVector/RcppDynProg/blob/master/R/solve_dyn_R.R" class="external-link">a direct transliteration <code>R</code></a> of the same code (so not vectorized, not fully R idiomatic, some time lost to <a href="https://winvector.github.io/wrapr/reference/seqi.html" class="external-link"><code>seqi()</code></a> abstraction), and <a href="https://github.com/WinVector/RcppDynProg/blob/master/extras/time_python.ipynb" class="external-link">over 400 times faster</a> than a <a href="https://github.com/WinVector/RcppDynProg/blob/master/extras/DynProg.py" class="external-link"><code>Python</code> direct transliteration</a> of the same code (so not optimized, and not “Pythonic”). The non-optimized and non-adapted nature of the code translations unfortunately exaggerates the speedup, however the <code>Rcpp</code> is likely buying as a solid factor of over 100- as <code>C++</code> is going to be much more efficient at all of the index-chasing this dynamic programming solution is based on.</p>
 <p>A note on problem complexity: general partition problems (where we do not restrict the subsets to be intervals) are NP-hard, so not thought to be amenable to efficient general solutions at scale (subset sum problems being good examples).</p>
 <hr>
 <p><code>RcppDynProg</code> can be installed from <code>CRAN</code> with:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"RcppDynProg"</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"RcppDynProg"</span><span class="op">)</span></span></code></pre></div>
 <hr>
 <p>Some other relevant segmentation and dynamic programming methods include:</p>
 <ul>
-<li>Piecewise or <a href="https://en.wikipedia.org/wiki/Segmented_regression">segmented regression</a> in general.</li>
+<li>Piecewise or <a href="https://en.wikipedia.org/wiki/Segmented_regression" class="external-link">segmented regression</a> in general.</li>
 <li>
-<a href="https://CRAN.R-project.org/package=gam"><code>GAM</code></a>, <a href="https://CRAN.R-project.org/package=mgcv"><code>mgcv</code></a>, <a href="https://github.com/WinVector/vtreat/blob/master/R/segmented_variable.R">quantile segmentation</a>, <a href="https://github.com/WinVector/vtreat/blob/master/R/spline_variable.R"><code>spline</code></a> methods.</li>
-<li>The <a href="https://CRAN.R-project.org/package=segmented"><code>segmented</code> package</a> break-point/change-point regression package (worked example <a href="https://github.com/WinVector/RcppDynProg/blob/master/extras/sp500/segmented_Example.md">here</a>).</li>
+<a href="https://CRAN.R-project.org/package=gam" class="external-link"><code>GAM</code></a>, <a href="https://CRAN.R-project.org/package=mgcv" class="external-link"><code>mgcv</code></a>, <a href="https://github.com/WinVector/vtreat/blob/master/R/segmented_variable.R" class="external-link">quantile segmentation</a>, <a href="https://github.com/WinVector/vtreat/blob/master/R/spline_variable.R" class="external-link"><code>spline</code></a> methods.</li>
+<li>The <a href="https://CRAN.R-project.org/package=segmented" class="external-link"><code>segmented</code> package</a> break-point/change-point regression package (worked example <a href="https://github.com/WinVector/RcppDynProg/blob/master/extras/sp500/segmented_Example.md" class="external-link">here</a>).</li>
 <li>
-<em>l</em><sub>1</sub> Trend Filtering, which we discuss <a href="https://github.com/WinVector/RcppDynProg/blob/master/extras/sp500/sp500_example.pdf">here</a>.</li>
-<li>The <a href="https://CRAN.R-project.org/package=dynprog"><code>dynprog</code> package</a>, which is a general DSL based memoizer.</li>
+<span class="math inline"><em>l</em><sub>1</sub></span> Trend Filtering, which we discuss <a href="https://github.com/WinVector/RcppDynProg/blob/master/extras/sp500/sp500_example.pdf" class="external-link">here</a>.</li>
+<li>The <a href="https://CRAN.R-project.org/package=dynprog" class="external-link"><code>dynprog</code> package</a>, which is a general DSL based memoizer.</li>
+<li><a href="https://CRAN.R-project.org/package=dpseg" class="external-link"><code>dpseg</code></a></li>
 </ul>
 </div>
 
@@ -238,50 +235,60 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=RcppDynProg">https://​cloud.r-project.org/​package=RcppDynProg</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/WinVector/RcppDynProg/">https://​github.com/​WinVector/​RcppDynProg/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/WinVector/RcppDynProg/issues">https://​github.com/​WinVector/​RcppDynProg/​issues</a>
-</li>
-</ul>
-</div>
-<div class="license">
-<h2>License</h2>
-<ul class="list-unstyled">
-<li>
-<a href="https://www.r-project.org/Licenses/GPL-2">GPL-2</a> | <a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a>
-</li>
-</ul>
-</div>
-<div class="developers">
-<h2>Developers</h2>
-<ul class="list-unstyled">
-<li>John Mount <br><small class="roles"> Author, maintainer </small>  </li>
-<li>Nina Zumel <br><small class="roles"> Author </small>  </li>
-<li><a href="authors.html">All authors...</a></li>
+<li><a href="https://cloud.r-project.org/package=RcppDynProg" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/WinVector/RcppDynProg/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/WinVector/RcppDynProg/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="license">
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://cran.r-project.org/package=RcppDynProg"><img src="https://www.r-pkg.org/badges/version/RcppDynProg" alt="CRAN_Status_Badge"></a></li>
-<li><a href="https://CRAN.R-project.org/package=RcppDynProg"><img src="https://tinyverse.netlify.com/badge/RcppDynProg" alt="status"></a></li>
+<li>
+<a href="https://www.r-project.org/Licenses/GPL-2" class="external-link">GPL-2</a> | <a href="https://www.r-project.org/Licenses/GPL-3" class="external-link">GPL-3</a>
+</li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing RcppDynProg</a></li>
+</ul>
 </div>
+
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
+<ul class="list-unstyled">
+<li>John Mount <br><small class="roles"> Author, maintainer </small>  </li>
+<li>Nina Zumel <br><small class="roles"> Author </small>  </li>
+<li><a href="authors.html">More about authors...</a></li>
+</ul>
+</div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://cran.r-project.org/package=RcppDynProg" class="external-link"><img src="https://www.r-pkg.org/badges/version/RcppDynProg" alt="CRAN_Status_Badge"></a></li>
+<li><a href="https://CRAN.R-project.org/package=RcppDynProg" class="external-link"><img src="https://tinyverse.netlify.com/badge/RcppDynProg" alt="status"></a></li>
+</ul>
+</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by John Mount, Nina Zumel.</p>
+  <p></p>
+<p>Developed by John Mount, Nina Zumel.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
@@ -289,6 +296,8 @@
 
   
 
+
+  
 
   </body>
 </html>

@@ -7,10 +7,8 @@
 #' Also supplies additional custom coders for the vtreat package.
 #' Please see \url{https://github.com/WinVector/RcppDynProg} for details.
 #' 
-#' @docType package
 #' @author John Mount
 #' @import Rcpp
 #' @importFrom Rcpp evalCpp
 #' @useDynLib RcppDynProg
-#' @name RcppDynProg
-NULL  
+"_PACKAGE" 

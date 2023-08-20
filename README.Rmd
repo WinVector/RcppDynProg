@@ -194,7 +194,7 @@ In addition to a piecewise linear solver we include a piecewise constant solver,
 
 The solver is fast through to the use of 3 techniques:
 
-  1. `RcppDynProg::solve_for_partition()` includes a problem reduction heuristic in the spirit of the [parameterized complexity](https://www.springer.com/us/book/9780387948836) methodology.
+  1. `RcppDynProg::solve_for_partition()` includes a problem reduction heuristic in the spirit of the parameterized complexity methodology.
   2. Ordered (or interval) partition problems are amenable to dynamic programming because initial segments of an interval partition have succinct summaries (just the right-most index and how many segments were used to get to this point).
   3. `RcppDynProg` is a fast `C++` implementation using `Rcpp`.
   

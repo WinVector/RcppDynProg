@@ -1,8 +1,8 @@
 Package: RcppDynProg
 Type: Package
 Title: 'Rcpp' Dynamic Programming
-Version: 0.2.0
-Date: 2020-12-15
+Version: 0.2.1
+Date: 2023-08-19
 Authors@R: c(
     person("John", "Mount", email = "jmount@win-vector.com", role = c("aut", "cre")),
     person("Nina", "Zumel", email = "nzumel@win-vector.com", role = c("aut")),
@@ -23,7 +23,7 @@ Imports:
 LinkingTo: 
   Rcpp,
   RcppArmadillo
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.3
 Suggests:
     tinytest,
     knitr,

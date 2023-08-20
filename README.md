@@ -1,11 +1,10 @@
 
-[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/RcppDynProg)](https://cran.r-project.org/package=RcppDynProg)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/RcppDynProg)](https://cran.r-project.org/package=RcppDynProg)
 [![status](https://tinyverse.netlify.com/badge/RcppDynProg)](https://CRAN.R-project.org/package=RcppDynProg)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-The package
------------
+## The package
 
 [`RcppDynProg`](https://github.com/WinVector/RcppDynProg) is an
 [`Rcpp`](https://CRAN.R-project.org/package=Rcpp) based
@@ -16,8 +15,7 @@ package can be used to optimally solve the minimum cost partition into
 intervals problem (described below) and is useful in building piecewise
 estimates of functions (shown in this note).
 
-The abstract problem
---------------------
+## The abstract problem
 
 The primary problem
 [`RcppDynProg::solve_interval_partition()`](https://winvector.github.io/RcppDynProg/reference/solve_interval_partition.html)
@@ -25,7 +23,7 @@ is designed to solve is formally given as follows.
 
 > Minimum cost partition into intervals.
 >
-> Given: a positive integer `n` and an a *n* by `n` matrix called
+> Given: a positive integer `n` and an a $n$ by `n` matrix called
 > `costs`.
 >
 > Find: an increasing sequence of integers `soln` with
@@ -92,8 +90,7 @@ allow the cheap set `{2, 3}` to be in its chosen partition. This is the
 essence of dynamic programming: finding an optimal *global* solution,
 even if it requires odd-looking local choices.
 
-An application
---------------
+## An application
 
 The intended application of `RcppDynProg` is to find optimal piecewise
 solutions to single-variable modeling problems. For example consider the
@@ -224,15 +221,12 @@ solver, which is demonstrated
 Other applications can include peak detection, or any other application
 where the per-segment metrics are independent.
 
-The methodology
----------------
+## The methodology
 
 The solver is fast through to the use of 3 techniques:
 
 1.  `RcppDynProg::solve_for_partition()` includes a problem reduction
-    heuristic in the spirit of the [parameterized
-    complexity](https://www.springer.com/us/book/9780387948836)
-    methodology.
+    heuristic in the spirit of the parameterized complexity methodology.
 2.  Ordered (or interval) partition problems are amenable to dynamic
     programming because initial segments of an interval partition have
     succinct summaries (just the right-most index and how many segments
@@ -277,20 +271,20 @@ install.packages("RcppDynProg")
 Some other relevant segmentation and dynamic programming methods
 include:
 
--   Piecewise or [segmented
-    regression](https://en.wikipedia.org/wiki/Segmented_regression) in
-    general.
--   [`GAM`](https://CRAN.R-project.org/package=gam),
-    [`mgcv`](https://CRAN.R-project.org/package=mgcv), [quantile
-    segmentation](https://github.com/WinVector/vtreat/blob/master/R/segmented_variable.R),
-    [`spline`](https://github.com/WinVector/vtreat/blob/master/R/spline_variable.R)
-    methods.
--   The [`segmented`
-    package](https://CRAN.R-project.org/package=segmented)
-    break-point/change-point regression package (worked example
-    [here](https://github.com/WinVector/RcppDynProg/blob/master/extras/sp500/segmented_Example.md)).
--   *l*<sub>1</sub> Trend Filtering, which we discuss
-    [here](https://github.com/WinVector/RcppDynProg/blob/master/extras/sp500/sp500_example.pdf).
--   The [`dynprog` package](https://CRAN.R-project.org/package=dynprog),
-    which is a general DSL based memoizer.
--   [`dpseg`](https://CRAN.R-project.org/package=dpseg)
+- Piecewise or [segmented
+  regression](https://en.wikipedia.org/wiki/Segmented_regression) in
+  general.
+- [`GAM`](https://CRAN.R-project.org/package=gam),
+  [`mgcv`](https://CRAN.R-project.org/package=mgcv), [quantile
+  segmentation](https://github.com/WinVector/vtreat/blob/master/R/segmented_variable.R),
+  [`spline`](https://github.com/WinVector/vtreat/blob/master/R/spline_variable.R)
+  methods.
+- The [`segmented`
+  package](https://CRAN.R-project.org/package=segmented)
+  break-point/change-point regression package (worked example
+  [here](https://github.com/WinVector/RcppDynProg/blob/master/extras/sp500/segmented_Example.md)).
+- $l_1$ Trend Filtering, which we discuss
+  [here](https://github.com/WinVector/RcppDynProg/blob/master/extras/sp500/sp500_example.pdf).
+- The [`dynprog` package](https://CRAN.R-project.org/package=dynprog),
+  which is a general DSL based memoizer.
+- [`dpseg`](https://CRAN.R-project.org/package=dpseg)

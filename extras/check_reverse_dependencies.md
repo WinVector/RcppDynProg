@@ -1,4 +1,4 @@
-check\_reverse\_dependencies
+check_reverse_dependencies
 ================
 
 ``` r
@@ -8,13 +8,13 @@ package = "RcppDynProg"
 packageVersion(package)
 ```
 
-    ## [1] '0.2.0'
+    ## [1] '0.2.1'
 
 ``` r
 date()
 ```
 
-    ## [1] "Tue Dec 15 08:20:23 2020"
+    ## [1] "Sat Aug 19 17:16:44 2023"
 
 ``` r
 parallelCluster <- NULL
@@ -33,7 +33,7 @@ setwd(td)
 print(td)
 ```
 
-    ## [1] "/var/folders/7f/sdjycp_d08n8wwytsbgwqgsw0000gn/T//RtmpKfg5DT"
+    ## [1] "/var/folders/7f/sdjycp_d08n8wwytsbgwqgsw0000gn/T//RtmpouQ3oU"
 
 ``` r
 options(repos = c(CRAN="https://cloud.r-project.org"))
